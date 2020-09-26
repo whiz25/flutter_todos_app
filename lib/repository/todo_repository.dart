@@ -8,7 +8,7 @@ class TodoRepository implements ITodoRepository {
 
   final ITodoRepository innerRepository;
 
-  TodoRepository(this.innerRepository);
+  TodoRepository({this.innerRepository});
 
   static Future<void> initialize() async {
     await Hive.initFlutter();
@@ -53,10 +53,7 @@ class TodoRepository implements ITodoRepository {
 
   @override
   Future<Todo> updateTodoById(int id) async {
-    await checkIfBoxIsCreatedAndOpen();
-
-    var todo = await innerRepository.updateTodoById(id);
-    // this._todoBox.
+    throw UnimplementedError();
   }
 
   Future<void> clearCache() async {
