@@ -1,4 +1,4 @@
-name: flutter_todos_app
+name: flutter_bloc_todo_app
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -28,10 +28,21 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
+  flutter_bloc: ^6.0.5
+  path_provider: ^1.6.16
+  hive: ^1.4.4
+  hive_flutter: ^0.3.1
+  async_redux: ^3.0.5
+  bloc_test: ^7.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
+  mockito: any
+  test: any
+  hive_generator: ^0.7.1
+  build_runner: any
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
