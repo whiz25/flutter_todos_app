@@ -1,6 +1,6 @@
-# flutter_todos_app
+# Flutter Todos App
 
-A new Flutter project.
+A todos app built with flutter and Hive database. This app's architecture follows the Bloc pattern for local state management, the Repository pattern for data management and Async_redux for global state management.
 
 ## Getting Started
 
