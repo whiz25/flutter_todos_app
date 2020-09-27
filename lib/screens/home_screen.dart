@@ -8,8 +8,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Flutter Todos App'),
+      ),
+      body: Center(child: Text('Todos will appear here')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){},child: Icon(Icons.add),
+        ),
     );
   }
 }

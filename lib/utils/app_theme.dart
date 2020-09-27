@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_todos_app/utils/app_color_palette.dart';
 
 ThemeData appTheme() {
   return ThemeData.light().copyWith(
-    textTheme: _appTextTheme()
-  );
+      primaryColor: AppColorPalette().primaryColor,
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: AppColorPalette().primaryColorDark),
+      textTheme: _appTextTheme());
 }
 
 TextTheme _appTextTheme() {
   return TextTheme(
-    bodyText1: TextStyle(color: Colors.black)
-  );
+      bodyText2:
+          TextStyle(color: AppColorPalette().textOnPrimary, fontSize: 18.0));
 }
