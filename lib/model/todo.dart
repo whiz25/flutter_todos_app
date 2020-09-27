@@ -13,5 +13,5 @@ class Todo {
   @HiveField(2)
   final bool isComplete;
 
-  Todo(this.id, this.content, this.isComplete);
+  Todo({this.id, this.content, this.isComplete});
 }
