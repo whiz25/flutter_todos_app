@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_todos_app/utils/localization.dart';
 import 'repository/itodo_repository.dart';
 import 'repository/todo_repository.dart';
 import 'screens/screens.dart';
@@ -24,6 +26,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: appTheme(),
       home: HomeScreen(),
+      supportedLocales: [Locale('en', 'US'), Locale('da', 'DK')],
+      localizationsDelegates: [FlutterTodosAppLocalizations.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate],
     );
   }
 }
