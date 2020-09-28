@@ -1,3 +1,7 @@
 {
-  "appBarTitle": "Flutter Todos App"
+  "appBarTitle": "Flutter Todos App",
+  "confirm": "OK",
+  "cancel": "Cancel",
+  "remove_user_start": "Do you want to remove ",
+  "remove_user_end": "from the account?"
 }

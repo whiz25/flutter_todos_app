@@ -1,11 +1,10 @@
-import 'package:flutter_todos_app/model/todo.dart';
+import '../model/todo.dart';
 
 class TodoState {
-  Todo todos;
+  List<Todo> todos;
 
   TodoState({this.todos});
 
-  TodoState copyWith({Todo todo}) {
-    return TodoState(todos: todo ?? this.todos);
-  }
+  TodoState copyWith({List<Todo> todos}) =>
+   TodoState(todos: todos ?? this.todos);
 }

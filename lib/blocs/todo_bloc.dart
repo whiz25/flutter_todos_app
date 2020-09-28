@@ -1,18 +1,28 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_todos_app/blocs/bloc.dart';
-import 'package:flutter_todos_app/repository/itodo_repository.dart';
-import 'package:flutter_todos_app/blocs/todo_state.dart';
+import '../model/todo.dart';
+import '../repository/itodo_repository.dart';
+import 'bloc.dart';
+import 'todo_state.dart';
 
 class TodoBloc extends AutoLoadCubit<TodoState> {
   final ITodoRepository iTodoRepository;
+  String content;
 
-  TodoBloc({@required this.iTodoRepository});
+  TodoBloc({this.iTodoRepository, this.content});
 
   @override
   FutureOr<TodoState> loadInitialState() async {
-    var todos = await this.iTodoRepository.getAllTodos();
+    final List<Todo> todos = await iTodoRepository.getAllTodos();
     return TodoState(todos: todos);
+  }
+
+  Future<void> createTodo(String content) async {
+    final newTodo = await iTodoRepository.addNewTodo(content);
+
+    final newList = List<Todo>.from(state.todos);
+    newList.add(newTodo);
+
+    state.copyWith(todos: newList);
   }
 }

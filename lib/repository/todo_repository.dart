@@ -1,7 +1,8 @@
-import 'package:flutter_todos_app/model/todo.dart';
-import 'package:flutter_todos_app/repository/itodo_repository.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import '../model/todo.dart';
+import 'itodo_repository.dart';
 
 class TodoRepository implements ITodoRepository {
   Box _todoBox;
@@ -17,38 +18,28 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<Todo> addNewTodo(Todo todo) async {
+  Future<Todo> addNewTodo(String content) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    var newTodo = await innerRepository.addNewTodo(todo);
-    this._todoBox.add(newTodo);
+    final newTodo = Todo()..content = content;
+    await _todoBox.add(newTodo);
 
     return newTodo;
   }
 
   @override
-  Future<void> deleteTodoById(int id) async {
+  Future<void> deleteTodo(int id) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    var todo = await innerRepository.getTodoById(id);
-    this._todoBox.delete(todo);
+    await _todoBox.delete(id);
   }
 
   @override
-  Future<Todo> getAllTodos() async {
+  Future<List<Todo>> getAllTodos() async {
     await checkIfBoxIsCreatedAndOpen();
 
-    var todos = this._todoBox.get('todos');
+    final List<Todo> todos = _todoBox.get('todos') as List<Todo>;
     return todos;
-  }
-
-  @override
-  Future<Todo> getTodoById(int id) async {
-    await checkIfBoxIsCreatedAndOpen();
-
-    var todo = this._todoBox.get(id);
-
-    return todo;
   }
 
   @override
@@ -57,20 +48,16 @@ class TodoRepository implements ITodoRepository {
   }
 
   Future<void> clearCache() async {
-    if (this._todoBox == null) {
-      this._todoBox = await Hive.openBox<Todo>('todos');
-    }
+    _todoBox ??= await Hive.openBox<Todo>('todos');
 
-    await this._todoBox.clear();
+    await _todoBox.clear();
   }
 
   Future<void> checkIfBoxIsCreatedAndOpen() async {
-    if (this._todoBox == null) {
-      this._todoBox = await Hive.openBox<Todo>('todos');
-    }
+    _todoBox ??= await Hive.openBox<Todo>('todos');
 
-    if (!(this._todoBox?.isOpen ?? false)) {
-      return null;
+    if (!(_todoBox?.isOpen ?? false)) {
+      return;
     }
   }
 }

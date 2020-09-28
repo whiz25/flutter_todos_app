@@ -5,13 +5,10 @@ part 'todo.g.dart';
 @HiveType(typeId: 0)
 class Todo {
   @HiveField(0)
-  final int id;
+  String content;
 
   @HiveField(1)
-  final String content;
+  bool isComplete;
 
-  @HiveField(2)
-  final bool isComplete;
-
-  Todo({this.id, this.content, this.isComplete});
+  Todo({this.content, this.isComplete=false});
 }

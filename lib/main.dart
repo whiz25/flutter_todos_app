@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_todos_app/utils/localization.dart';
+
 import 'repository/itodo_repository.dart';
 import 'repository/todo_repository.dart';
 import 'screens/screens.dart';
 import 'utils/app_theme.dart';
+import 'utils/localization.dart';
 
 void main() {
   WidgetsFlutterBinding();
@@ -16,18 +17,22 @@ void main() {
     RepositoryProvider<ITodoRepository>(
       create: (_) => TodoRepository(),
     )
-  ], child: MyApp()));
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context) => MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: appTheme(),
-      home: HomeScreen(),
-      supportedLocales: [Locale('en', 'US'), Locale('da', 'DK')],
-      localizationsDelegates: [FlutterTodosAppLocalizations.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate],
+      home: const HomeScreen(),
+      supportedLocales: const [Locale('en', 'US'), Locale('da', 'DK')],
+      localizationsDelegates: const [
+        FlutterTodosAppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
     );
-  }
 }

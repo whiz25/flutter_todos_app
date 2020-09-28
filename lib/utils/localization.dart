@@ -9,30 +9,29 @@ class FlutterTodosAppLocalizations {
 
   FlutterTodosAppLocalizations(this.locale);
 
-  static FlutterTodosAppLocalizations of(BuildContext context) {
-    return Localizations.of<FlutterTodosAppLocalizations>(
+  static FlutterTodosAppLocalizations of(BuildContext context) =>
+   Localizations.of<FlutterTodosAppLocalizations>(
         context, FlutterTodosAppLocalizations);
-  }
 
   static const LocalizationsDelegate<FlutterTodosAppLocalizations> delegate =
       _FlutterTodosAppLocalizationsDelegate();
 
-  Map<String, String> _localizedStrings;
+  Map<dynamic, dynamic> _localizedStrings;
 
   Future<bool> load() async {
-    String jsonString = await rootBundle
+    final String jsonString = await rootBundle
         .loadString('assets/localization/${locale.languageCode}.json');
 
-    Map<String, dynamic> jsonMap = json.decode(jsonString);
+    final dynamic jsonMap = json.decode(jsonString);
 
     _localizedStrings =
-        jsonMap.map((key, value) => MapEntry(key, value.toString()));
+        jsonMap.map((dynamic key, dynamic value) => 
+        MapEntry<dynamic, dynamic>(key, value.toString()))
+         as Map<dynamic, dynamic>;
     return true;
   }
 
-  String translate(String key) {
-    return _localizedStrings[key];
-  }
+  dynamic translate(String key) => _localizedStrings[key];
 }
 
 class _FlutterTodosAppLocalizationsDelegate
@@ -40,13 +39,11 @@ class _FlutterTodosAppLocalizationsDelegate
   const _FlutterTodosAppLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) {
-    return ['en', 'da'].contains(locale.languageCode);
-  }
+  bool isSupported(Locale locale) => ['en', 'da'].contains(locale.languageCode);
 
   @override
   Future<FlutterTodosAppLocalizations> load(Locale locale) async {
-    FlutterTodosAppLocalizations localizations =
+    final FlutterTodosAppLocalizations localizations =
         FlutterTodosAppLocalizations(locale);
     await localizations.load();
     return localizations;
