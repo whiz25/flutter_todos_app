@@ -34,7 +34,9 @@ class _HomeScreenState extends State<HomeScreen>
     contentInputController = TextEditingController();
 
     animationController = AnimationController(
-        duration: const Duration(microseconds: 2000), vsync: this);
+        duration: const Duration(milliseconds: 2000), vsync: this);
+
+    animationController.forward();
 
     mainAnimation = MainAnimation(animationController);
     animationController.addListener(() {
@@ -69,7 +71,8 @@ class _HomeScreenState extends State<HomeScreen>
             body: _buildTodoList(state, context),
             floatingActionButton: FloatingActionButton(
               onPressed: () => _createTodoForm(context, todoBloc),
-              child: const Icon(Icons.add),
+              child: AnimatedIcon(icon: AnimatedIcons.add_event, progress: 
+              mainAnimation.animateFloatingActionButtonIcon),
             ),
           );
         },
