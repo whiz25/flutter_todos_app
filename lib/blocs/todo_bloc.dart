@@ -7,9 +7,8 @@ import 'todo_state.dart';
 
 class TodoBloc extends AutoLoadCubit<TodoState> {
   final ITodoRepository iTodoRepository;
-  String content;
 
-  TodoBloc({this.iTodoRepository, this.content});
+  TodoBloc({this.iTodoRepository});
 
   @override
   FutureOr<TodoState> loadInitialState() async {

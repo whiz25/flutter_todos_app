@@ -1,0 +1,38 @@
+## Classes
+- TodoState: This class manages the state of the app locally. It takes a list of Todo items a required parameter.
+- TodoBloc: This class supplies the TodoState class with data from the TodoRepository class. It has a method that creates a new 
+todo item. This method takes a String as a parameter.
+- ITodoRepository: This is an abstract class with well defined methods that are implemented in the 
+TodoRepository class.
+- TodoRepository: This class holds the only source of data in the app. It overrides five methods from the ITodoRepository class.
+- Todo: This is the model class of the app. This class has fields annotated as HiveFields. These fields are used by the hive_generator and build_runner to auto generate the TodoAdapter.
+
+## Methods
+- addNewTodo: Adds a new todo item to the database. Takes a string as a parameter.
+- deleteTodo: Deletes a todo item. Takes an id as a parameter.
+- getAllTodos: Returns a list of todo items.
+- updateTodoById: Updates a todo item based on the id of the todo item.
+- checkIfBoxIsCreatedAndOpen: Checks if Box is created and open. This method is called before any operation
+concerning the Box is performed.
+
+## State Management
+- The state is managed locally using the Bloc pattern and globally using the async_redux package.
+The async_redux package is built on top of the redux library.
+
+## Data
+- Data is stored locally on the user's device using Hive database.
+
+## Localization 
+- A localization folder is added in the assets folder with json files for English and Danish languages. These are the two supported 
+languages currently.
+
+## Directories
+- Animations: Contains animation logic for the app. 
+- Async_redux: Contains logic for managing state globally.
+- Blocs: Contains bloc logic for local state management.
+- Keys: Contains widget keys. These keys will be used through the app and when testing widgets.
+- Model: Contains models.
+- Repository: Contains repository logic 
+- Screens: This folder houses all pages in the app 
+- Widgets: Houses re-usable widgets like the progress indicator
+- Utils: Contains helper code. The AppTheme resides in this folder 

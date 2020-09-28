@@ -47,12 +47,6 @@ class TodoRepository implements ITodoRepository {
     throw UnimplementedError();
   }
 
-  Future<void> clearCache() async {
-    _todoBox ??= await Hive.openBox<Todo>('todos');
-
-    await _todoBox.clear();
-  }
-
   Future<void> checkIfBoxIsCreatedAndOpen() async {
     _todoBox ??= await Hive.openBox<Todo>('todos');
 
