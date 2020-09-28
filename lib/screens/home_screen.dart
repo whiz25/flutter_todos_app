@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 
+import '../animations/main_animation.dart';
 import '../blocs/todo_bloc.dart';
 import '../blocs/todo_state.dart';
 import '../model/todo.dart';
@@ -16,9 +17,12 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   TodoBloc todoBloc;
   TextEditingController contentInputController;
+  AnimationController animationController;
+  MainAnimation mainAnimation;
 
   @override
   void initState() {
@@ -28,6 +32,16 @@ class _HomeScreenState extends State<HomeScreen> {
         iTodoRepository: RepositoryProvider.of<ITodoRepository>(context));
 
     contentInputController = TextEditingController();
+
+    animationController = AnimationController(
+        duration: const Duration(microseconds: 2000), vsync: this);
+
+    mainAnimation = MainAnimation(animationController);
+    animationController.addListener(() {
+      setState(() {});
+    });
+
+    animationController.forward();
   }
 
   @override
@@ -35,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
 
     todoBloc.close();
+    animationController.dispose();
   }
 
   @override
@@ -118,7 +133,9 @@ class _HomeScreenState extends State<HomeScreen> {
             _confirmTodoDelete(context, state, index, todosBox),
         key: ValueKey(todosBox.getAt(index)),
         child: ListTile(
-          title: Text(todo.content),
+          title: Text(todo.content, style: 
+          TextStyle(fontSize: 40 * mainAnimation.
+          listViewAnimation.value),),
         ));
   }
 
