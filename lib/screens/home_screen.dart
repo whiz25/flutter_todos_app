@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen>
               FlatButton(
                 onPressed: () {
                   if (contentInputController.text.isNotEmpty) {
-                    todoBloc.createTodo(contentInputController.text);
+                    todoBloc.createTodoItem(contentInputController.text);
                     contentInputController.clear();
 
                     Navigator.of(context).pop();

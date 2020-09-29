@@ -11,7 +11,7 @@ TodoRepository class.
 - addNewTodo: Adds a new todo item to the database. Takes a string as a parameter.
 - deleteTodo: Deletes a todo item. Takes an id as a parameter.
 - getAllTodos: Returns a list of todo items.
-- updateTodoById: Updates a todo item based on the id of the todo item.
+- updateTodoById: Updates a todo item based on the id of the todo item. The updated content is inserted at the specific index.
 - checkIfBoxIsCreatedAndOpen: Checks if Box is created and open. This method is called before any operation
 concerning the Box is performed.
 
@@ -31,7 +31,7 @@ languages currently.
 - Async_redux: Contains logic for managing state globally.
 - Blocs: Contains bloc logic for local state management.
 - Keys: Contains widget keys. These keys will be used through the app and when testing widgets.
-- Model: Contains models.
+- Model: Contains models. The Todo model and the auto generated TodoAdapter.
 - Repository: Contains repository logic 
 - Screens: This folder houses all pages in the app 
 - Widgets: Houses re-usable widgets like the progress indicator

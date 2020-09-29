@@ -14,7 +14,7 @@ class MockTodoRepository extends Mock implements ITodoRepository {
   }
 
   @override
-  Future<Todo> updateTodoById(int id) {
+  Future<void> updateTodoById(int id, String content) {
     throw UnimplementedError();
   }
 }

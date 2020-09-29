@@ -16,13 +16,17 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
     return TodoState(todos: todos);
   }
 
-  Future<void> createTodo(String content) async {
+  Future<void> createTodoItem(String content) async {
     final newTodo = await iTodoRepository.addNewTodo(content);
 
     final newList = List<Todo>.from(state.todos);
     newList.add(newTodo);
 
     state.copyWith(todos: newList);
+  }
+
+  Future<void> updateTodoItem(int id, String content) async {
+    await iTodoRepository.updateTodoById(id, content);
   }
 
   Future<void> deleteTodoItem(int id) async {

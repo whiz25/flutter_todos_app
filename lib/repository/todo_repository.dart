@@ -43,8 +43,10 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<Todo> updateTodoById(int id) async {
-    throw UnimplementedError();
+  Future<void> updateTodoById(int id, String content) async {
+    await checkIfBoxIsCreatedAndOpen();
+
+    await _todoBox.putAt(id, content);
   }
 
   Future<void> checkIfBoxIsCreatedAndOpen() async {
