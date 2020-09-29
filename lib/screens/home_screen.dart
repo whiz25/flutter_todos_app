@@ -204,6 +204,8 @@ class _HomeScreenState extends State<HomeScreen>
               FlatButton(
                   onPressed: () {
                     todoBloc.updateTodoItem(index, contentInputController.text);
+                    contentInputController.clear();
+
                     Navigator.of(context).pop();
                   },
                   child: const Text('Update'))
