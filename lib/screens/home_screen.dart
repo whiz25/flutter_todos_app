@@ -141,6 +141,7 @@ class _HomeScreenState extends State<HomeScreen>
             style:
                 TextStyle(fontSize: 40 * mainAnimation.listViewAnimation.value),
           ),
+          onTap: () => _editTodoForm(context, index, todo),
         ));
   }
 
@@ -178,4 +179,34 @@ class _HomeScreenState extends State<HomeScreen>
             ));
     return true;
   }
+
+  Future<Widget> _editTodoForm(BuildContext context, int index, Todo todo) =>
+      showDialog<Widget>(
+          context: context,
+          child: AlertDialog(
+            contentPadding: const EdgeInsets.all(10),
+            content: Column(
+              children: [
+                const Text('Please update todo item'),
+                Expanded(
+                    child: TextField(
+                  controller: contentInputController,
+                  decoration: InputDecoration(labelText: todo.content),
+                ))
+              ],
+            ),
+            actions: [
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Cancel')),
+              FlatButton(
+                  onPressed: () {
+                    todoBloc.updateTodoItem(index, contentInputController.text);
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Update'))
+            ],
+          ));
 }
