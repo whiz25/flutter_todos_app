@@ -24,4 +24,8 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
 
     state.copyWith(todos: newList);
   }
+
+  Future<void> deleteTodoItem(int id) async {
+    await iTodoRepository.deleteTodoById(id);
+  }
 }

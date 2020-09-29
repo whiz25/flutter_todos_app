@@ -28,10 +28,10 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<void> deleteTodo(int id) async {
+  Future<void> deleteTodoById(int id) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    await _todoBox.delete(id);
+    await _todoBox.deleteAt(id);
   }
 
   @override

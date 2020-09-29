@@ -65,14 +65,14 @@ class _HomeScreenState extends State<HomeScreen>
             appBar: AppBar(
               centerTitle: true,
               title: Text(
-                  "${FlutterTodosAppLocalizations.
-                  of(context).translate('appBarTitle')}"),
+                  "${FlutterTodosAppLocalizations.of(context).translate('appBarTitle')}"),
             ),
             body: _buildTodoList(state, context),
             floatingActionButton: FloatingActionButton(
               onPressed: () => _createTodoForm(context, todoBloc),
-              child: AnimatedIcon(icon: AnimatedIcons.add_event, progress: 
-              mainAnimation.animateFloatingActionButtonIcon),
+              child: AnimatedIcon(
+                  icon: AnimatedIcons.add_event,
+                  progress: mainAnimation.animateFloatingActionButtonIcon),
             ),
           );
         },
@@ -136,9 +136,11 @@ class _HomeScreenState extends State<HomeScreen>
             _confirmTodoDelete(context, state, index, todosBox),
         key: ValueKey(todosBox.getAt(index)),
         child: ListTile(
-          title: Text(todo.content, style: 
-          TextStyle(fontSize: 40 * mainAnimation.
-          listViewAnimation.value),),
+          title: Text(
+            todo.content,
+            style:
+                TextStyle(fontSize: 40 * mainAnimation.listViewAnimation.value),
+          ),
         ));
   }
 
@@ -148,23 +150,18 @@ class _HomeScreenState extends State<HomeScreen>
         context: context,
         builder: (BuildContext context) => AlertDialog(
               title: Text(
-                  "${FlutterTodosAppLocalizations.
-                  of(context).translate('confirm')}"),
+                  "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
               content: Text(
-                  "${FlutterTodosAppLocalizations.
-                  of(context).translate('remove_user_start')} ${box.
-                  getAt(index)} ${FlutterTodosAppLocalizations.
-                  of(context).translate('remove_user_end')}"),
+                  "${FlutterTodosAppLocalizations.of(context).translate('remove_user_start')} ${box.getAt(index)} ${FlutterTodosAppLocalizations.of(context).translate('remove_user_end')}"),
               actions: [
                 FlatButton(
                     onPressed: () {
-                      box.deleteAt(index);
+                      todoBloc.deleteTodoItem(index);
 
                       Navigator.pop(context, true);
                     },
                     child: Text(
-                        "${FlutterTodosAppLocalizations.
-                        of(context).translate('confirm')}",
+                        "${FlutterTodosAppLocalizations.of(context).translate('confirm')}",
                         style: Theme.of(context)
                             .textTheme
                             .headline6
@@ -172,8 +169,7 @@ class _HomeScreenState extends State<HomeScreen>
                 FlatButton(
                     onPressed: () => Navigator.pop(context, false),
                     child: Text(
-                        "${FlutterTodosAppLocalizations.
-                        of(context).translate('cancel')}",
+                        "${FlutterTodosAppLocalizations.of(context).translate('cancel')}",
                         style: Theme.of(context)
                             .textTheme
                             .headline6
