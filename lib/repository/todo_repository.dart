@@ -28,10 +28,10 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<void> deleteTodoById(int id) async {
+  Future<void> deleteTodoByIndex(int index) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    await _todoBox.deleteAt(id);
+    await _todoBox.deleteAt(index);
   }
 
   @override
@@ -43,12 +43,12 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<void> updateTodoById(int id, String content) async {
+  Future<void> updateTodoByIndex(int index, String content) async {
     await checkIfBoxIsCreatedAndOpen();
 
     final updatedTodo = Todo()..content = content;
 
-    await _todoBox.putAt(id, updatedTodo);
+    await _todoBox.putAt(index, updatedTodo);
   }
 
   Future<void> checkIfBoxIsCreatedAndOpen() async {
