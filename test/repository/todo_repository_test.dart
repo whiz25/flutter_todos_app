@@ -1,57 +1,53 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_todos_app/model/todo.dart';
-
-import '../utils/mock_todo_repository.dart';
+import 'package:flutter_todos_app/repository/todo_repository.dart';
 
 void main() {
-  test('Test Todo content', () async {
-    final mockTodoRepository = MockTodoRepository();
+  final todoRepository = TodoRepository();
 
-    final todo = await mockTodoRepository.addNewTodo('Some test content');
+  test('Test addNewTodo()', () async {
+    await TodoRepository.initialize();
 
-    final Todo newTodo = Todo(content: 'Some test content');
+    await todoRepository.resetTodoBox();
 
-    expect(todo.content, newTodo.content);
-  });
+    final Iterable<Todo> todos = await todoRepository.getAllTodos();
 
-  test('Test Todo length', () async {
-    final mockTodoRepository = MockTodoRepository();
+    expect(todos.length, 0);
 
-    final List<Todo> todoList = [Todo(content: ''), Todo(content: '')];
-    final todos = await mockTodoRepository.getAllTodos();
-
-    expect(todoList.length, todos.length);
-  });
-
-  test('Test deleteTodoByIndex()', () async {
-    final mockTodoRepository = MockTodoRepository();
-    final todos = await mockTodoRepository.getAllTodos();
-
-    expect(todos.length, 2);
-
-    await mockTodoRepository.deleteTodoByIndex(0);
+    await todoRepository.addNewTodo('Some content here');
 
     expect(todos.length, 1);
 
-    await mockTodoRepository.deleteTodoByIndex(0);
+    await todoRepository.addNewTodo('Some content here again');
+
+    expect(todos.length, 2);
+  });
+
+  test('Test deleteTodoByIndex()', () async {
+    final Iterable<Todo> todos = await todoRepository.getAllTodos();
+
+    expect(todos.length, 2);
+
+    await todoRepository.deleteTodoByIndex(0);
+
+    expect(todos.length, 1);
+
+    await todoRepository.deleteTodoByIndex(0);
 
     expect(todos.length, 0);
   });
 
   test('Test updateTodoByIndex()', () async {
-    final mockTodoRepository = MockTodoRepository();
+    final Iterable<Todo> todos = await todoRepository.getAllTodos();
 
-    final todos = await mockTodoRepository.getAllTodos();
+    expect(todos.length, 0);
 
-    expect(todos.length, 2);
+    await todoRepository.addNewTodo('Some content here');
 
-    await mockTodoRepository.updateTodoByIndex(1, 'Code in Dart');
+    await todoRepository.updateTodoByIndex(0, 'Code in Flutter');
 
-    final secondTodo = todos[1];
+    final Todo updatedTodo = todos.toList()[0];
 
-    expect(todos.length, 2);
-
-    expect(secondTodo.content, 'Code in Dart');
-
+    expect(updatedTodo.content, 'Code in Flutter');
   });
 }
