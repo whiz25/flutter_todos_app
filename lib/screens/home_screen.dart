@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 
 import '../animations/main_animation.dart';
 import '../blocs/todo_bloc.dart';
@@ -119,22 +118,21 @@ class _HomeScreenState extends State<HomeScreen>
           ));
 
   Widget _buildTodoList(TodoState state, BuildContext context) {
-    final Box<Todo> todosBox = Hive.box('todos');
+    final todos = state.todos.toList();
     return ListView.separated(
         separatorBuilder: (context, int index) => const Divider(
               thickness: 1,
             ),
-        itemCount: todosBox.length,
-        itemBuilder: (context, index) =>
-            _buildDismissible(state, index, todosBox));
+        itemCount: todos.length,
+        itemBuilder: (context, index) => _buildDismissible(state, index));
   }
 
-  Widget _buildDismissible(TodoState state, int index, Box<Todo> todosBox) {
-    final todo = todosBox.getAt(index);
+  Widget _buildDismissible(TodoState state, int index) {
+    final todo = state.todos.toList()[index];
     return Dismissible(
         confirmDismiss: (direction) =>
-            _confirmTodoDelete(context, state, index, todosBox),
-        key: ValueKey(todosBox.getAt(index)),
+            _confirmTodoDelete(context, state, index),
+        key: ValueKey(state.todos.toList()[index]),
         child: ListTile(
           title: Text(
             todo.content,
@@ -146,14 +144,14 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Future<bool> _confirmTodoDelete(
-      BuildContext context, TodoState state, int index, Box<Todo> box) async {
+      BuildContext context, TodoState state, int index) async {
     await showDialog<bool>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
               title: Text(
                   "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
               content: Text(
-                  "${FlutterTodosAppLocalizations.of(context).translate('remove_user_start')} ${box.getAt(index)} ${FlutterTodosAppLocalizations.of(context).translate('remove_user_end')}"),
+                  "${FlutterTodosAppLocalizations.of(context).translate('remove_user_start')} ${state.todos.toList()[index].content} ${FlutterTodosAppLocalizations.of(context).translate('remove_user_end')}"),
               actions: [
                 FlatButton(
                     onPressed: () {

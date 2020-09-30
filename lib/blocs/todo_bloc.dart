@@ -12,7 +12,7 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
 
   @override
   FutureOr<TodoState> loadInitialState() async {
-    final List<Todo> todos = await iTodoRepository.getAllTodos();
+    final Iterable<Todo> todos = await iTodoRepository.getAllTodos();
     return TodoState(todos: todos);
   }
 
@@ -25,11 +25,16 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
     state.copyWith(todos: newList);
   }
 
-  Future<void> updateTodoItem(int id, String content) async {
-    await iTodoRepository.updateTodoByIndex(id, content);
+  Future<void> updateTodoItem(int index, String content) async {
+    await iTodoRepository.updateTodoByIndex(index, content);
   }
 
-  Future<void> deleteTodoItem(int id) async {
-    await iTodoRepository.deleteTodoByIndex(id);
+  Future<void> deleteTodoItem(int index) async {
+    await iTodoRepository.deleteTodoByIndex(index);
+
+    final newList = List<Todo>.from(state.todos);
+    newList.removeAt(index);
+
+    state.copyWith(todos: newList);
   }
 }

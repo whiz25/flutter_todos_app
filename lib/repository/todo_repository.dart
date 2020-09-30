@@ -35,10 +35,10 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<List<Todo>> getAllTodos() async {
+  Future<Iterable<Todo>> getAllTodos() async {
     await checkIfBoxIsCreatedAndOpen();
 
-    final List<Todo> todos = _todoBox.get('todos') as List<Todo>;
+    final Iterable<Todo> todos = _todoBox.values.cast();
     return todos;
   }
 
