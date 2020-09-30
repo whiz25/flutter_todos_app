@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen>
           ));
 
   Widget _buildTodoList(TodoState state, BuildContext context) {
-    final todos = state.todos.toList();
+    final todos = state.todos;
     return ListView.separated(
         separatorBuilder: (context, int index) => const Divider(
               thickness: 1,
@@ -128,11 +128,11 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _buildDismissible(TodoState state, int index) {
-    final todo = state.todos.toList()[index];
+    final todo = state.todos[index];
     return Dismissible(
         confirmDismiss: (direction) =>
             _confirmTodoDelete(context, state, index),
-        key: ValueKey(state.todos.toList()[index]),
+        key: ValueKey(state.todos[index]),
         child: ListTile(
           title: Text(
             todo.content,
@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen>
               title: Text(
                   "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
               content: Text(
-                  "${FlutterTodosAppLocalizations.of(context).translate('remove_user_start')} ${state.todos.toList()[index].content} ${FlutterTodosAppLocalizations.of(context).translate('remove_user_end')}"),
+                  "${FlutterTodosAppLocalizations.of(context).translate('remove_user_start')} ${state.todos[index].content} ${FlutterTodosAppLocalizations.of(context).translate('remove_user_end')}"),
               actions: [
                 FlatButton(
                     onPressed: () {
