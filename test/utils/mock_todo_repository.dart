@@ -18,10 +18,12 @@ class MockTodoRepository implements ITodoRepository {
   Future<List<Todo>> getAllTodos() async => todos;
 
   @override
-  Future<void> updateTodoByIndex(int index, String content) async {
+  Future<Todo> updateTodoByIndex(int index, String content) async {
     final Todo newTodo = Todo(content: content);
     todos.removeAt(index);
     todos.insert(index, newTodo);
+
+    return newTodo;
   }
 
   @override

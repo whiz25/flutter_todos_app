@@ -43,12 +43,14 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<void> updateTodoByIndex(int index, String content) async {
+  Future<Todo> updateTodoByIndex(int index, String content) async {
     await checkIfBoxIsCreatedAndOpen();
 
     final updatedTodo = Todo()..content = content;
 
     await _todoBox.putAt(index, updatedTodo);
+
+    return updatedTodo;
   }
 
   Future<void> checkIfBoxIsCreatedAndOpen() async {
