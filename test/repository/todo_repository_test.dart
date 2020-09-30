@@ -37,4 +37,21 @@ void main() {
 
     expect(todos.length, 0);
   });
+
+  test('Test updateTodoByIndex()', () async {
+    final mockTodoRepository = MockTodoRepository();
+
+    final todos = await mockTodoRepository.getAllTodos();
+
+    expect(todos.length, 2);
+
+    await mockTodoRepository.updateTodoByIndex(1, 'Code in Dart');
+
+    final secondTodo = todos[1];
+
+    expect(todos.length, 2);
+
+    expect(secondTodo.content, 'Code in Dart');
+
+  });
 }
