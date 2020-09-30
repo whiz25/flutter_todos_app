@@ -13,7 +13,7 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   @override
   FutureOr<TodoState> loadInitialState() async {
     final Iterable<Todo> todos = await iTodoRepository.getAllTodos();
-    return TodoState(todos: todos);
+    return TodoState(todos: todos.toList());
   }
 
   Future<void> createTodoItem(String content) async {

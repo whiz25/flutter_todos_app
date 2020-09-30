@@ -8,7 +8,7 @@ void main() {
   test('Test addNewTodo()', () async {
     await TodoRepository.initialize();
 
-    await todoRepository.resetTodoBox();
+    await todoRepository.clearTodoBox();
 
     final Iterable<Todo> todos = await todoRepository.getAllTodos();
 

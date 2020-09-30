@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../model/todo.dart';
 
 class TodoState {
-  Iterable<Todo> todos;
+  List<Todo> todos;
 
   TodoState({@required this.todos});
 

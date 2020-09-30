@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-09-30 13:35:02</td>
+            <td class="headerValue">2020-09-30 15:40:42</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -100,7 +100,7 @@
 <a name="38"><span class="lineNum">      38 </span><span class="lineCov">          1 :   Future&lt;Iterable&lt;Todo&gt;&gt; getAllTodos() async {</span></a>
 <a name="39"><span class="lineNum">      39 </span><span class="lineCov">          2 :     await checkIfBoxIsCreatedAndOpen();</span></a>
 <a name="40"><span class="lineNum">      40 </span>            : </a>
-<a name="41"><span class="lineNum">      41 </span><span class="lineCov">          2 :     final Iterable&lt;Todo&gt; todos = _todoBox.values as Iterable&lt;Todo&gt;;</span></a>
+<a name="41"><span class="lineNum">      41 </span><span class="lineCov">          2 :     final Iterable&lt;Todo&gt; todos = _todoBox.values.cast&lt;Todo&gt;();</span></a>
 <a name="42"><span class="lineNum">      42 </span>            :     return todos;</a>
 <a name="43"><span class="lineNum">      43 </span>            :   }</a>
 <a name="44"><span class="lineNum">      44 </span>            : </a>
@@ -121,7 +121,7 @@
 <a name="59"><span class="lineNum">      59 </span>            :     }</a>
 <a name="60"><span class="lineNum">      60 </span>            :   }</a>
 <a name="61"><span class="lineNum">      61 </span>            : </a>
-<a name="62"><span class="lineNum">      62 </span><span class="lineCov">          1 :   Future&lt;void&gt; resetTodoBox() async {</span></a>
+<a name="62"><span class="lineNum">      62 </span><span class="lineCov">          1 :   Future&lt;void&gt; clearTodoBox() async {</span></a>
 <a name="63"><span class="lineNum">      63 </span><span class="lineCov">          2 :     await checkIfBoxIsCreatedAndOpen();</span></a>
 <a name="64"><span class="lineNum">      64 </span>            : </a>
 <a name="65"><span class="lineNum">      65 </span><span class="lineCov">          3 :     await _todoBox.clear();</span></a>

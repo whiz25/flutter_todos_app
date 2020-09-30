@@ -38,7 +38,7 @@ class TodoRepository implements ITodoRepository {
   Future<Iterable<Todo>> getAllTodos() async {
     await checkIfBoxIsCreatedAndOpen();
 
-    final Iterable<Todo> todos = _todoBox.values as Iterable<Todo>;
+    final Iterable<Todo> todos = _todoBox.values.cast<Todo>();
     return todos;
   }
 
@@ -59,7 +59,7 @@ class TodoRepository implements ITodoRepository {
     }
   }
 
-  Future<void> resetTodoBox() async {
+  Future<void> clearTodoBox() async {
     await checkIfBoxIsCreatedAndOpen();
 
     await _todoBox.clear();
