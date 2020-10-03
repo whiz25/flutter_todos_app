@@ -25,14 +25,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: appTheme(),
-      home: const HomeScreen(),
-      supportedLocales: const [Locale('en', 'US'), Locale('da', 'DK')],
-      localizationsDelegates: const [
-        FlutterTodosAppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
-      ],
-    );
+        debugShowCheckedModeBanner: false,
+        theme: appTheme(),
+        home: const HomeScreen(),
+        supportedLocales: const [Locale('en', 'US'), Locale('da', 'DK')],
+        localizationsDelegates: const [
+          FlutterTodosAppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
+      );
 }

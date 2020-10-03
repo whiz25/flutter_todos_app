@@ -1,8 +1,9 @@
 import '../model/todo.dart';
 
 abstract class ITodoRepository {
-  Future<Iterable<Todo>> getAllTodos();
-  Future<Todo> addNewTodo(String content);
-  Future<Todo> updateTodoByIndex(int index, String content);
-  Future<void> deleteTodoByIndex(int index);
+  Future<List<Todo>> getAllTodos();
+  Future<Todo> addTodo(Todo todo);
+  Future<Todo> updateTodo(Todo todo);
+  Future<void> deleteTodo(Todo todo);
+  Future<bool> completeTodo(Todo todo);
 }

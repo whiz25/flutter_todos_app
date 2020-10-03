@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../animations/main_animation.dart';
 import '../blocs/todo_bloc.dart';
 import '../blocs/todo_state.dart';
 import '../model/todo.dart';
 import '../repository/itodo_repository.dart';
+import '../utils/app_color_palette.dart';
 import '../utils/localization.dart';
 import '../widgets/progress_loader.dart';
 
@@ -35,8 +37,6 @@ class _HomeScreenState extends State<HomeScreen>
     animationController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
 
-    animationController.forward();
-
     mainAnimation = MainAnimation(animationController);
     animationController.addListener(() {
       setState(() {});
@@ -61,17 +61,15 @@ class _HomeScreenState extends State<HomeScreen>
             return const ProgressLoader();
           }
           return Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: Text(
-                  "${FlutterTodosAppLocalizations.of(context).translate('appBarTitle')}"),
-            ),
-            body: _buildTodoList(state, context),
+            body: Container(
+                color: AppColorPalette().primaryColor,
+                child: _buildTodoList(state, context)),
             floatingActionButton: FloatingActionButton(
               onPressed: () => _createTodoForm(context, todoBloc),
-              child: AnimatedIcon(
-                  icon: AnimatedIcons.add_event,
-                  progress: mainAnimation.animateFloatingActionButtonIcon),
+              child: Icon(
+                Icons.add,
+                color: AppColorPalette().primaryColor,
+              ),
             ),
           );
         },
@@ -106,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen>
               FlatButton(
                 onPressed: () {
                   if (contentInputController.text.isNotEmpty) {
-                    todoBloc.createTodoItem(contentInputController.text);
+                    todoBloc.createTodo(contentInputController.text);
                     contentInputController.clear();
 
                     Navigator.of(context).pop();
@@ -119,12 +117,16 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget _buildTodoList(TodoState state, BuildContext context) {
     final todos = state.todos;
-    return ListView.separated(
-        separatorBuilder: (context, int index) => const Divider(
-              thickness: 1,
-            ),
-        itemCount: todos.length,
-        itemBuilder: (context, index) => _buildDismissible(state, index));
+    return Container(
+      margin: const EdgeInsets.only(top: 100),
+      child: ListView.separated(
+          padding: const EdgeInsets.all(8),
+          separatorBuilder: (context, int index) => const Divider(
+                thickness: 1,
+              ),
+          itemCount: todos.length,
+          itemBuilder: (context, index) => _buildDismissible(state, index)),
+    );
   }
 
   Widget _buildDismissible(TodoState state, int index) {
@@ -132,14 +134,27 @@ class _HomeScreenState extends State<HomeScreen>
     return Dismissible(
         confirmDismiss: (direction) =>
             _confirmTodoDelete(context, state, index),
-        key: ValueKey(state.todos[index]),
-        child: ListTile(
-          title: Text(
-            todo.content,
-            style:
-                TextStyle(fontSize: 40 * mainAnimation.listViewAnimation.value),
-          ),
-          onTap: () => _editTodoForm(context, index, todo),
+        key: ValueKey(todo),
+        child: Card(
+          child: ListTile(
+              leading: IconButton(
+                onPressed: () {
+                  todoBloc.completeTodo(todo);
+                },
+                icon: todo.isComplete
+                    ? Icon(FontAwesomeIcons.solidCheckCircle, size: 
+                    35, color: AppColorPalette().primaryColor,)
+                    : const Icon(
+                        FontAwesomeIcons.circle,
+                        size: 35,
+                      ),
+              ),
+              title: Text(
+                todo.content ?? '',
+                style: TextStyle(
+                    fontSize: 40 * mainAnimation.listViewAnimation.value),
+              ),
+              onTap: () {}),
         ));
   }
 
@@ -155,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen>
               actions: [
                 FlatButton(
                     onPressed: () {
-                      todoBloc.deleteTodoItem(index);
+                      todoBloc.deleteTodo(state.todos[index]);
 
                       Navigator.pop(context, true);
                     },
@@ -178,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen>
     return true;
   }
 
-  Future<Widget> _editTodoForm(BuildContext context, int index, Todo todo) =>
+  Future<Widget> _updateTodoForm(BuildContext context, int index, Todo todo) =>
       showDialog<Widget>(
           context: context,
           child: AlertDialog(
@@ -201,8 +216,8 @@ class _HomeScreenState extends State<HomeScreen>
                   child: const Text('Cancel')),
               FlatButton(
                   onPressed: () {
-                    todoBloc.updateTodoItem(index, contentInputController.text);
-                    contentInputController.clear();
+                    // todoBloc.updateTodo(contentInputController.text);
+                    // contentInputController.clear();
 
                     Navigator.of(context).pop();
                   },

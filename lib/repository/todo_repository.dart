@@ -18,43 +18,53 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<Todo> addNewTodo(String content) async {
+  Future<Todo> addTodo(Todo todo) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    final newTodo = Todo()..content = content;
-    await _todoBox.add(newTodo);
+    await _todoBox.add(todo);
 
-    return newTodo;
+    return todo;
   }
 
   @override
-  Future<void> deleteTodoByIndex(int index) async {
+  Future<void> deleteTodo(Todo todo) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    await _todoBox.deleteAt(index);
+    await _todoBox.delete(todo.key);
   }
 
   @override
-  Future<Iterable<Todo>> getAllTodos() async {
+  Future<List<Todo>> getAllTodos() async {
     await checkIfBoxIsCreatedAndOpen();
 
     final Iterable<Todo> todos = _todoBox.values.cast<Todo>();
-    return todos;
+    return todos.toList();
   }
 
   @override
-  Future<Todo> updateTodoByIndex(int index, String content) async {
+  Future<Todo> updateTodo(Todo todo) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    final updatedTodo = Todo()..content = content;
+    return todo;
+  }
 
-    await _todoBox.putAt(index, updatedTodo);
+  @override
+  Future<bool> completeTodo(Todo todo) async {
+    await checkIfBoxIsCreatedAndOpen();
 
-    return updatedTodo;
+    if (todo.isComplete) {
+      todo.isComplete = false;
+      await _todoBox.put(todo.key, todo);
+      return todo.isComplete;
+    }
+
+    todo.isComplete = true;
+    await _todoBox.put(todo.key, todo);
+    return todo.isComplete;
   }
 
   Future<void> checkIfBoxIsCreatedAndOpen() async {
-    _todoBox ??= await Hive.openBox<Todo>('todos');
+    _todoBox ??= await Hive.openBox<Todo>('all_todos');
 
     if (!(_todoBox?.isOpen ?? false)) {
       return;

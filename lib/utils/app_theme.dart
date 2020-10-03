@@ -4,7 +4,7 @@ import 'app_color_palette.dart';
 ThemeData appTheme() => ThemeData(
     primaryColor: AppColorPalette().primaryColor,
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: AppColorPalette().primaryColorDark),
+        backgroundColor: AppColorPalette().floatingActionButtonBackgroundColor),
     textTheme: _appTextTheme());
 
 TextTheme _appTextTheme() =>
