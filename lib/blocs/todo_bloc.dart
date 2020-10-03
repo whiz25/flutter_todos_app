@@ -46,10 +46,9 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
 
   Future<bool> completeTodo(Todo todo) async {
     final updatedTodo = await iTodoRepository.completeTodo(todo);
-    todo.isComplete = updatedTodo;
 
     final newList = List<Todo>.from(state.todos);
-    newList.where((t) => t.isComplete == todo.isComplete);
+    newList.where((t) => t.isComplete == updatedTodo);
 
     final newState = state.copyWith(todos: newList);
     emit(newState);

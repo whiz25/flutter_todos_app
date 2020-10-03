@@ -45,7 +45,10 @@ class TodoRepository implements ITodoRepository {
   Future<Todo> updateTodo(Todo todo) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    return todo;
+    final Todo updatedTodo = Todo()..content = todo.content;
+    await _todoBox.put(todo.key, updatedTodo);
+
+    return updatedTodo;
   }
 
   @override

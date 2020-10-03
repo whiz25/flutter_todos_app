@@ -10,13 +10,14 @@ void main() {
     await TodoRepository.initialize();
   });
 
-  testWidgets('Find the CircularProgressIndicator', 
-  (WidgetTester tester) async {
+  testWidgets('Find the CircularProgressIndicator',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       buildTestMain(const HomeScreen()),
     );
     await tester.pump();
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
   });
 }
