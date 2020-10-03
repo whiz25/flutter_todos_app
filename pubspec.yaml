@@ -32,12 +32,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
   flutter_bloc: ^6.0.5
-  path_provider: ^1.6.16
   hive: ^1.4.4
   hive_flutter: ^0.3.1
   async_redux: ^3.0.5
-  bloc_test: ^7.0.4
-  shared_preferences:
+  uuid: ^2.2.2
+  font_awesome_flutter: ^8.8.1
+  material_design_icons_flutter: ^4.0.5345
 
 dev_dependencies:
   flutter_test:

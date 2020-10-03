@@ -47,10 +47,10 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
-    super.dispose();
-
     todoBloc.close();
     animationController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -142,8 +142,11 @@ class _HomeScreenState extends State<HomeScreen>
                   todoBloc.completeTodo(todo);
                 },
                 icon: todo.isComplete
-                    ? Icon(FontAwesomeIcons.solidCheckCircle, size: 
-                    35, color: AppColorPalette().primaryColor,)
+                    ? Icon(
+                        FontAwesomeIcons.solidCheckCircle,
+                        size: 35,
+                        color: AppColorPalette().primaryColor,
+                      )
                     : const Icon(
                         FontAwesomeIcons.circle,
                         size: 35,
@@ -151,8 +154,8 @@ class _HomeScreenState extends State<HomeScreen>
               ),
               title: Text(
                 todo.content ?? '',
-                style: TextStyle(
-                    fontSize: 40 * mainAnimation.listViewAnimation.value),
+                style: const TextStyle(
+                    fontSize: 20),
               ),
               onTap: () {}),
         ));
