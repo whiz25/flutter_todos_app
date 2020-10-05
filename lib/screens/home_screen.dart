@@ -152,10 +152,15 @@ class _HomeScreenState extends State<HomeScreen>
                         size: 35,
                       ),
               ),
-              title: Text(
-                todo.content ?? '',
-                style: const TextStyle(
-                    fontSize: 20),
+              title: Container(
+                child: todo.isComplete ? Text(
+                  todo.content ?? '',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    decoration: TextDecoration.lineThrough
+                  ),
+                ) : Text(todo.content ?? '', style: 
+                const TextStyle(fontSize: 20),),
               ),
               onTap: () {}),
         ));
