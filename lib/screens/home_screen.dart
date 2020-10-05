@@ -240,36 +240,4 @@ class _HomeScreenState extends State<HomeScreen>
             ));
     return true;
   }
-
-  Future<Widget> _updateTodoForm(BuildContext context, int index, Todo todo) =>
-      showDialog<Widget>(
-          context: context,
-          child: AlertDialog(
-            contentPadding: const EdgeInsets.all(10),
-            content: Column(
-              children: [
-                const Text('Please update todo item'),
-                Expanded(
-                    child: TextField(
-                  controller: contentInputController,
-                  decoration: InputDecoration(labelText: todo.content),
-                ))
-              ],
-            ),
-            actions: [
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Cancel')),
-              FlatButton(
-                  onPressed: () {
-                    // todoBloc.updateTodo(contentInputController.text);
-                    // contentInputController.clear();
-
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Update'))
-            ],
-          ));
 }
