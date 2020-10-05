@@ -18,8 +18,8 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
         await iTodoRepository.getAllIncompleteTodos();
     final List<Todo> completeTodos =
         await iTodoRepository.getAllCompleteTodos();
-    return TodoState(incompleteTodos: incompleteTodos, 
-    completeTodos: completeTodos);
+    return TodoState(
+        incompleteTodos: incompleteTodos, completeTodos: completeTodos);
   }
 
   Future<void> createTodo(String content) async {
@@ -40,10 +40,17 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   Future<void> deleteTodo(Todo todo) async {
     await iTodoRepository.deleteTodo(todo);
 
-    final newList = List<Todo>.from(state.incompleteTodos);
-    newList.remove(todo);
+    if (todo.isComplete) {
+      final List<Todo> completeTodos = List<Todo>.from(state.completeTodos);
+      completeTodos.remove(todo);
 
-    emit(state.copyWith(incompleteTodos: newList));
+      emit(state.copyWith(completeTodos: completeTodos));
+    }
+
+    final List<Todo> incompleteTodos = List<Todo>.from(state.incompleteTodos);
+    incompleteTodos.remove(todo);
+
+    emit(state.copyWith(incompleteTodos: incompleteTodos));
   }
 
   Future<bool> completeTodo(Todo todo) async {

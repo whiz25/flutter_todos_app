@@ -64,15 +64,19 @@ class _HomeScreenState extends State<HomeScreen>
             body: Container(
                 color: AppColorPalette().primaryColor,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(child: _incompleteTodoList(state, context)),
                     if (state.completeTodos.isNotEmpty)
-                      Text(
-                        'Completed  ${state.completeTodos.length}',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Text(
+                          'Completed  ${state.completeTodos.length}',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
                         ),
                       ),
                     Expanded(child: _completeTodoList(state, context))
@@ -147,6 +151,7 @@ class _HomeScreenState extends State<HomeScreen>
   Widget _completeTodoList(TodoState state, BuildContext context) {
     final List<Todo> completeTodos = state.completeTodos;
     return ListView.separated(
+        padding: const EdgeInsets.all(8),
         separatorBuilder: (context, int index) => const Divider(
               thickness: 1,
             ),
@@ -159,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen>
     final Todo incompleteTodo = state.incompleteTodos[index];
     return Dismissible(
         confirmDismiss: (direction) =>
-            _confirmTodoDelete(context, state, index),
+            _confirmTodoDelete(context, state, index, incompleteTodo),
         key: ValueKey(incompleteTodo),
         child: Card(
           child: ListTile(
@@ -181,16 +186,16 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _completeTodoDismissible(TodoState state, int index) {
-    final Todo todo = state.completeTodos[index];
+    final Todo completeTodo = state.completeTodos[index];
     return Dismissible(
         confirmDismiss: (direction) =>
-            _confirmTodoDelete(context, state, index),
-        key: ValueKey(todo),
+            _confirmTodoDelete(context, state, index, completeTodo),
+        key: ValueKey(completeTodo),
         child: Card(
           child: ListTile(
               leading: IconButton(
                   onPressed: () {
-                    todoBloc.completeTodo(todo);
+                    todoBloc.completeTodo(completeTodo);
                   },
                   icon: Icon(
                     FontAwesomeIcons.solidCheckCircle,
@@ -198,16 +203,16 @@ class _HomeScreenState extends State<HomeScreen>
                     color: AppColorPalette().primaryColor,
                   )),
               title: Text(
-                todo.content ?? '',
-                style: const TextStyle(fontSize: 20, 
-                decoration: TextDecoration.lineThrough),
+                completeTodo.content ?? '',
+                style: const TextStyle(
+                    fontSize: 20, decoration: TextDecoration.lineThrough),
               ),
               onTap: () {}),
         ));
   }
 
   Future<bool> _confirmTodoDelete(
-      BuildContext context, TodoState state, int index) async {
+      BuildContext context, TodoState state, int index, Todo todo) async {
     await showDialog<bool>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
@@ -218,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen>
               actions: [
                 FlatButton(
                     onPressed: () {
-                      todoBloc.deleteTodo(state.incompleteTodos[index]);
+                      todoBloc.deleteTodo(todo);
 
                       Navigator.pop(context, true);
                     },
