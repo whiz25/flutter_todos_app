@@ -14,8 +14,12 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
 
   @override
   FutureOr<TodoState> loadInitialState() async {
-    final List<Todo> todos = await iTodoRepository.getAllTodos();
-    return TodoState(todos: todos);
+    final List<Todo> incompleteTodos =
+        await iTodoRepository.getAllIncompleteTodos();
+    final List<Todo> completeTodos =
+        await iTodoRepository.getAllCompleteTodos();
+    return TodoState(incompleteTodos: incompleteTodos, 
+    completeTodos: completeTodos);
   }
 
   Future<void> createTodo(String content) async {
@@ -27,32 +31,46 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
 
     await iTodoRepository.addTodo(newTodo);
 
-    final newList = List<Todo>.from(state.todos);
-    newList.add(newTodo);
+    final incompleteTodos = List<Todo>.from(state.incompleteTodos);
+    incompleteTodos.add(newTodo);
 
-    final newState = state.copyWith(todos: newList);
-    emit(newState);
+    emit(state.copyWith(incompleteTodos: incompleteTodos));
   }
 
   Future<void> deleteTodo(Todo todo) async {
     await iTodoRepository.deleteTodo(todo);
 
-    final newList = List<Todo>.from(state.todos);
+    final newList = List<Todo>.from(state.incompleteTodos);
     newList.remove(todo);
 
-    final newState = state.copyWith(todos: newList);
-    emit(newState);
+    emit(state.copyWith(incompleteTodos: newList));
   }
 
   Future<bool> completeTodo(Todo todo) async {
-    final updatedTodo = await iTodoRepository.completeTodo(todo);
+    final todoStatus = await iTodoRepository.completeTodo(todo);
 
-    final newList = List<Todo>.from(state.todos);
-    newList.where((t) => t.isComplete == updatedTodo);
+    if (todoStatus) {
+      final incompleteTodos = List<Todo>.from(state.incompleteTodos);
+      final completeTodos = List<Todo>.from(state.completeTodos);
 
-    final newState = state.copyWith(todos: newList);
-    emit(newState);
+      incompleteTodos.remove(todo);
+      emit(state.copyWith(incompleteTodos: incompleteTodos));
 
-    return updatedTodo;
+      completeTodos.add(todo);
+      emit(state.copyWith(completeTodos: completeTodos));
+
+      return todoStatus;
+    }
+
+    final completeTodos = List<Todo>.from(state.completeTodos);
+    final incompleteTodos = List<Todo>.from(state.incompleteTodos);
+
+    completeTodos.remove(todo);
+    emit(state.copyWith(completeTodos: completeTodos));
+
+    incompleteTodos.add(todo);
+    emit(state.copyWith(incompleteTodos: incompleteTodos));
+
+    return todoStatus;
   }
 }

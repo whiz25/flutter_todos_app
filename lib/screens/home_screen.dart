@@ -63,7 +63,21 @@ class _HomeScreenState extends State<HomeScreen>
           return Scaffold(
             body: Container(
                 color: AppColorPalette().primaryColor,
-                child: _buildTodoList(state, context)),
+                child: Column(
+                  children: [
+                    Expanded(child: _incompleteTodoList(state, context)),
+                    if (state.completeTodos.isNotEmpty)
+                      Text(
+                        'Completed  ${state.completeTodos.length}',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
+                    Expanded(child: _completeTodoList(state, context))
+                  ],
+                )),
             floatingActionButton: FloatingActionButton(
               onPressed: () => _createTodoForm(context, todoBloc),
               child: Icon(
@@ -115,8 +129,8 @@ class _HomeScreenState extends State<HomeScreen>
             ],
           ));
 
-  Widget _buildTodoList(TodoState state, BuildContext context) {
-    final todos = state.todos;
+  Widget _incompleteTodoList(TodoState state, BuildContext context) {
+    final List<Todo> todos = state.incompleteTodos;
     return Container(
       margin: const EdgeInsets.only(top: 100),
       child: ListView.separated(
@@ -125,12 +139,49 @@ class _HomeScreenState extends State<HomeScreen>
                 thickness: 1,
               ),
           itemCount: todos.length,
-          itemBuilder: (context, index) => _buildDismissible(state, index)),
+          itemBuilder: (context, index) =>
+              _incompleteTodoDismissible(state, index)),
     );
   }
 
-  Widget _buildDismissible(TodoState state, int index) {
-    final todo = state.todos[index];
+  Widget _completeTodoList(TodoState state, BuildContext context) {
+    final List<Todo> completeTodos = state.completeTodos;
+    return ListView.separated(
+        separatorBuilder: (context, int index) => const Divider(
+              thickness: 1,
+            ),
+        itemCount: completeTodos.length,
+        itemBuilder: (context, index) =>
+            _completeTodoDismissible(state, index));
+  }
+
+  Widget _incompleteTodoDismissible(TodoState state, int index) {
+    final Todo incompleteTodo = state.incompleteTodos[index];
+    return Dismissible(
+        confirmDismiss: (direction) =>
+            _confirmTodoDelete(context, state, index),
+        key: ValueKey(incompleteTodo),
+        child: Card(
+          child: ListTile(
+              leading: IconButton(
+                onPressed: () {
+                  todoBloc.completeTodo(incompleteTodo);
+                },
+                icon: const Icon(
+                  FontAwesomeIcons.circle,
+                  size: 35,
+                ),
+              ),
+              title: Text(
+                incompleteTodo.content ?? '',
+                style: const TextStyle(fontSize: 20),
+              ),
+              onTap: () {}),
+        ));
+  }
+
+  Widget _completeTodoDismissible(TodoState state, int index) {
+    final Todo todo = state.completeTodos[index];
     return Dismissible(
         confirmDismiss: (direction) =>
             _confirmTodoDelete(context, state, index),
@@ -138,24 +189,17 @@ class _HomeScreenState extends State<HomeScreen>
         child: Card(
           child: ListTile(
               leading: IconButton(
-                onPressed: () {
-                  todoBloc.completeTodo(todo);
-                },
-                icon: todo.isComplete
-                    ? Icon(
-                        FontAwesomeIcons.solidCheckCircle,
-                        size: 35,
-                        color: AppColorPalette().primaryColor,
-                      )
-                    : const Icon(
-                        FontAwesomeIcons.circle,
-                        size: 35,
-                      ),
-              ),
+                  onPressed: () {
+                    todoBloc.completeTodo(todo);
+                  },
+                  icon: Icon(
+                    FontAwesomeIcons.solidCheckCircle,
+                    size: 35,
+                    color: AppColorPalette().primaryColor,
+                  )),
               title: Text(
                 todo.content ?? '',
-                style: const TextStyle(
-                    fontSize: 20),
+                style: const TextStyle(fontSize: 20),
               ),
               onTap: () {}),
         ));
@@ -169,11 +213,11 @@ class _HomeScreenState extends State<HomeScreen>
               title: Text(
                   "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
               content: Text(
-                  "${FlutterTodosAppLocalizations.of(context).translate('remove_user_start')} ${state.todos[index].content} ${FlutterTodosAppLocalizations.of(context).translate('remove_user_end')}"),
+                  "${FlutterTodosAppLocalizations.of(context).translate('remove_user_start')} ${state.incompleteTodos[index].content} ${FlutterTodosAppLocalizations.of(context).translate('remove_user_end')}"),
               actions: [
                 FlatButton(
                     onPressed: () {
-                      todoBloc.deleteTodo(state.todos[index]);
+                      todoBloc.deleteTodo(state.incompleteTodos[index]);
 
                       Navigator.pop(context, true);
                     },
