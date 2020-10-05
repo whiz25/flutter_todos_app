@@ -1,3 +1,4 @@
+import 'package:flutter_todos_app/model/todo_list.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -15,6 +16,7 @@ class TodoRepository implements ITodoRepository {
     await Hive.initFlutter();
 
     Hive.registerAdapter(TodoAdapter());
+    Hive.registerAdapter(TodoListAdapter());
   }
 
   @override
@@ -39,8 +41,8 @@ class TodoRepository implements ITodoRepository {
 
     final Iterable<Todo> todos = _todoBox.values.cast<Todo>();
     final List<Todo> copyTodos = List<Todo>.from(todos);
-    final List<Todo> incompleteTodos = copyTodos.where((t) => t.
-    isComplete == false).toList();
+    final List<Todo> incompleteTodos =
+        copyTodos.where((t) => t.isComplete == false).toList();
 
     return incompleteTodos;
   }
