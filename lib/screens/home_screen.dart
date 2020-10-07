@@ -12,6 +12,7 @@ import '../utils/localization.dart';
 import '../widgets/progress_loader.dart';
 
 class HomeScreen extends StatefulWidget {
+
   const HomeScreen({Key key}) : super(key: key);
 
   @override
@@ -217,9 +218,14 @@ class _HomeScreenState extends State<HomeScreen>
         context: context,
         builder: (BuildContext context) => AlertDialog(
               title: Text(
-                  "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
+                  "${FlutterTodosAppLocalizations.of(context).
+                  translate('confirm')}"),
               content: Text(
-                  "${FlutterTodosAppLocalizations.of(context).translate('remove_user_start')} ${state.incompleteTodos[index].content} ${FlutterTodosAppLocalizations.of(context).translate('remove_user_end')}"),
+                  "${FlutterTodosAppLocalizations.of(context).
+                  translate('remove_user_start')} ${state.
+                  incompleteTodos[index].content} ${
+                    FlutterTodosAppLocalizations.
+                  of(context).translate('remove_user_end')}"),
               actions: [
                 FlatButton(
                     onPressed: () {
@@ -228,7 +234,8 @@ class _HomeScreenState extends State<HomeScreen>
                       Navigator.pop(context, true);
                     },
                     child: Text(
-                        "${FlutterTodosAppLocalizations.of(context).translate('confirm')}",
+                        "${FlutterTodosAppLocalizations.of(context).
+                        translate('confirm')}",
                         style: Theme.of(context)
                             .textTheme
                             .headline6
@@ -236,7 +243,8 @@ class _HomeScreenState extends State<HomeScreen>
                 FlatButton(
                     onPressed: () => Navigator.pop(context, false),
                     child: Text(
-                        "${FlutterTodosAppLocalizations.of(context).translate('cancel')}",
+                        "${FlutterTodosAppLocalizations.of(context).
+                        translate('cancel')}",
                         style: Theme.of(context)
                             .textTheme
                             .headline6
