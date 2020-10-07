@@ -10,7 +10,7 @@ void main() {
 
     await todoRepository.clearTodoBox();
 
-    List<Todo> todos = await todoRepository.getAllTodos();
+    List<Todo> todos = await todoRepository.getAllIncompleteTodos();
 
     expect(todos.length, 0);
 
@@ -20,26 +20,26 @@ void main() {
     final Todo anotherNewTodo = Todo(content: 'Code in Dart');
     await todoRepository.addTodo(anotherNewTodo);
 
-    todos = await todoRepository.getAllTodos();
+    todos = await todoRepository.getAllIncompleteTodos();
 
     expect(todos.length, 2);
   });
 
   test('Test deleteTodo()', () async {
-    List<Todo> todos = await todoRepository.getAllTodos();
+    List<Todo> todos = await todoRepository.getAllIncompleteTodos();
 
     expect(todos.length, 2);
 
     final Todo todoToDelete = todos[0];
     await todoRepository.deleteTodo(todoToDelete);
 
-    todos = await todoRepository.getAllTodos();
+    todos = await todoRepository.getAllIncompleteTodos();
 
     expect(todos.length, 1);
   });
 
   test('Test updateTodo()', () async {
-    List<Todo> todos = await todoRepository.getAllTodos();
+    List<Todo> todos = await todoRepository.getAllIncompleteTodos();
 
     expect(todos.length, 1);
 
@@ -51,14 +51,14 @@ void main() {
 
     await todoRepository.updateTodo(todoToUpdate);
 
-    todos = await todoRepository.getAllTodos();
+    todos = await todoRepository.getAllIncompleteTodos();
 
     final Todo updatedTodo = todos[0];
     expect(updatedTodo.content, 'Code in Python');
   });
 
   test('Test completeTodo()', () async {
-    List<Todo> todos = await todoRepository.getAllTodos();
+    List<Todo> todos = await todoRepository.getAllIncompleteTodos();
 
     expect(todos.length, 1);
 
@@ -70,7 +70,7 @@ void main() {
     // Set Todo's complete status to true
     await todoRepository.completeTodo(todoToComplete);
 
-    todos = await todoRepository.getAllTodos();
+    todos = await todoRepository.getAllCompleteTodos();
 
     final Todo completedTodoReturnsTrue = todos[0];
     expect(completedTodoReturnsTrue.isComplete, true);
@@ -78,7 +78,7 @@ void main() {
     // Set Todo's complete status to false
     await todoRepository.completeTodo(todoToComplete);
 
-    todos = await todoRepository.getAllTodos();
+    todos = await todoRepository.getAllIncompleteTodos();
 
     final Todo completedTodoReturnsFalse = todos[0];
     expect(completedTodoReturnsFalse.isComplete, false);

@@ -34,11 +34,27 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<List<Todo>> getAllTodos() async {
+  Future<List<Todo>> getAllIncompleteTodos() async {
     await checkIfBoxIsCreatedAndOpen();
 
     final Iterable<Todo> todos = _todoBox.values.cast<Todo>();
-    return todos.toList();
+    final List<Todo> copyTodos = List<Todo>.from(todos);
+    final List<Todo> incompleteTodos = copyTodos.where((t) => t.
+    isComplete == false).toList();
+
+    return incompleteTodos;
+  }
+
+  @override
+  Future<List<Todo>> getAllCompleteTodos() async {
+    await checkIfBoxIsCreatedAndOpen();
+
+    final Iterable<Todo> todos = _todoBox.values.cast<Todo>();
+    final List<Todo> copyTodos = List<Todo>.from(todos);
+    final List<Todo> completeTodos =
+        copyTodos.where((c) => c.isComplete == true).toList();
+
+    return completeTodos;
   }
 
   @override
