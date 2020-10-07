@@ -8,6 +8,7 @@ abstract class ITodoRepository {
   Future<TodoList> addTodoList(TodoList todoList);
   Future<Todo> updateTodo(Todo todo);
   Future<void> deleteTodo(Todo todo);
+  Future<void> deletTodoList(TodoList todoList);
   Future<bool> completeTodo(Todo todo);
   Future<List<TodoList>> getAllTodoLists();
 }

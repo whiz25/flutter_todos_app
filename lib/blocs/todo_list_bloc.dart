@@ -1,7 +1,4 @@
 import 'dart:async';
-
-import 'package:flutter_todos_app/blocs/todo_bloc.dart';
-import 'package:flutter_todos_app/model/todo.dart';
 import 'package:uuid/uuid.dart';
 
 import '../model/todo_list.dart';
@@ -21,7 +18,8 @@ class TodoListBloc extends AutoLoadCubit<TodoListState> {
   }
 
   Future<void> createTodoList(String todoListTitle) async {
-    final TodoList newTodoList = TodoList(title: todoListTitle);
+    final uuid = Uuid();
+    final TodoList newTodoList = TodoList(id: uuid.v4(), title: todoListTitle);
 
     await iTodoRepository.addTodoList(newTodoList);
 
@@ -29,5 +27,14 @@ class TodoListBloc extends AutoLoadCubit<TodoListState> {
     newList.add(newTodoList);
 
     emit(state.copyWith(todoList: newList));
+  }
+
+  Future<void> deleteTodoList(TodoList todoList) async {
+    await iTodoRepository.deletTodoList(todoList);
+
+    final List<TodoList> newTodoList = List<TodoList>.from(state.todoList);
+    newTodoList.remove(todoList);
+
+    emit(state.copyWith(todoList: newTodoList));
   }
 }

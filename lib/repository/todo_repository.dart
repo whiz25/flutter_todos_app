@@ -23,11 +23,11 @@ class TodoRepository implements ITodoRepository {
   Future<Todo> addTodo(Todo todo, TodoList todoList) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    await _todoBox.add(todoList);
+    await _todoBox.add(todo);
 
     // Create a HiveList from the Todo Box
-    todoList.todos = HiveList(_todoBox);
-    todoList.todos.add(todo);
+    final HiveList hiveList = HiveList<TodoList>(_todoBox);
+    hiveList.add(todo);
 
     return todo;
   }
@@ -40,37 +40,40 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
+  Future<void> deletTodoList(TodoList todoList) async {
+    await checkIfBoxIsCreatedAndOpen();
+
+    await _todoBox.delete(todoList.key);
+  }
+
+  @override
   Future<List<Todo>> getAllIncompleteTodos(TodoList todoList) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    final TodoList existingTodoList = _todoBox.get(todoList.key) as TodoList;
+    // final TodoList existingTodoList = _todoBox.get(todoList.key) as TodoList;
 
-    if (existingTodoList.todos.isNotEmpty) {
-      final List<Todo> copyTodos = List<Todo>.from(existingTodoList.todos);
-      final List<Todo> incompleteTodos =
-          copyTodos.where((t) => t.isComplete == false).toList();
+    //   final List<Todo> copyTodos = List<Todo>.from(existingTodoList);
+    //   final List<Todo> incompleteTodos =
+    //       copyTodos.where((t) => t.isComplete == false).toList();
 
-      return incompleteTodos;
-    }
-
-    return null;
+    //   return incompleteTodos;
   }
 
   @override
   Future<List<Todo>> getAllCompleteTodos(TodoList todoList) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    final TodoList existingTodoList = _todoBox.get(todoList.key) as TodoList;
+    // final TodoList existingTodoList = _todoBox.get(todoList.key) as TodoList;
 
-    if (existingTodoList.todos.isNotEmpty) {
-      final List<Todo> copyTodos = List<Todo>.from(existingTodoList.todos);
-      final List<Todo> completeTodos =
-          copyTodos.where((c) => c.isComplete == true).toList();
+    // if (existingTodoList.todos.isNotEmpty) {
+    //   final List<Todo> copyTodos = List<Todo>.from(existingTodoList.todos);
+    //   final List<Todo> completeTodos =
+    //       copyTodos.where((c) => c.isComplete == true).toList();
 
-      return completeTodos;
-    }
+    //   return completeTodos;
+    // }
 
-    return null;
+    // return null;
   }
 
   @override

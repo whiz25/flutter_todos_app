@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-import 'todo.dart';
-
 part 'todo_list.g.dart';
 
 @HiveType(typeId: 1)

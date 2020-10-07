@@ -6,6 +6,7 @@ import '../blocs/todo_list_state.dart';
 import '../model/todo_list.dart';
 import '../repository/itodo_repository.dart';
 import '../utils/app_color_palette.dart';
+import '../utils/localization.dart';
 import '../widgets/progress_loader.dart';
 import 'todo_list_screen.dart';
 
@@ -68,24 +69,7 @@ class _HomeScreenState extends State<HomeScreen>
             thickness: 1,
           ),
       itemCount: state.todoList.length,
-      itemBuilder: (context, index) {
-        final TodoList todoList = state.todoList[index];
-        return Card(
-          child: ListTile(
-              leading: Icon(
-                Icons.list,
-                size: 35,
-                color: AppColorPalette().primaryColor,
-              ),
-              title: Text(todoList.title),
-              onTap: () {
-                Navigator.of(context).push<Widget>(
-                    MaterialPageRoute<Widget>(
-                      builder: (context) => 
-                      TodoListScreen(todoList: todoList,)));
-              }),
-        );
-      });
+      itemBuilder: (context, index) => _todoListDissmissible(state, index));
 
   Future<Widget> _createTodoForm(
           BuildContext context, TodoListBloc todoListBloc) =>
@@ -129,4 +113,63 @@ class _HomeScreenState extends State<HomeScreen>
               )
             ],
           ));
+
+  Widget _todoListDissmissible(TodoListState state, int index) {
+    final TodoList todoList = state.todoList[index];
+    return Dismissible(
+      key: ValueKey(todoList),
+      confirmDismiss: (direction) =>
+          _confirmTodoDelete(context, index, state, todoList),
+      child: Card(
+          child: ListTile(
+              leading: Icon(
+                Icons.list,
+                size: 35,
+                color: AppColorPalette().primaryColor,
+              ),
+              title: Text(todoList.title ?? ''),
+              onTap: () {
+                Navigator.of(context).push<Widget>(MaterialPageRoute<Widget>(
+                    builder: (context) => TodoListScreen(
+                          todoList: todoList,
+                        )));
+              }),
+        ),
+    );
+  }
+
+  Future<bool> _confirmTodoDelete(BuildContext context, int index,
+      TodoListState state, TodoList todoList) async {
+    await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(
+                  "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
+              content: Text(
+                  "${FlutterTodosAppLocalizations.of(context).translate('delete_todoList_start')} ${state.todoList[index].title} ${FlutterTodosAppLocalizations.of(context).translate('delete_todoList_end')}"),
+              actions: [
+                FlatButton(
+                    onPressed: () {
+                      todoListBloc.deleteTodoList(todoList);
+
+                      Navigator.pop(context, true);
+                    },
+                    child: Text(
+                        "${FlutterTodosAppLocalizations.of(context).translate('confirm')}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(color: Theme.of(context).accentColor))),
+                FlatButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: Text(
+                        "${FlutterTodosAppLocalizations.of(context).translate('cancel')}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(color: Theme.of(context).accentColor)))
+              ],
+            ));
+    return true;
+  }
 }

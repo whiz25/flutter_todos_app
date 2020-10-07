@@ -32,7 +32,7 @@ class _TodoListScreenState extends State<TodoListScreen>
     super.initState();
 
     todoBloc = TodoBloc(
-      todoList: widget.todoList,
+        todoList: widget.todoList,
         iTodoRepository: RepositoryProvider.of<ITodoRepository>(context));
 
     contentInputController = TextEditingController();
@@ -64,12 +64,25 @@ class _TodoListScreenState extends State<TodoListScreen>
             return const ProgressLoader();
           }
           return Scaffold(
+            appBar: AppBar(
+              elevation: 0,
+            ),
             body: Container(
                 color: AppColorPalette().primaryColor,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(child: _incompleteTodoList(state, context)),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        widget.todoList.title,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 30),
+                      ),
+                    ),
+                    Expanded(
+                      child: _incompleteTodoList(state, context),
+                    ),
                     if (state.completeTodos.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.all(8),
@@ -125,8 +138,8 @@ class _TodoListScreenState extends State<TodoListScreen>
               FlatButton(
                 onPressed: () {
                   if (contentInputController.text.isNotEmpty) {
-                    todoBloc.createTodo(contentInputController.text, 
-                    widget.todoList);
+                    todoBloc.createTodo(
+                        contentInputController.text, widget.todoList);
                     contentInputController.clear();
 
                     Navigator.of(context).pop();
@@ -219,7 +232,7 @@ class _TodoListScreenState extends State<TodoListScreen>
       BuildContext context, TodoState state, int index, Todo todo) async {
     await showDialog<bool>(
         context: context,
-        builder: (BuildContext context) => AlertDialog(
+        builder: (context) => AlertDialog(
               title: Text(
                   "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
               content: Text(

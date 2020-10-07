@@ -2,6 +2,8 @@
   "appBarTitle": "Flutter Todos App",
   "confirm": "OK",
   "cancel": "Annuller",
-  "remove_user_start": "Vil du fjerne ",
-  "remove_user_end": "fra kontoen?"
+  "delete_todoList_start": "Vil du fjerne ",
+  "delete_todoList_end": " ?",
+  "delete_todo_start": "Vil du fjerne ",
+  "delete_todo_end": " ?"
 }
