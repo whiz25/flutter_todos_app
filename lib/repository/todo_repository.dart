@@ -1,8 +1,8 @@
-import 'package:flutter_todos_app/model/todo_list.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../model/todo.dart';
+import '../model/todo_list.dart';
 import 'itodo_repository.dart';
 
 class TodoRepository implements ITodoRepository {
@@ -20,10 +20,14 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<Todo> addTodo(Todo todo) async {
+  Future<Todo> addTodo(Todo todo, TodoList todoList) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    await _todoBox.add(todo);
+    await _todoBox.add(todoList);
+
+    // Create a HiveList from the Todo Box
+    todoList.todos = HiveList(_todoBox);
+    todoList.todos.add(todo);
 
     return todo;
   }
@@ -36,27 +40,37 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<List<Todo>> getAllIncompleteTodos() async {
+  Future<List<Todo>> getAllIncompleteTodos(TodoList todoList) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    final Iterable<Todo> todos = _todoBox.values.cast<Todo>();
-    final List<Todo> copyTodos = List<Todo>.from(todos);
-    final List<Todo> incompleteTodos =
-        copyTodos.where((t) => t.isComplete == false).toList();
+    final TodoList existingTodoList = _todoBox.get(todoList.key) as TodoList;
 
-    return incompleteTodos;
+    if (existingTodoList.todos.isNotEmpty) {
+      final List<Todo> copyTodos = List<Todo>.from(existingTodoList.todos);
+      final List<Todo> incompleteTodos =
+          copyTodos.where((t) => t.isComplete == false).toList();
+
+      return incompleteTodos;
+    }
+
+    return null;
   }
 
   @override
-  Future<List<Todo>> getAllCompleteTodos() async {
+  Future<List<Todo>> getAllCompleteTodos(TodoList todoList) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    final Iterable<Todo> todos = _todoBox.values.cast<Todo>();
-    final List<Todo> copyTodos = List<Todo>.from(todos);
-    final List<Todo> completeTodos =
-        copyTodos.where((c) => c.isComplete == true).toList();
+    final TodoList existingTodoList = _todoBox.get(todoList.key) as TodoList;
 
-    return completeTodos;
+    if (existingTodoList.todos.isNotEmpty) {
+      final List<Todo> copyTodos = List<Todo>.from(existingTodoList.todos);
+      final List<Todo> completeTodos =
+          copyTodos.where((c) => c.isComplete == true).toList();
+
+      return completeTodos;
+    }
+
+    return null;
   }
 
   @override
@@ -84,8 +98,25 @@ class TodoRepository implements ITodoRepository {
     return todo.isComplete;
   }
 
+  @override
+  Future<TodoList> addTodoList(TodoList todoList) async {
+    await checkIfBoxIsCreatedAndOpen();
+
+    await _todoBox.add(todoList);
+
+    return todoList;
+  }
+
+  @override
+  Future<List<TodoList>> getAllTodoLists() async {
+    await checkIfBoxIsCreatedAndOpen();
+
+    final Iterable<TodoList> todoLists = _todoBox.values.cast<TodoList>();
+    return todoLists.toList();
+  }
+
   Future<void> checkIfBoxIsCreatedAndOpen() async {
-    _todoBox ??= await Hive.openBox<Todo>('all_todos');
+    _todoBox ??= await Hive.openBox<TodoList>('todoLists');
 
     if (!(_todoBox?.isOpen ?? false)) {
       return;

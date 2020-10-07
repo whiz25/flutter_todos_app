@@ -1,35 +1,38 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 import '../model/todo.dart';
+import '../model/todo_list.dart';
 import '../repository/itodo_repository.dart';
 import 'bloc.dart';
 import 'todo_state.dart';
 
 class TodoBloc extends AutoLoadCubit<TodoState> {
+  final TodoList todoList;
   final ITodoRepository iTodoRepository;
 
-  TodoBloc({this.iTodoRepository});
+  TodoBloc({@required this.todoList, this.iTodoRepository});
 
   @override
   FutureOr<TodoState> loadInitialState() async {
-    final List<Todo> incompleteTodos =
-        await iTodoRepository.getAllIncompleteTodos();
-    final List<Todo> completeTodos =
-        await iTodoRepository.getAllCompleteTodos();
+    final Todo incompleteTodo = Todo(content: 'flutter', id: '10');
+    final List<Todo> incompleteTodos = [incompleteTodo];
+    // await iTodoRepository.getAllIncompleteTodos(todoList);
+    final Todo completeTodo = Todo(content: 'python', id: '11');
+    final List<Todo> completeTodos = [completeTodo];
+    // await iTodoRepository.getAllCompleteTodos(todoList);
     return TodoState(
         incompleteTodos: incompleteTodos, completeTodos: completeTodos);
   }
 
-  Future<void> createTodo(String content) async {
+  Future<void> createTodo(String content, TodoList todoList) async {
     final uuid = Uuid();
 
-    final Todo newTodo = Todo()
-      ..id = uuid.v4()
-      ..content = content;
+    final Todo newTodo = Todo(id: uuid.v4(), content: content);
 
-    await iTodoRepository.addTodo(newTodo);
+    await iTodoRepository.addTodo(newTodo, todoList);
 
     final incompleteTodos = List<Todo>.from(state.incompleteTodos);
     incompleteTodos.add(newTodo);

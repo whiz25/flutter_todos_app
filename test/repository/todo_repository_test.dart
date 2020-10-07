@@ -1,86 +1,86 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_todos_app/model/todo.dart';
-import 'package:flutter_todos_app/repository/todo_repository.dart';
+// import 'package:flutter_test/flutter_test.dart';
+// import 'package:flutter_todos_app/model/todo.dart';
+// import 'package:flutter_todos_app/repository/todo_repository.dart';
 
-void main() {
-  final todoRepository = TodoRepository();
+// void main() {
+//   final todoRepository = TodoRepository();
 
-  test('Test addNewTodo()', () async {
-    await TodoRepository.initialize();
+//   test('Test addNewTodo()', () async {
+//     await TodoRepository.initialize();
 
-    await todoRepository.clearTodoBox();
+//     await todoRepository.clearTodoBox();
 
-    List<Todo> todos = await todoRepository.getAllIncompleteTodos();
+//     List<Todo> todos = await todoRepository.getAllIncompleteTodos();
 
-    expect(todos.length, 0);
+//     expect(todos.length, 0);
 
-    final Todo newTodo = Todo(content: 'Code in Flutter');
-    await todoRepository.addTodo(newTodo);
+//     // final Todo newTodo = Todo(content: 'Code in Flutter');
+//     // await todoRepository.addTodo(newTodo);
 
-    final Todo anotherNewTodo = Todo(content: 'Code in Dart');
-    await todoRepository.addTodo(anotherNewTodo);
+//     // final Todo anotherNewTodo = Todo(content: 'Code in Dart');
+//     // await todoRepository.addTodo(anotherNewTodo);
 
-    todos = await todoRepository.getAllIncompleteTodos();
+//     todos = await todoRepository.getAllIncompleteTodos();
 
-    expect(todos.length, 2);
-  });
+//     expect(todos.length, 2);
+//   });
 
-  test('Test deleteTodo()', () async {
-    List<Todo> todos = await todoRepository.getAllIncompleteTodos();
+//   test('Test deleteTodo()', () async {
+//     List<Todo> todos = await todoRepository.getAllIncompleteTodos();
 
-    expect(todos.length, 2);
+//     expect(todos.length, 2);
 
-    final Todo todoToDelete = todos[0];
-    await todoRepository.deleteTodo(todoToDelete);
+//     final Todo todoToDelete = todos[0];
+//     await todoRepository.deleteTodo(todoToDelete);
 
-    todos = await todoRepository.getAllIncompleteTodos();
+//     todos = await todoRepository.getAllIncompleteTodos();
 
-    expect(todos.length, 1);
-  });
+//     expect(todos.length, 1);
+//   });
 
-  test('Test updateTodo()', () async {
-    List<Todo> todos = await todoRepository.getAllIncompleteTodos();
+//   test('Test updateTodo()', () async {
+//     List<Todo> todos = await todoRepository.getAllIncompleteTodos();
 
-    expect(todos.length, 1);
+//     expect(todos.length, 1);
 
-    final Todo existingTodo = todos[0];
-    expect(existingTodo.content, 'Code in Dart');
+//     final Todo existingTodo = todos[0];
+//     expect(existingTodo.content, 'Code in Dart');
 
-    final Todo todoToUpdate = todos[0];
-    todoToUpdate.content = 'Code in Python';
+//     final Todo todoToUpdate = todos[0];
+//     todoToUpdate.content = 'Code in Python';
 
-    await todoRepository.updateTodo(todoToUpdate);
+//     await todoRepository.updateTodo(todoToUpdate);
 
-    todos = await todoRepository.getAllIncompleteTodos();
+//     todos = await todoRepository.getAllIncompleteTodos();
 
-    final Todo updatedTodo = todos[0];
-    expect(updatedTodo.content, 'Code in Python');
-  });
+//     final Todo updatedTodo = todos[0];
+//     expect(updatedTodo.content, 'Code in Python');
+//   });
 
-  test('Test completeTodo()', () async {
-    List<Todo> todos = await todoRepository.getAllIncompleteTodos();
+//   test('Test completeTodo()', () async {
+//     List<Todo> todos = await todoRepository.getAllIncompleteTodos();
 
-    expect(todos.length, 1);
+//     expect(todos.length, 1);
 
-    final Todo existingTodo = todos[0];
-    expect(existingTodo.isComplete, false);
+//     final Todo existingTodo = todos[0];
+//     expect(existingTodo.isComplete, false);
 
-    final Todo todoToComplete = todos[0];
+//     final Todo todoToComplete = todos[0];
 
-    // Set Todo's complete status to true
-    await todoRepository.completeTodo(todoToComplete);
+//     // Set Todo's complete status to true
+//     await todoRepository.completeTodo(todoToComplete);
 
-    todos = await todoRepository.getAllCompleteTodos();
+//     todos = await todoRepository.getAllCompleteTodos();
 
-    final Todo completedTodoReturnsTrue = todos[0];
-    expect(completedTodoReturnsTrue.isComplete, true);
+//     final Todo completedTodoReturnsTrue = todos[0];
+//     expect(completedTodoReturnsTrue.isComplete, true);
 
-    // Set Todo's complete status to false
-    await todoRepository.completeTodo(todoToComplete);
+//     // Set Todo's complete status to false
+//     await todoRepository.completeTodo(todoToComplete);
 
-    todos = await todoRepository.getAllIncompleteTodos();
+//     todos = await todoRepository.getAllIncompleteTodos();
 
-    final Todo completedTodoReturnsFalse = todos[0];
-    expect(completedTodoReturnsFalse.isComplete, false);
-  });
-}
+//     final Todo completedTodoReturnsFalse = todos[0];
+//     expect(completedTodoReturnsFalse.isComplete, false);
+//   });
+// }
