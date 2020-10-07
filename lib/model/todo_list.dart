@@ -8,10 +8,10 @@ part 'todo_list.g.dart';
 @HiveType(typeId: 1)
 class TodoList extends HiveObject {
   @HiveField(0)
-  String title;
+  String id;
 
   @HiveField(1)
-  List<Todo> todos;
+  String title;
 
-  TodoList({@required this.title});
+  TodoList({@required this.id, @required this.title});
 }

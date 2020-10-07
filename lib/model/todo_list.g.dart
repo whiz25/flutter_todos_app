@@ -17,8 +17,9 @@ class TodoListAdapter extends TypeAdapter<TodoList> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return TodoList(
-      title: fields[0] as String,
-    )..todos = (fields[1] as List)?.cast<Todo>();
+      id: fields[0] as String,
+      title: fields[1] as String,
+    );
   }
 
   @override
@@ -26,9 +27,9 @@ class TodoListAdapter extends TypeAdapter<TodoList> {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.title)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.todos);
+      ..write(obj.title);
   }
 
   @override
