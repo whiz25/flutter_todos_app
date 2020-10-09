@@ -2,6 +2,6 @@
   "appBarTitle": "Flutter Todos App",
   "confirm": "OK",
   "cancel": "Cancel",
-  "remove_user_start": "Do you want to remove ",
-  "remove_user_end": "from the account?"
+  "delete_todo_start": "Do you want to delete ",
+  "delete_todo_end": "?"
 }

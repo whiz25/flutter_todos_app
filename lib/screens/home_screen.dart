@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../animations/main_animation.dart';
 import '../blocs/todo_bloc.dart';
 import '../blocs/todo_state.dart';
 import '../model/todo.dart';
 import '../repository/itodo_repository.dart';
-import '../utils/app_color_palette.dart';
 import '../utils/localization.dart';
 import '../widgets/progress_loader.dart';
 
@@ -18,12 +16,14 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> {
   TodoBloc todoBloc;
   TextEditingController contentInputController;
-  AnimationController animationController;
-  MainAnimation mainAnimation;
+
+  final GlobalKey<AnimatedListState> _incompleteListKey =
+      GlobalKey<AnimatedListState>();
+  final GlobalKey<AnimatedListState> _completeListKey =
+      GlobalKey<AnimatedListState>();
 
   @override
   void initState() {
@@ -33,22 +33,11 @@ class _HomeScreenState extends State<HomeScreen>
         iTodoRepository: RepositoryProvider.of<ITodoRepository>(context));
 
     contentInputController = TextEditingController();
-
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 2000), vsync: this);
-
-    mainAnimation = MainAnimation(animationController);
-    animationController.addListener(() {
-      setState(() {});
-    });
-
-    animationController.forward();
   }
 
   @override
   void dispose() {
     todoBloc.close();
-    animationController.dispose();
 
     super.dispose();
   }
@@ -62,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen>
           }
           return Scaffold(
             body: Container(
-                color: AppColorPalette().primaryColor,
+                color: Theme.of(context).primaryColor,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -83,17 +72,18 @@ class _HomeScreenState extends State<HomeScreen>
                   ],
                 )),
             floatingActionButton: FloatingActionButton(
-              onPressed: () => _createTodoForm(context, todoBloc),
+              onPressed: () => _createTodoForm(context, todoBloc, state),
               child: Icon(
                 Icons.add,
-                color: AppColorPalette().primaryColor,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           );
         },
       );
 
-  Future<Widget> _createTodoForm(BuildContext context, TodoBloc bloc) =>
+  Future<Widget> _createTodoForm(
+          BuildContext context, TodoBloc bloc, TodoState state) =>
       showDialog<Widget>(
           context: context,
           child: AlertDialog(
@@ -120,10 +110,12 @@ class _HomeScreenState extends State<HomeScreen>
                 child: const Text('Cancel'),
               ),
               FlatButton(
-                onPressed: () {
+                onPressed: () async {
                   if (contentInputController.text.isNotEmpty) {
-                    todoBloc.createTodo(contentInputController.text);
+                    await todoBloc.createTodo(contentInputController.text);
                     contentInputController.clear();
+
+                    _incompleteListKey.currentState.insertItem(0);
 
                     Navigator.of(context).pop();
                   }
@@ -137,40 +129,46 @@ class _HomeScreenState extends State<HomeScreen>
     final List<Todo> todos = state.incompleteTodos;
     return Container(
       margin: const EdgeInsets.only(top: 100),
-      child: ListView.separated(
+      child: AnimatedList(
+          key: _incompleteListKey,
           padding: const EdgeInsets.all(8),
-          separatorBuilder: (context, int index) => const Divider(
-                thickness: 1,
-              ),
-          itemCount: todos.length,
-          itemBuilder: (context, index) =>
-              _incompleteTodoDismissible(state, index)),
+          initialItemCount: todos.length,
+          itemBuilder: (context, index, animation) => SizeTransition(
+              sizeFactor: animation,
+              child: _incompleteTodoDismissible(state, index))),
     );
   }
 
   Widget _completeTodoList(TodoState state, BuildContext context) {
     final List<Todo> completeTodos = state.completeTodos;
-    return ListView.separated(
+    return AnimatedList(
+        key: _completeListKey,
         padding: const EdgeInsets.all(8),
-        separatorBuilder: (context, int index) => const Divider(
-              thickness: 1,
-            ),
-        itemCount: completeTodos.length,
-        itemBuilder: (context, index) =>
-            _completeTodoDismissible(state, index));
+        initialItemCount: completeTodos.length,
+        itemBuilder: (context, index, animation) => SizeTransition(
+            sizeFactor: animation,
+            child: _completeTodoDismissible(state, index)));
   }
 
   Widget _incompleteTodoDismissible(TodoState state, int index) {
     final Todo incompleteTodo = state.incompleteTodos[index];
     return Dismissible(
-        confirmDismiss: (direction) =>
-            _confirmTodoDelete(context, state, index, incompleteTodo),
+        confirmDismiss: (direction) => _confirmTodoDeleteIncompleteTodo(
+            context, state, index, incompleteTodo),
         key: ValueKey(incompleteTodo),
         child: Card(
           child: ListTile(
               leading: IconButton(
-                onPressed: () {
-                  todoBloc.completeTodo(incompleteTodo);
+                onPressed: () async {
+                  _incompleteListKey.currentState.removeItem(
+                      index,
+                      (context, animation) => const SizedBox(
+                            width: 0,
+                            height: 0,
+                          ));
+                  await todoBloc.completeTodo(incompleteTodo);
+
+                  _completeListKey.currentState.insertItem(0);
                 },
                 icon: const Icon(
                   FontAwesomeIcons.circle,
@@ -189,18 +187,27 @@ class _HomeScreenState extends State<HomeScreen>
     final Todo completeTodo = state.completeTodos[index];
     return Dismissible(
         confirmDismiss: (direction) =>
-            _confirmTodoDelete(context, state, index, completeTodo),
+            _confirmTodoDeleteCompleteTodo(context, state, index, completeTodo),
         key: ValueKey(completeTodo),
         child: Card(
           child: ListTile(
               leading: IconButton(
-                  onPressed: () {
-                    todoBloc.completeTodo(completeTodo);
+                  onPressed: () async {
+                    _completeListKey.currentState.removeItem(
+                        index,
+                        (context, animation) => const SizedBox(
+                              width: 0,
+                              height: 0,
+                            ));
+
+                    await todoBloc.completeTodo(completeTodo);
+
+                    _incompleteListKey.currentState.insertItem(0);
                   },
                   icon: Icon(
                     FontAwesomeIcons.solidCheckCircle,
                     size: 35,
-                    color: AppColorPalette().primaryColor,
+                    color: Theme.of(context).primaryColor,
                   )),
               title: Text(
                 completeTodo.content ?? '',
@@ -211,7 +218,7 @@ class _HomeScreenState extends State<HomeScreen>
         ));
   }
 
-  Future<bool> _confirmTodoDelete(
+  Future<bool> _confirmTodoDeleteIncompleteTodo(
       BuildContext context, TodoState state, int index, Todo todo) async {
     await showDialog<bool>(
         context: context,
@@ -219,11 +226,17 @@ class _HomeScreenState extends State<HomeScreen>
               title: Text(
                   "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
               content: Text(
-                  "${FlutterTodosAppLocalizations.of(context).translate('remove_user_start')} ${state.incompleteTodos[index].content} ${FlutterTodosAppLocalizations.of(context).translate('remove_user_end')}"),
+                  "${FlutterTodosAppLocalizations.of(context).translate('delete_todo_start')} ${todo.content} ${FlutterTodosAppLocalizations.of(context).translate('delete_todo_end')}"),
               actions: [
                 FlatButton(
-                    onPressed: () {
-                      todoBloc.deleteTodo(todo);
+                    onPressed: () async {
+                      _incompleteListKey.currentState.removeItem(
+                          index,
+                          (context, animation) => const SizedBox(
+                                width: 0,
+                                height: 0,
+                              ));
+                      await todoBloc.deleteTodo(todo);
 
                       Navigator.pop(context, true);
                     },
@@ -232,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen>
                         style: Theme.of(context)
                             .textTheme
                             .headline6
-                            .copyWith(color: Theme.of(context).accentColor))),
+                            .copyWith(color: Theme.of(context).primaryColor))),
                 FlatButton(
                     onPressed: () => Navigator.pop(context, false),
                     child: Text(
@@ -240,7 +253,48 @@ class _HomeScreenState extends State<HomeScreen>
                         style: Theme.of(context)
                             .textTheme
                             .headline6
-                            .copyWith(color: Theme.of(context).accentColor)))
+                            .copyWith(color: Theme.of(context).primaryColor)))
+              ],
+            ));
+    return true;
+  }
+
+  Future<bool> _confirmTodoDeleteCompleteTodo(
+      BuildContext context, TodoState state, int index, Todo todo) async {
+    await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              title: Text(
+                  "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
+              content: Text(
+                  "${FlutterTodosAppLocalizations.of(context).translate('delete_todo_start')} ${todo.content} ${FlutterTodosAppLocalizations.of(context).translate('delete_todo_end')}"),
+              actions: [
+                FlatButton(
+                    onPressed: () async {
+                      _completeListKey.currentState.removeItem(
+                          index,
+                          (context, animation) => const SizedBox(
+                                width: 0,
+                                height: 0,
+                              ));
+                      await todoBloc.deleteTodo(todo);
+
+                      Navigator.pop(context, true);
+                    },
+                    child: Text(
+                        "${FlutterTodosAppLocalizations.of(context).translate('confirm')}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(color: Theme.of(context).primaryColor))),
+                FlatButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: Text(
+                        "${FlutterTodosAppLocalizations.of(context).translate('cancel')}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(color: Theme.of(context).primaryColor)))
               ],
             ));
     return true;
