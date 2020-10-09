@@ -6,7 +6,6 @@ import '../blocs/todo_bloc.dart';
 import '../blocs/todo_state.dart';
 import '../model/todo.dart';
 import '../repository/itodo_repository.dart';
-import '../utils/app_color_palette.dart';
 import '../utils/localization.dart';
 import '../widgets/progress_loader.dart';
 
@@ -17,7 +16,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>{
+class _HomeScreenState extends State<HomeScreen> {
   TodoBloc todoBloc;
   TextEditingController contentInputController;
 
@@ -52,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen>{
           }
           return Scaffold(
             body: Container(
-                color: AppColorPalette().primaryColor,
+                color: Theme.of(context).primaryColor,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -76,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen>{
               onPressed: () => _createTodoForm(context, todoBloc, state),
               child: Icon(
                 Icons.add,
-                color: AppColorPalette().primaryColor,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           );
@@ -160,14 +159,14 @@ class _HomeScreenState extends State<HomeScreen>{
         child: Card(
           child: ListTile(
               leading: IconButton(
-                onPressed: () {
+                onPressed: () async {
                   _incompleteListKey.currentState.removeItem(
                       index,
                       (context, animation) => const SizedBox(
                             width: 0,
                             height: 0,
                           ));
-                  todoBloc.completeTodo(incompleteTodo);
+                  await todoBloc.completeTodo(incompleteTodo);
 
                   _completeListKey.currentState.insertItem(0);
                 },
@@ -193,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen>{
         child: Card(
           child: ListTile(
               leading: IconButton(
-                  onPressed: () {
+                  onPressed: () async {
                     _completeListKey.currentState.removeItem(
                         index,
                         (context, animation) => const SizedBox(
@@ -201,14 +200,14 @@ class _HomeScreenState extends State<HomeScreen>{
                               height: 0,
                             ));
 
-                    todoBloc.completeTodo(completeTodo);
+                    await todoBloc.completeTodo(completeTodo);
 
                     _incompleteListKey.currentState.insertItem(0);
                   },
                   icon: Icon(
                     FontAwesomeIcons.solidCheckCircle,
                     size: 35,
-                    color: AppColorPalette().primaryColor,
+                    color: Theme.of(context).primaryColor,
                   )),
               title: Text(
                 completeTodo.content ?? '',
@@ -225,42 +224,36 @@ class _HomeScreenState extends State<HomeScreen>{
         context: context,
         builder: (BuildContext context) => AlertDialog(
               title: Text(
-                  "${FlutterTodosAppLocalizations.of(context).
-                  translate('confirm')}"),
+                  "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
               content: Text(
-                  "${FlutterTodosAppLocalizations.of(context).
-                  translate('delete_todo_start')} ${todo.
-                  content} ${FlutterTodosAppLocalizations.
-                  of(context).translate('delete_todo_end')}"),
+                  "${FlutterTodosAppLocalizations.of(context).translate('delete_todo_start')} ${todo.content} ${FlutterTodosAppLocalizations.of(context).translate('delete_todo_end')}"),
               actions: [
                 FlatButton(
-                    onPressed: () {
+                    onPressed: () async {
                       _incompleteListKey.currentState.removeItem(
                           index,
                           (context, animation) => const SizedBox(
                                 width: 0,
                                 height: 0,
                               ));
-                      todoBloc.deleteTodo(todo);
+                      await todoBloc.deleteTodo(todo);
 
                       Navigator.pop(context, true);
                     },
                     child: Text(
-                        "${FlutterTodosAppLocalizations.of(context).
-                        translate('confirm')}",
+                        "${FlutterTodosAppLocalizations.of(context).translate('confirm')}",
                         style: Theme.of(context)
                             .textTheme
                             .headline6
-                            .copyWith(color: AppColorPalette().primaryColor))),
+                            .copyWith(color: Theme.of(context).primaryColor))),
                 FlatButton(
                     onPressed: () => Navigator.pop(context, false),
                     child: Text(
-                        "${FlutterTodosAppLocalizations.of(context).
-                        translate('cancel')}",
+                        "${FlutterTodosAppLocalizations.of(context).translate('cancel')}",
                         style: Theme.of(context)
                             .textTheme
                             .headline6
-                            .copyWith(color: AppColorPalette().primaryColor)))
+                            .copyWith(color: Theme.of(context).primaryColor)))
               ],
             ));
     return true;
@@ -272,13 +265,9 @@ class _HomeScreenState extends State<HomeScreen>{
         context: context,
         builder: (BuildContext context) => AlertDialog(
               title: Text(
-                  "${FlutterTodosAppLocalizations.of(context).
-                  translate('confirm')}"),
+                  "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
               content: Text(
-                  "${FlutterTodosAppLocalizations.of(context).
-                  translate('delete_todo_start')} ${todo.
-                  content} ${FlutterTodosAppLocalizations.
-                  of(context).translate('delete_todo_end')}"),
+                  "${FlutterTodosAppLocalizations.of(context).translate('delete_todo_start')} ${todo.content} ${FlutterTodosAppLocalizations.of(context).translate('delete_todo_end')}"),
               actions: [
                 FlatButton(
                     onPressed: () async {
@@ -293,21 +282,19 @@ class _HomeScreenState extends State<HomeScreen>{
                       Navigator.pop(context, true);
                     },
                     child: Text(
-                        "${FlutterTodosAppLocalizations.of(context).
-                        translate('confirm')}",
+                        "${FlutterTodosAppLocalizations.of(context).translate('confirm')}",
                         style: Theme.of(context)
                             .textTheme
                             .headline6
-                            .copyWith(color: AppColorPalette().primaryColor))),
+                            .copyWith(color: Theme.of(context).primaryColor))),
                 FlatButton(
                     onPressed: () => Navigator.pop(context, false),
                     child: Text(
-                        "${FlutterTodosAppLocalizations.of(context).
-                        translate('cancel')}",
+                        "${FlutterTodosAppLocalizations.of(context).translate('cancel')}",
                         style: Theme.of(context)
                             .textTheme
                             .headline6
-                            .copyWith(color: AppColorPalette().primaryColor)))
+                            .copyWith(color: Theme.of(context).primaryColor)))
               ],
             ));
     return true;
