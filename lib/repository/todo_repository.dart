@@ -105,7 +105,8 @@ class TodoRepository implements ITodoRepository {
   Future<TodoList> addTodoList(TodoList todoList) async {
     await checkIfBoxIsCreatedAndOpen();
 
-    await _todoBox.add(todoList);
+    final _todoListBox = await Hive.openBox<TodoList>(todoList.id);
+    await _todoBox.add(_todoListBox);
 
     return todoList;
   }
@@ -119,7 +120,7 @@ class TodoRepository implements ITodoRepository {
   }
 
   Future<void> checkIfBoxIsCreatedAndOpen() async {
-    _todoBox ??= await Hive.openBox<TodoList>('todoLists');
+    _todoBox ??= await Hive.openBox<List<TodoList>>('todoLists');
 
     if (!(_todoBox?.isOpen ?? false)) {
       return;
