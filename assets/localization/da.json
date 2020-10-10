@@ -3,7 +3,7 @@
   "confirm": "OK",
   "cancel": "Annuller",
   "delete_todoList_start": "Vil du fjerne ",
-  "delete_todoList_end": " ?",
+  "delete_todoList_end": "?",
   "delete_todo_start": "Vil du fjerne ",
-  "delete_todo_end": " ?"
+  "delete_todo_end": "?"
 }

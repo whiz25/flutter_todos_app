@@ -187,7 +187,7 @@ class _TodoListScreenState extends State<TodoListScreen>
           child: ListTile(
               leading: IconButton(
                 onPressed: () {
-                  // todoBloc.completeTodo(incompleteTodo);
+                  todoBloc.completeTodo(incompleteTodo);
                 },
                 icon: const Icon(
                   FontAwesomeIcons.circle,
@@ -212,7 +212,7 @@ class _TodoListScreenState extends State<TodoListScreen>
           child: ListTile(
               leading: IconButton(
                   onPressed: () {
-                    // todoBloc.completeTodo(completeTodo);
+                    todoBloc.completeTodo(completeTodo);
                   },
                   icon: Icon(
                     FontAwesomeIcons.solidCheckCircle,
@@ -236,11 +236,11 @@ class _TodoListScreenState extends State<TodoListScreen>
               title: Text(
                   "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
               content: Text(
-                  "${FlutterTodosAppLocalizations.of(context).translate('remove_user_start')} ${state.incompleteTodos[index].content} ${FlutterTodosAppLocalizations.of(context).translate('remove_user_end')}"),
+                  "${FlutterTodosAppLocalizations.of(context).translate('delete_todo_start')} ${state.incompleteTodos[index].content} ${FlutterTodosAppLocalizations.of(context).translate('delete_todo_end')}"),
               actions: [
                 FlatButton(
                     onPressed: () {
-                      // todoBloc.deleteTodo(todo);
+                      todoBloc.deleteTodo(todo);
 
                       Navigator.pop(context, true);
                     },

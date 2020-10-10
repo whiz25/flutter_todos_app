@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 import '../model/todo.dart';
 import '../model/todo_list.dart';
@@ -17,20 +16,16 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
 
   @override
   FutureOr<TodoState> loadInitialState() async {
-    final Todo incompleteTodo = Todo(content: 'flutter', id: '10');
-    final List<Todo> incompleteTodos = [incompleteTodo];
-    // await iTodoRepository.getAllIncompleteTodos(todoList);
-    final Todo completeTodo = Todo(content: 'python', id: '11');
-    final List<Todo> completeTodos = [completeTodo];
-    // await iTodoRepository.getAllCompleteTodos(todoList);
+    final List<Todo> incompleteTodos =
+        await iTodoRepository.getAllIncompleteTodos(todoList);
+    final List<Todo> completeTodos =
+        await iTodoRepository.getAllCompleteTodos(todoList);
     return TodoState(
         incompleteTodos: incompleteTodos, completeTodos: completeTodos);
   }
 
   Future<void> createTodo(String content, TodoList todoList) async {
-    final uuid = Uuid();
-
-    final Todo newTodo = Todo(id: uuid.v4(), content: content);
+    final Todo newTodo = Todo(id: todoList.id, content: content);
 
     await iTodoRepository.addTodo(newTodo, todoList);
 

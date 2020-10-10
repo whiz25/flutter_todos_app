@@ -52,7 +52,16 @@ class _HomeScreenState extends State<HomeScreen>
                 width: double.infinity,
                 height: double.infinity,
                 color: AppColorPalette().primaryColor,
-                child: _todoLists(state)),
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top:60),
+                      child: Text('All TodoLists', style: 
+                      TextStyle(fontSize: 25, color: Colors.white),),
+                    ),
+                    Expanded(child: _todoLists(state)),
+                  ],
+                )),
             floatingActionButton: FloatingActionButton(
               onPressed: () => _createTodoForm(context, todoListBloc),
               child: Icon(
@@ -121,20 +130,20 @@ class _HomeScreenState extends State<HomeScreen>
       confirmDismiss: (direction) =>
           _confirmTodoDelete(context, index, state, todoList),
       child: Card(
-          child: ListTile(
-              leading: Icon(
-                Icons.list,
-                size: 35,
-                color: AppColorPalette().primaryColor,
-              ),
-              title: Text(todoList.title ?? ''),
-              onTap: () {
-                Navigator.of(context).push<Widget>(MaterialPageRoute<Widget>(
-                    builder: (context) => TodoListScreen(
-                          todoList: todoList,
-                        )));
-              }),
-        ),
+        child: ListTile(
+            leading: Icon(
+              Icons.list,
+              size: 35,
+              color: AppColorPalette().primaryColor,
+            ),
+            title: Text(todoList.title ?? ''),
+            onTap: () {
+              Navigator.of(context).push<Widget>(MaterialPageRoute<Widget>(
+                  builder: (context) => TodoListScreen(
+                        todoList: todoList,
+                      )));
+            }),
+      ),
     );
   }
 
