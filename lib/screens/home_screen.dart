@@ -22,6 +22,8 @@ class _HomeScreenState extends State<HomeScreen>
   TodoListBloc todoListBloc;
   TextEditingController todoListInputController;
 
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+
   @override
   void initState() {
     super.initState();
@@ -55,9 +57,11 @@ class _HomeScreenState extends State<HomeScreen>
                 child: Column(
                   children: [
                     const Padding(
-                      padding: EdgeInsets.only(top:60),
-                      child: Text('All TodoLists', style: 
-                      TextStyle(fontSize: 25, color: Colors.white),),
+                      padding: EdgeInsets.only(top: 60),
+                      child: Text(
+                        'All TodoLists',
+                        style: TextStyle(fontSize: 25, color: Colors.white),
+                      ),
                     ),
                     Expanded(child: _todoLists(state)),
                   ],
@@ -73,12 +77,11 @@ class _HomeScreenState extends State<HomeScreen>
         },
       );
 
-  Widget _todoLists(TodoListState state) => ListView.separated(
-      separatorBuilder: (context, index) => const Divider(
-            thickness: 1,
-          ),
-      itemCount: state.todoList.length,
-      itemBuilder: (context, index) => _todoListDissmissible(state, index));
+  Widget _todoLists(TodoListState state) => AnimatedList(
+      key: _listKey,
+      initialItemCount: state.todoList.length,
+      itemBuilder: (context, index, animation) => SizeTransition(
+          sizeFactor: animation, child: _todoListDissmissible(state, index)));
 
   Future<Widget> _createTodoForm(
           BuildContext context, TodoListBloc todoListBloc) =>
@@ -108,12 +111,14 @@ class _HomeScreenState extends State<HomeScreen>
                 child: const Text('Cancel'),
               ),
               FlatButton(
-                onPressed: () {
+                onPressed: () async {
                   if (todoListInputController.text.isNotEmpty) {
-                    todoListBloc.createTodoList(
+                    await todoListBloc.createTodoList(
                       todoListInputController.text,
                     );
                     todoListInputController.clear();
+
+                    _listKey.currentState.insertItem(0);
 
                     Navigator.of(context).pop();
                   }

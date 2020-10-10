@@ -23,8 +23,7 @@ class TodoRepository implements ITodoRepository {
   @override
   Future<Todo> addTodo(Todo todo, TodoList todoList) async {
     await checkIfMainBoxIsCreatedAndOpen();
-    await checkIfTodoListBoxIsCreatedAndOpen();
-
+    
     await _todoBox.add(todo);
 
     return todo;
@@ -40,14 +39,15 @@ class TodoRepository implements ITodoRepository {
   @override
   Future<void> deletTodoList(TodoList todoList) async {
     await checkIfMainBoxIsCreatedAndOpen();
+    await checkIfTodoListBoxIsCreatedAndOpen();
 
     await _todoBox.delete(todoList.key);
+    await _todoListBox.delete(todoList.key);
   }
 
   @override
   Future<List<Todo>> getAllIncompleteTodos(TodoList todoList) async {
     await checkIfMainBoxIsCreatedAndOpen();
-    await checkIfTodoListBoxIsCreatedAndOpen();
 
     final Iterable<Todo> allIncompleteTodos = _todoBox.values.cast<Todo>();
 
@@ -83,7 +83,9 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<bool> completeTodo(Todo todo,) async {
+  Future<bool> completeTodo(
+    Todo todo,
+  ) async {
     await checkIfMainBoxIsCreatedAndOpen();
 
     if (todo.isComplete) {
