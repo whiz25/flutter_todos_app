@@ -166,6 +166,13 @@ class _HomeScreenState extends State<HomeScreen>
                     onPressed: () {
                       todoListBloc.deleteTodoList(todoList);
 
+                      _listKey.currentState.removeItem(
+                          index,
+                          (context, animation) => const SizedBox(
+                                width: 0,
+                                height: 0,
+                              ));
+
                       Navigator.pop(context, true);
                     },
                     child: Text(
