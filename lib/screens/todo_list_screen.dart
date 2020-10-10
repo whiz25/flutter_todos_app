@@ -172,8 +172,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
   Widget _incompleteTodoDismissible(TodoState state, int index) {
     final Todo incompleteTodo = state.incompleteTodos[index];
     return Dismissible(
-        confirmDismiss: (direction) =>
-            _confirmTodoDelete(context, state, index, incompleteTodo),
+        confirmDismiss: (direction) => _confirmTodoDeleteIncompleteTodo(
+            context, state, index, incompleteTodo),
         key: ValueKey(incompleteTodo),
         child: Card(
           child: ListTile(
@@ -188,7 +188,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
                   await todoBloc.completeTodo(incompleteTodo);
 
-                  _completeTodoListKey.currentState.insertItem(0);      
+                  _completeTodoListKey.currentState.insertItem(0);
                 },
                 icon: const Icon(
                   FontAwesomeIcons.circle,
@@ -207,7 +207,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
     final Todo completeTodo = state.completeTodos[index];
     return Dismissible(
         confirmDismiss: (direction) =>
-            _confirmTodoDelete(context, state, index, completeTodo),
+            _confirmTodoDeleteCompleteTodo(context, state, index, completeTodo),
         key: ValueKey(completeTodo),
         child: Card(
           child: ListTile(
@@ -238,21 +238,26 @@ class _TodoListScreenState extends State<TodoListScreen> {
         ));
   }
 
-  Future<bool> _confirmTodoDelete(
+  Future<bool> _confirmTodoDeleteIncompleteTodo(
       BuildContext context, TodoState state, int index, Todo todo) async {
     await showDialog<bool>(
         context: context,
-        builder: (context) => AlertDialog(
+        builder: (BuildContext context) => AlertDialog(
               title: Text(
                   "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
               content: Text(
                   "${FlutterTodosAppLocalizations.of(context).translate('delete_todo_start')} ${todo.content} ${FlutterTodosAppLocalizations.of(context).translate('delete_todo_end')}"),
               actions: [
                 FlatButton(
-                    onPressed: () async{
+                    onPressed: () async {
+                      _incompleteTodoListKey.currentState.removeItem(
+                          index,
+                          (context, animation) => const SizedBox(
+                                width: 0,
+                                height: 0,
+                              ));
+
                       await todoBloc.deleteTodo(todo);
-
-
 
                       Navigator.pop(context, true);
                     },
@@ -261,7 +266,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                         style: Theme.of(context)
                             .textTheme
                             .headline6
-                            .copyWith(color: Theme.of(context).accentColor))),
+                            .copyWith(color: Theme.of(context).primaryColor))),
                 FlatButton(
                     onPressed: () => Navigator.pop(context, false),
                     child: Text(
@@ -269,7 +274,49 @@ class _TodoListScreenState extends State<TodoListScreen> {
                         style: Theme.of(context)
                             .textTheme
                             .headline6
-                            .copyWith(color: Theme.of(context).accentColor)))
+                            .copyWith(color: Theme.of(context).primaryColor)))
+              ],
+            ));
+    return true;
+  }
+
+  Future<bool> _confirmTodoDeleteCompleteTodo(
+      BuildContext context, TodoState state, int index, Todo todo) async {
+    await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              title: Text(
+                  "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
+              content: Text(
+                  "${FlutterTodosAppLocalizations.of(context).translate('delete_todo_start')} ${todo.content} ${FlutterTodosAppLocalizations.of(context).translate('delete_todo_end')}"),
+              actions: [
+                FlatButton(
+                    onPressed: () async {
+                      _completeTodoListKey.currentState.removeItem(
+                          index,
+                          (context, animation) => const SizedBox(
+                                width: 0,
+                                height: 0,
+                              ));
+                              
+                      await todoBloc.deleteTodo(todo);
+
+                      Navigator.pop(context, true);
+                    },
+                    child: Text(
+                        "${FlutterTodosAppLocalizations.of(context).translate('confirm')}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(color: Theme.of(context).primaryColor))),
+                FlatButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: Text(
+                        "${FlutterTodosAppLocalizations.of(context).translate('cancel')}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(color: Theme.of(context).primaryColor)))
               ],
             ));
     return true;
