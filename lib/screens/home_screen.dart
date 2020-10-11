@@ -132,23 +132,40 @@ class _HomeScreenState extends State<HomeScreen>
     final TodoList todoList = state.todoList[index];
     return Dismissible(
       key: ValueKey(todoList),
-      confirmDismiss: (direction) =>
-          _confirmTodoDelete(context, index, state, todoList),
+      // onDismissed: (DismissDirection direction) {
+      //   if (direction == DismissDirection.endToStart) {
+      //     _confirmTodoDelete(context, index, state, todoList);
+      //   }
+      // },
+      background: Container(
+        color: Theme.of(context).primaryColor,
+        child: IconButton(
+            onPressed: () =>
+                _confirmTodoDelete(context, index, state, todoList),
+            icon: const Icon(
+              Icons.delete_forever,
+              size: 45,
+              color: Colors.white,
+            )),
+      ),
       child: Card(
         child: ListTile(
-            leading: Icon(
-              Icons.list,
-              size: 35,
-              color: AppColorPalette().primaryColor,
-            ),
-            title: Text(todoList.title ?? '', 
-            style: const TextStyle(fontSize: 20),),
-            onTap: () {
-              Navigator.of(context).push<Widget>(MaterialPageRoute<Widget>(
-                  builder: (context) => TodoListScreen(
-                        todoList: todoList,
-                      )));
-            }),
+          onTap: () {
+            Navigator.of(context).push<Widget>(MaterialPageRoute<Widget>(
+                builder: (context) => TodoListScreen(
+                      todoList: todoList,
+                    )));
+          },
+          leading: Icon(
+            Icons.list,
+            size: 35,
+            color: AppColorPalette().primaryColor,
+          ),
+          title: Text(
+            todoList.title ?? '',
+            style: const TextStyle(fontSize: 20),
+          ),
+        ),
       ),
     );
   }
