@@ -17,12 +17,12 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> {
   TodoListBloc todoListBloc;
   TextEditingController todoListInputController;
 
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  final GlobalKey<AnimatedListState> _todoListKey =
+      GlobalKey<AnimatedListState>();
 
   @override
   void initState() {
@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen>
       );
 
   Widget _todoLists(TodoListState state) => AnimatedList(
-      key: _listKey,
+      key: _todoListKey,
       initialItemCount: state.todoList.length,
       itemBuilder: (context, index, animation) => SizeTransition(
           sizeFactor: animation, child: _todoListDissmissible(state, index)));
@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen>
                     );
                     todoListInputController.clear();
 
-                    _listKey.currentState.insertItem(0);
+                    _todoListKey.currentState.insertItem(0);
 
                     Navigator.of(context).pop();
                   }
@@ -183,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen>
                     onPressed: () {
                       todoListBloc.deleteTodoList(todoList);
 
-                      _listKey.currentState.removeItem(
+                      _todoListKey.currentState.removeItem(
                           index,
                           (context, animation) => const SizedBox(
                                 width: 0,
@@ -208,5 +208,6 @@ class _HomeScreenState extends State<HomeScreen>
                             .copyWith(color: Theme.of(context).accentColor)))
               ],
             ));
+    return true;
   }
 }
