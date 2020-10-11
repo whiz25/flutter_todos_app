@@ -141,7 +141,8 @@ class _HomeScreenState extends State<HomeScreen>
               size: 35,
               color: AppColorPalette().primaryColor,
             ),
-            title: Text(todoList.title ?? ''),
+            title: Text(todoList.title ?? '', 
+            style: const TextStyle(fontSize: 20),),
             onTap: () {
               Navigator.of(context).push<Widget>(MaterialPageRoute<Widget>(
                   builder: (context) => TodoListScreen(
