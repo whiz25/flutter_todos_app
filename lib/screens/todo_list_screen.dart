@@ -42,9 +42,9 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
   @override
   void dispose() {
-    todoBloc.close();
-
     super.dispose();
+
+    todoBloc.close();
   }
 
   @override
@@ -59,7 +59,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
               elevation: 0,
             ),
             body: Container(
-                color: AppColorPalette().primaryColor,
+                color: Theme.of(context).primaryColor,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -93,7 +93,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
               onPressed: () => _createTodoForm(context, todoBloc),
               child: Icon(
                 Icons.add,
-                color: AppColorPalette().primaryColor,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           );
@@ -227,7 +227,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                   icon: Icon(
                     FontAwesomeIcons.solidCheckCircle,
                     size: 35,
-                    color: AppColorPalette().primaryColor,
+                    color: Theme.of(context).primaryColor,
                   )),
               title: Text(
                 completeTodo.content ?? '',
@@ -249,7 +249,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                   "${FlutterTodosAppLocalizations.of(context).translate('delete_todo_start')} ${todo.content} ${FlutterTodosAppLocalizations.of(context).translate('delete_todo_end')}"),
               actions: [
                 FlatButton(
-                    onPressed: () async {
+                    onPressed: () {
                       _incompleteTodoListKey.currentState.removeItem(
                           index,
                           (context, animation) => const SizedBox(
@@ -257,7 +257,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                                 height: 0,
                               ));
 
-                      await todoBloc.deleteTodo(todo);
+                      todoBloc.deleteTodo(todo);
 
                       Navigator.pop(context, true);
                     },
@@ -291,15 +291,15 @@ class _TodoListScreenState extends State<TodoListScreen> {
                   "${FlutterTodosAppLocalizations.of(context).translate('delete_todo_start')} ${todo.content} ${FlutterTodosAppLocalizations.of(context).translate('delete_todo_end')}"),
               actions: [
                 FlatButton(
-                    onPressed: () async {
+                    onPressed: () {
                       _completeTodoListKey.currentState.removeItem(
                           index,
                           (context, animation) => const SizedBox(
                                 width: 0,
                                 height: 0,
                               ));
-                              
-                      await todoBloc.deleteTodo(todo);
+
+                      todoBloc.deleteTodo(todo);
 
                       Navigator.pop(context, true);
                     },

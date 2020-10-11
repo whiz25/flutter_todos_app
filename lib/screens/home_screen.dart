@@ -36,9 +36,9 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
-    todoListBloc.close();
-
     super.dispose();
+
+    todoListBloc.close();
   }
 
   @override
