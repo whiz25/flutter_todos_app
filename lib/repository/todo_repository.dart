@@ -22,7 +22,7 @@ class TodoRepository implements ITodoRepository {
 
   @override
   Future<Todo> addTodo(Todo todo, TodoList todoList) async {
-    await checkIfMainBoxIsCreatedAndOpen();
+    await checkIfTodosBoxIsCreatedAndOpen();
     
     await _todoBox.add(todo);
 
@@ -31,15 +31,15 @@ class TodoRepository implements ITodoRepository {
 
   @override
   Future<void> deleteTodo(Todo todo) async {
-    await checkIfMainBoxIsCreatedAndOpen();
+    await checkIfTodosBoxIsCreatedAndOpen();
 
     await _todoBox.delete(todo.key);
   }
 
   @override
   Future<void> deletTodoList(TodoList todoList) async {
-    await checkIfMainBoxIsCreatedAndOpen();
-    await checkIfTodoListBoxIsCreatedAndOpen();
+    await checkIfTodosBoxIsCreatedAndOpen();
+    await checkIfTodoListsBoxIsCreatedAndOpen();
 
     await _todoBox.delete(todoList.key);
     await _todoListBox.delete(todoList.key);
@@ -47,7 +47,7 @@ class TodoRepository implements ITodoRepository {
 
   @override
   Future<List<Todo>> getAllIncompleteTodos(TodoList todoList) async {
-    await checkIfMainBoxIsCreatedAndOpen();
+    await checkIfTodosBoxIsCreatedAndOpen();
 
     final Iterable<Todo> allIncompleteTodos = _todoBox.values.cast<Todo>();
 
@@ -60,8 +60,8 @@ class TodoRepository implements ITodoRepository {
 
   @override
   Future<List<Todo>> getAllCompleteTodos(TodoList todoList) async {
-    await checkIfMainBoxIsCreatedAndOpen();
-    await checkIfTodoListBoxIsCreatedAndOpen();
+    await checkIfTodosBoxIsCreatedAndOpen();
+    await checkIfTodoListsBoxIsCreatedAndOpen();
 
     final Iterable<Todo> allCompleteTodos = _todoBox.values.cast<Todo>();
 
@@ -74,7 +74,7 @@ class TodoRepository implements ITodoRepository {
 
   @override
   Future<Todo> updateTodo(Todo todo) async {
-    await checkIfMainBoxIsCreatedAndOpen();
+    await checkIfTodosBoxIsCreatedAndOpen();
 
     final Todo updatedTodo = Todo(id: todo.id, content: todo.content);
     await _todoBox.put(todo.key, updatedTodo);
@@ -86,7 +86,7 @@ class TodoRepository implements ITodoRepository {
   Future<bool> completeTodo(
     Todo todo,
   ) async {
-    await checkIfMainBoxIsCreatedAndOpen();
+    await checkIfTodosBoxIsCreatedAndOpen();
 
     if (todo.isComplete) {
       todo.isComplete = false;
@@ -101,7 +101,7 @@ class TodoRepository implements ITodoRepository {
 
   @override
   Future<TodoList> addTodoList(TodoList todoList) async {
-    await checkIfTodoListBoxIsCreatedAndOpen();
+    await checkIfTodoListsBoxIsCreatedAndOpen();
 
     await _todoListBox.add(todoList);
 
@@ -110,13 +110,13 @@ class TodoRepository implements ITodoRepository {
 
   @override
   Future<List<TodoList>> getAllTodoLists() async {
-    await checkIfTodoListBoxIsCreatedAndOpen();
+    await checkIfTodoListsBoxIsCreatedAndOpen();
 
     final Iterable<TodoList> todoLists = _todoListBox.values.cast<TodoList>();
     return todoLists.toList();
   }
 
-  Future<void> checkIfTodoListBoxIsCreatedAndOpen() async {
+  Future<void> checkIfTodoListsBoxIsCreatedAndOpen() async {
     _todoListBox ??= await Hive.openBox<TodoList>('allTodoLists');
 
     if (!(_todoListBox?.isOpen ?? false)) {
@@ -124,7 +124,7 @@ class TodoRepository implements ITodoRepository {
     }
   }
 
-  Future<void> checkIfMainBoxIsCreatedAndOpen() async {
+  Future<void> checkIfTodosBoxIsCreatedAndOpen() async {
     _todoBox ??= await Hive.openBox<Todo>('allTodos');
 
     if (!(_todoBox?.isOpen ?? false)) {
@@ -133,7 +133,7 @@ class TodoRepository implements ITodoRepository {
   }
 
   Future<void> clearTodoBox() async {
-    await checkIfMainBoxIsCreatedAndOpen();
+    await checkIfTodosBoxIsCreatedAndOpen();
 
     await _todoBox.clear();
   }
