@@ -5,5 +5,8 @@
   "delete_todoList_start": "Do you want to delete ",
   "delete_todoList_end": "?",
   "delete_todo_start": "Do you want to delete ",
-  "delete_todo_end": "?"
+  "delete_todo_end": "?",
+  "fill_form": "Please fill out this form",
+  "save": "Save",
+  "content": "Content here *"
 }

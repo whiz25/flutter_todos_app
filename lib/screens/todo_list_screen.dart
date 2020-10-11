@@ -7,7 +7,6 @@ import '../blocs/todo_state.dart';
 import '../model/todo.dart';
 import '../model/todo_list.dart';
 import '../repository/itodo_repository.dart';
-import '../utils/app_color_palette.dart';
 import '../utils/localization.dart';
 import '../widgets/progress_loader.dart';
 
@@ -107,11 +106,13 @@ class _TodoListScreenState extends State<TodoListScreen> {
             contentPadding: const EdgeInsets.all(10),
             content: Column(
               children: [
-                const Text('Please fill out this form'),
+                Text(
+                    '${FlutterTodosAppLocalizations.of(context).translate("fill_form")}'),
                 Expanded(
                   child: TextField(
-                    decoration:
-                        const InputDecoration(labelText: 'Content here *'),
+                    decoration: InputDecoration(
+                        labelText:
+                            '${FlutterTodosAppLocalizations.of(context).translate("content")}'),
                     controller: contentInputController,
                   ),
                 ),
@@ -122,9 +123,10 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 onPressed: () {
                   contentInputController.clear();
 
-                  Navigator.pop(context);
+                  Navigator.of(context).pop();
                 },
-                child: const Text('Cancel'),
+                child: Text(
+                    '${FlutterTodosAppLocalizations.of(context).translate("cancel")}'),
               ),
               FlatButton(
                 onPressed: () async {
@@ -139,7 +141,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
                     Navigator.of(context).pop();
                   }
                 },
-                child: const Text('Save'),
+                child: Text(
+                    '${FlutterTodosAppLocalizations.of(context).translate("save")}'),
               )
             ],
           ));
