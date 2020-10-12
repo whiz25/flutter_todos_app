@@ -347,7 +347,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
           PopupMenuItem(
               child: ListTile(
             leading: IconButton(
-              icon: const Icon(Icons.delete),
+              icon: const Icon(FontAwesomeIcons.trashAlt),
               onPressed: () {
                 _confirmTodoListDelete(context, widget.todoList);
               },

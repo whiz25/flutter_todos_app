@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../blocs/todo_list_bloc.dart';
 import '../blocs/todo_list_state.dart';
@@ -120,8 +119,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     _todoListKey.currentState.insertItem(0);
 
-                    _incompleteListKey.currentState.insertItem(0);
-
                     Navigator.of(context).pop();
                   }
                 },
@@ -143,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: Icon(
           Icons.list,
           size: 35,
-          color: AppColorPalette().primaryColor,
+          color: Theme.of(context).primaryColor,
         ),
         title: Text(
           todoList.title ?? '',
