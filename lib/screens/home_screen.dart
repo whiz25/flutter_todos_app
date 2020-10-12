@@ -49,22 +49,18 @@ class _HomeScreenState extends State<HomeScreen> {
             return const ProgressLoader();
           }
           return Scaffold(
-            body: Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: Theme.of(context).primaryColor,
-                child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 60),
-                      child: Text(
-                        'All TodoLists',
-                        style: TextStyle(fontSize: 25, color: Colors.white),
-                      ),
-                    ),
-                    Expanded(child: _todoLists(state)),
-                  ],
-                )),
+            body: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 60),
+                  child: Text(
+                    'All TodoLists',
+                    style: TextStyle(fontSize: 25, color: Colors.white),
+                  ),
+                ),
+                Expanded(child: _todoLists(state)),
+              ],
+            ),
             floatingActionButton: FloatingActionButton(
               onPressed: () => _createTodoForm(context, todoListBloc),
               child: Icon(
@@ -129,23 +125,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _todoList(TodoListState state, int index) {
     final TodoList todoList = state.todoList[index];
-    return Card(
-      child: ListTile(
-        onTap: () {
-          Navigator.of(context).push<Widget>(MaterialPageRoute<Widget>(
-              builder: (context) => TodoListScreen(
-                    todoList: todoList,
-                  )));
-        },
-        leading: Icon(
-          Icons.list,
-          size: 35,
-          color: Theme.of(context).primaryColor,
-        ),
-        title: Text(
-          todoList.title ?? '',
-          style: const TextStyle(fontSize: 20),
-        ),
+    return ListTile(
+      onTap: () {
+        Navigator.of(context).push<Widget>(MaterialPageRoute<Widget>(
+            builder: (context) => TodoListScreen(
+                  todoList: todoList,
+                )));
+      },
+      leading: Icon(
+        Icons.list,
+        size: 35,
+        color: Theme.of(context).primaryColor,
+      ),
+      title: Text(
+        todoList.title ?? '',
+        style: const TextStyle(fontSize: 20),
       ),
     );
   }
