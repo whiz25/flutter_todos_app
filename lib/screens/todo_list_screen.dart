@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todos_app/blocs/todo_list_bloc.dart';
-import 'package:flutter_todos_app/blocs/todo_list_state.dart';
-import 'package:flutter_todos_app/screens/home_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../blocs/todo_bloc.dart';
+import '../blocs/todo_list_bloc.dart';
 import '../blocs/todo_state.dart';
 import '../model/todo.dart';
 import '../model/todo_list.dart';
 import '../repository/itodo_repository.dart';
 import '../utils/localization.dart';
 import '../widgets/progress_loader.dart';
+import 'home_screen.dart';
 
 class TodoListScreen extends StatefulWidget {
   final TodoList todoList;
@@ -339,8 +338,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
     return true;
   }
 
-  Future<ListTile> _showPopupMenu(BuildContext context) {
-    return showMenu(
+  Future<void> _showPopupMenu(BuildContext context) => showMenu(
         context: context,
         position: const RelativeRect.fromLTRB(15, 15, 0, 0),
         items: [
@@ -355,7 +353,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
             title: const Text('Delete'),
           ))
         ]);
-  }
 
   Future<bool> _confirmTodoListDelete(
       BuildContext context, TodoList todoList) async {

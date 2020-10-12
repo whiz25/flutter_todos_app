@@ -5,7 +5,6 @@ import '../blocs/todo_list_bloc.dart';
 import '../blocs/todo_list_state.dart';
 import '../model/todo_list.dart';
 import '../repository/itodo_repository.dart';
-import '../utils/localization.dart';
 import '../widgets/progress_loader.dart';
 import 'todo_list_screen.dart';
 
@@ -142,47 +141,5 @@ class _HomeScreenState extends State<HomeScreen> {
         style: const TextStyle(fontSize: 20),
       ),
     );
-  }
-
-  Future<bool> _confirmTodoListDelete(BuildContext context, int index,
-      TodoListState state, TodoList todoList) async {
-    await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(
-                  "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
-              content: Text(
-                  "${FlutterTodosAppLocalizations.of(context).translate('delete_todoList_start')} ${state.todoList[index].title} ${FlutterTodosAppLocalizations.of(context).translate('delete_todoList_end')}"),
-              actions: [
-                FlatButton(
-                    onPressed: () {
-                      todoListBloc.deleteTodoList(todoList);
-
-                      _todoListKey.currentState.removeItem(
-                          index,
-                          (context, animation) => const SizedBox(
-                                width: 0,
-                                height: 0,
-                              ));
-
-                      Navigator.pop(context, true);
-                    },
-                    child: Text(
-                        "${FlutterTodosAppLocalizations.of(context).translate('confirm')}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6
-                            .copyWith(color: Theme.of(context).primaryColor))),
-                FlatButton(
-                    onPressed: () => Navigator.pop(context, false),
-                    child: Text(
-                        "${FlutterTodosAppLocalizations.of(context).translate('cancel')}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6
-                            .copyWith(color: Theme.of(context).primaryColor)))
-              ],
-            ));
-    return true;
   }
 }
