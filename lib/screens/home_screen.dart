@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../blocs/todo_list_bloc.dart';
 import '../blocs/todo_list_state.dart';
@@ -81,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _todoListKey,
       initialItemCount: state.todoList.length,
       itemBuilder: (context, index, animation) => SizeTransition(
-          sizeFactor: animation, child: _todoListDissmissible(state, index)));
+          sizeFactor: animation, child: _todoList(state, index)));
 
   Future<Widget> _createTodoForm(
           BuildContext context, TodoListBloc todoListBloc) =>
@@ -128,48 +129,30 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ));
 
-  Widget _todoListDissmissible(TodoListState state, int index) {
+  Widget _todoList(TodoListState state, int index) {
     final TodoList todoList = state.todoList[index];
-    return Dismissible(
-      key: ValueKey(todoList),
-      onDismissed: (DismissDirection direction) {
-        if (direction == DismissDirection.endToStart) {
-          _confirmTodoDelete(context, index, state, todoList);
-        }
-      },
-      background: Container(
-        color: Colors.redAccent,
-        child: IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.delete_forever,
-              size: 45,
-              color: Colors.white,
-            )),
-      ),
-      child: Card(
-        child: ListTile(
-          onTap: () {
-            Navigator.of(context).push<Widget>(MaterialPageRoute<Widget>(
-                builder: (context) => TodoListScreen(
-                      todoList: todoList,
-                    )));
-          },
-          leading: Icon(
-            Icons.list,
-            size: 35,
-            color: AppColorPalette().primaryColor,
-          ),
-          title: Text(
-            todoList.title ?? '',
-            style: const TextStyle(fontSize: 20),
-          ),
+    return Card(
+      child: ListTile(
+        onTap: () {
+          Navigator.of(context).push<Widget>(MaterialPageRoute<Widget>(
+              builder: (context) => TodoListScreen(
+                    todoList: todoList,
+                  )));
+        },
+        leading: Icon(
+          Icons.list,
+          size: 35,
+          color: AppColorPalette().primaryColor,
+        ),
+        title: Text(
+          todoList.title ?? '',
+          style: const TextStyle(fontSize: 20),
         ),
       ),
     );
   }
 
-  Future<bool> _confirmTodoDelete(BuildContext context, int index,
+  Future<bool> _confirmTodoListDelete(BuildContext context, int index,
       TodoListState state, TodoList todoList) async {
     await showDialog<bool>(
         context: context,

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_todos_app/blocs/todo_list_bloc.dart';
+import 'package:flutter_todos_app/blocs/todo_list_state.dart';
+import 'package:flutter_todos_app/screens/home_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../blocs/todo_bloc.dart';
@@ -20,6 +23,7 @@ class TodoListScreen extends StatefulWidget {
 
 class _TodoListScreenState extends State<TodoListScreen> {
   TodoBloc todoBloc;
+  TodoListBloc todoListBloc;
   TextEditingController contentInputController;
 
   final GlobalKey<AnimatedListState> _incompleteTodoListKey =
@@ -34,6 +38,9 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
     todoBloc = TodoBloc(
         todoList: widget.todoList,
+        iTodoRepository: RepositoryProvider.of<ITodoRepository>(context));
+
+    todoListBloc = TodoListBloc(
         iTodoRepository: RepositoryProvider.of<ITodoRepository>(context));
 
     contentInputController = TextEditingController();
@@ -56,6 +63,13 @@ class _TodoListScreenState extends State<TodoListScreen> {
           return Scaffold(
             appBar: AppBar(
               elevation: 0,
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      _showPopupMenu(context);
+                    },
+                    icon: const Icon(Icons.more_horiz))
+              ],
             ),
             body: Container(
                 color: Theme.of(context).primaryColor,
@@ -320,6 +334,64 @@ class _TodoListScreenState extends State<TodoListScreen> {
                             .textTheme
                             .headline6
                             .copyWith(color: Theme.of(context).primaryColor)))
+              ],
+            ));
+    return true;
+  }
+
+  Future<ListTile> _showPopupMenu(BuildContext context) {
+    return showMenu(
+        context: context,
+        position: const RelativeRect.fromLTRB(15, 15, 0, 0),
+        items: [
+          PopupMenuItem(
+              child: ListTile(
+            leading: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                _confirmTodoListDelete(context, widget.todoList);
+              },
+            ),
+            title: const Text('Delete'),
+          ))
+        ]);
+  }
+
+  Future<bool> _confirmTodoListDelete(
+      BuildContext context, TodoList todoList) async {
+    await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(
+                  "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
+              content: Text(
+                  "${FlutterTodosAppLocalizations.of(context).translate('delete_todoList_start')} ${widget.todoList.title} ${FlutterTodosAppLocalizations.of(context).translate('delete_todoList_end')}"),
+              actions: [
+                FlatButton(
+                    onPressed: () {
+                      todoListBloc.deleteTodoList(todoList);
+
+                      Navigator.pop(context, true);
+
+                      Navigator.push<Widget>(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomeScreen()));
+                    },
+                    child: Text(
+                        "${FlutterTodosAppLocalizations.of(context).translate('confirm')}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(color: Theme.of(context).accentColor))),
+                FlatButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: Text(
+                        "${FlutterTodosAppLocalizations.of(context).translate('cancel')}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(color: Theme.of(context).accentColor)))
               ],
             ));
     return true;
