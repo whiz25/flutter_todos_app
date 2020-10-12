@@ -5,7 +5,6 @@ import '../blocs/todo_list_bloc.dart';
 import '../blocs/todo_list_state.dart';
 import '../model/todo_list.dart';
 import '../repository/itodo_repository.dart';
-import '../utils/app_color_palette.dart';
 import '../utils/localization.dart';
 import '../widgets/progress_loader.dart';
 import 'todo_list_screen.dart';
@@ -53,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
             body: Container(
                 width: double.infinity,
                 height: double.infinity,
-                color: AppColorPalette().primaryColor,
+                color: Theme.of(context).primaryColor,
                 child: Column(
                   children: [
                     const Padding(
@@ -70,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () => _createTodoForm(context, todoListBloc),
               child: Icon(
                 Icons.add,
-                color: AppColorPalette().primaryColor,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           );
@@ -119,6 +118,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     todoListInputController.clear();
 
                     _todoListKey.currentState.insertItem(0);
+
+                    _incompleteListKey.currentState.insertItem(0);
 
                     Navigator.of(context).pop();
                   }
@@ -197,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: Theme.of(context)
                             .textTheme
                             .headline6
-                            .copyWith(color: Theme.of(context).accentColor))),
+                            .copyWith(color: Theme.of(context).primaryColor))),
                 FlatButton(
                     onPressed: () => Navigator.pop(context, false),
                     child: Text(
@@ -205,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: Theme.of(context)
                             .textTheme
                             .headline6
-                            .copyWith(color: Theme.of(context).accentColor)))
+                            .copyWith(color: Theme.of(context).primaryColor)))
               ],
             ));
     return true;
