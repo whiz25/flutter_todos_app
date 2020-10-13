@@ -48,26 +48,37 @@ class _HomeScreenState extends State<HomeScreen> {
             return const ProgressLoader();
           }
           return Scaffold(
-            body: Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 60),
-                  child: Text(
-                    'All TodoLists',
-                    style: TextStyle(fontSize: 25, color: Colors.white),
+              body: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 80),
+                    child: Divider(thickness: 1),
                   ),
-                ),
-                Expanded(child: _todoLists(state)),
-              ],
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => _createTodoForm(context, todoListBloc),
-              child: Icon(
-                Icons.add,
-                color: Theme.of(context).primaryColor,
+                  Expanded(child: _todoLists(state)),
+                ],
               ),
-            ),
-          );
+              bottomNavigationBar: BottomAppBar(
+                elevation: 0,
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(icon: const Icon(Icons.add), 
+                        onPressed: () => 
+                        _createTodoForm(context, todoListBloc), 
+                        color: Theme.of(context).primaryColor, iconSize: 30,),
+                        Text('New List', style: 
+                        TextStyle(color: Theme.of(context).primaryColor),),
+                      ],
+                    ),
+                    IconButton(icon: const Icon(Icons.group_add), 
+                    onPressed: (){}, 
+                    color: Theme.of(context).primaryColor,iconSize: 30,)
+                  ],
+                ),
+              ));
         },
       );
 
