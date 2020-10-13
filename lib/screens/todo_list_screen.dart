@@ -365,8 +365,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
                   "${FlutterTodosAppLocalizations.of(context).translate('delete_todoList_start')} ${widget.todoList.title} ${FlutterTodosAppLocalizations.of(context).translate('delete_todoList_end')}"),
               actions: [
                 FlatButton(
-                    onPressed: () {
-                      todoListBloc.deleteTodoList(todoList);
+                    onPressed: () async {
+                      await todoListBloc.deleteTodoList(todoList);
 
                       Navigator.pop(context, true);
 
