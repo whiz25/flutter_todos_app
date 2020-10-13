@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
           context: context,
           child: AlertDialog(
             contentPadding: const EdgeInsets.all(10),
-            content: Container(
+            content: SizedBox(
               height: 100,
               child: Column(
                 children: [
