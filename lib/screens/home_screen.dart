@@ -108,17 +108,20 @@ class _HomeScreenState extends State<HomeScreen> {
           context: context,
           child: AlertDialog(
             contentPadding: const EdgeInsets.all(10),
-            content: Column(
-              children: [
-                const Text('Please fill out this form'),
-                Expanded(
-                  child: TextField(
-                    decoration:
-                        const InputDecoration(labelText: 'Title here *'),
+            content: Container(
+              height: 100,
+              child: Column(
+                children: [
+                  const Text('New list'),
+                  TextField(
+                    decoration: const InputDecoration(
+                      hintText: 'Enter list title',
+                      icon: Icon(Icons.list),
+                    ),
                     controller: todoListInputController,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             actions: [
               FlatButton(
@@ -145,7 +148,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                 },
                 child: Text(
-                    '${FlutterTodosAppLocalizations.of(context).translate("save")}', style: TextStyle(color: Theme.of(context).primaryColor,)),
+                    '${FlutterTodosAppLocalizations.of(context).translate("save")}',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                    )),
               )
             ],
           ));
