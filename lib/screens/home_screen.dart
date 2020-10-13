@@ -5,6 +5,8 @@ import '../blocs/todo_list_bloc.dart';
 import '../blocs/todo_list_state.dart';
 import '../model/todo_list.dart';
 import '../repository/itodo_repository.dart';
+import '../utils/app_color_palette.dart';
+import '../utils/localization.dart';
 import '../widgets/progress_loader.dart';
 import 'todo_list_screen.dart';
 
@@ -48,34 +50,46 @@ class _HomeScreenState extends State<HomeScreen> {
             return const ProgressLoader();
           }
           return Scaffold(
-              body: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: 80),
-                    child: Divider(thickness: 1),
-                  ),
-                  Expanded(child: _todoLists(state)),
-                ],
+              body: Container(
+                color: AppColorPalette().secondaryColor,
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 80),
+                      child: Divider(thickness: 1),
+                    ),
+                    Expanded(child: _todoLists(state)),
+                  ],
+                ),
               ),
               bottomNavigationBar: BottomAppBar(
                 elevation: 0,
-                color: Colors.white,
+                color: AppColorPalette().secondaryColor,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
-                        IconButton(icon: const Icon(Icons.add), 
-                        onPressed: () => 
-                        _createTodoForm(context, todoListBloc), 
-                        color: Theme.of(context).primaryColor, iconSize: 30,),
-                        Text('New List', style: 
-                        TextStyle(color: Theme.of(context).primaryColor),),
+                        IconButton(
+                          icon: const Icon(Icons.add),
+                          onPressed: () =>
+                              _createTodoForm(context, todoListBloc),
+                          color: Theme.of(context).primaryColor,
+                          iconSize: 30,
+                        ),
+                        Text(
+                          'New List',
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
                       ],
                     ),
-                    IconButton(icon: const Icon(Icons.group_add), 
-                    onPressed: (){}, 
-                    color: Theme.of(context).primaryColor,iconSize: 30,)
+                    IconButton(
+                      icon: const Icon(Icons.group_add),
+                      onPressed: () {},
+                      color: Theme.of(context).primaryColor,
+                      iconSize: 30,
+                    )
                   ],
                 ),
               ));
@@ -113,7 +127,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   Navigator.pop(context);
                 },
-                child: const Text('Cancel'),
+                child: Text(
+                    '${FlutterTodosAppLocalizations.of(context).translate("cancel")}',
+                    style: TextStyle(color: Theme.of(context).primaryColor)),
               ),
               FlatButton(
                 onPressed: () async {
@@ -128,7 +144,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.of(context).pop();
                   }
                 },
-                child: const Text('Save'),
+                child: Text(
+                    '${FlutterTodosAppLocalizations.of(context).translate("save")}', style: TextStyle(color: Theme.of(context).primaryColor,)),
               )
             ],
           ));

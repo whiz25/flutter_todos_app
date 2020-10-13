@@ -8,6 +8,7 @@ import '../blocs/todo_state.dart';
 import '../model/todo.dart';
 import '../model/todo_list.dart';
 import '../repository/itodo_repository.dart';
+import '../utils/app_color_palette.dart';
 import '../utils/localization.dart';
 import '../widgets/progress_loader.dart';
 import 'home_screen.dart';
@@ -79,8 +80,9 @@ class _TodoListScreenState extends State<TodoListScreen> {
                       padding: const EdgeInsets.all(16),
                       child: Text(
                         widget.todoList.title,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 30),
+                        style: TextStyle(
+                            color: AppColorPalette().secondaryColor,
+                            fontSize: 30),
                       ),
                     ),
                     Expanded(
@@ -92,8 +94,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
                         child: Text(
                           'Completed  ${state.completeTodos.length}',
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: AppColorPalette().secondaryColor,
                             fontSize: 20,
                           ),
                         ),
@@ -139,7 +141,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                    '${FlutterTodosAppLocalizations.of(context).translate("cancel")}'),
+                    '${FlutterTodosAppLocalizations.of(context).translate("cancel")}',
+                    style: TextStyle(color: Theme.of(context).primaryColor)),
               ),
               FlatButton(
                 onPressed: () async {
@@ -155,7 +158,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
                   }
                 },
                 child: Text(
-                    '${FlutterTodosAppLocalizations.of(context).translate("save")}'),
+                    '${FlutterTodosAppLocalizations.of(context).translate("save")}',
+                    style: TextStyle(color: Theme.of(context).primaryColor)),
               )
             ],
           ));
@@ -339,20 +343,20 @@ class _TodoListScreenState extends State<TodoListScreen> {
   }
 
   Future<void> _showPopupMenu(BuildContext context) => showMenu(
-        context: context,
-        position: const RelativeRect.fromLTRB(15, 15, 0, 0),
-        items: [
-          PopupMenuItem(
-              child: ListTile(
-            leading: IconButton(
-              icon: const Icon(FontAwesomeIcons.trashAlt),
-              onPressed: () {
-                _confirmTodoListDelete(context, widget.todoList);
-              },
-            ),
-            title: const Text('Delete'),
-          ))
-        ]);
+          context: context,
+          position: const RelativeRect.fromLTRB(15, 15, 0, 0),
+          items: [
+            PopupMenuItem(
+                child: ListTile(
+              leading: IconButton(
+                icon: const Icon(FontAwesomeIcons.trashAlt),
+                onPressed: () {
+                  _confirmTodoListDelete(context, widget.todoList);
+                },
+              ),
+              title: const Text('Delete'),
+            ))
+          ]);
 
   Future<bool> _confirmTodoListDelete(
       BuildContext context, TodoList todoList) async {
@@ -370,7 +374,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
                       Navigator.pop(context, true);
 
-                      Navigator.push<Widget>(
+                      await Navigator.push<Widget>(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const HomeScreen()));
