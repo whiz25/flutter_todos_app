@@ -73,43 +73,46 @@ class _TodoListScreenState extends State<TodoListScreen> {
                     icon: const Icon(Icons.more_horiz))
               ],
             ),
-            body: FooterLayout(
-              footer: TodoKeyboardAttachable(
-                  todoBloc: todoBloc,
-                  todoList: widget.todoList,
-                  incompleteTodoListKey: _incompleteTodoListKey),
-              child: Container(
-                  color: Theme.of(context).primaryColor,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          widget.todoList.title,
-                          style: TextStyle(
-                              color: AppColorPalette().secondaryColor,
-                              fontSize: 30),
-                        ),
-                      ),
-                      Expanded(
-                        child: _incompleteTodoList(state, context),
-                      ),
-                      if (state.completeTodos.isNotEmpty)
+            body: GestureDetector(
+              onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+              child: FooterLayout(
+                footer: TodoKeyboardAttachable(
+                    todoBloc: todoBloc,
+                    todoList: widget.todoList,
+                    incompleteTodoListKey: _incompleteTodoListKey),
+                child: Container(
+                    color: Theme.of(context).primaryColor,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Padding(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(16),
                           child: Text(
-                            'Completed  ${state.completeTodos.length}',
-                            textAlign: TextAlign.center,
+                            widget.todoList.title,
                             style: TextStyle(
-                              color: AppColorPalette().secondaryColor,
-                              fontSize: 20,
-                            ),
+                                color: AppColorPalette().secondaryColor,
+                                fontSize: 30),
                           ),
                         ),
-                      Expanded(child: _completeTodoList(state, context)),
-                    ],
-                  )),
+                        Expanded(
+                          child: _incompleteTodoList(state, context),
+                        ),
+                        if (state.completeTodos.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Text(
+                              'Completed  ${state.completeTodos.length}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: AppColorPalette().secondaryColor,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        Expanded(child: _completeTodoList(state, context)),
+                      ],
+                    )),
+              ),
             ),
           );
         },
