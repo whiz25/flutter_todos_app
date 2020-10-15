@@ -120,16 +120,13 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
   Widget _incompleteTodoList(TodoState state, BuildContext context) {
     final List<Todo> todos = state.incompleteTodos;
-    return Container(
-      margin: const EdgeInsets.only(top: 100),
-      child: AnimatedList(
-          key: _incompleteTodoListKey,
-          padding: const EdgeInsets.all(8),
-          initialItemCount: todos.length,
-          itemBuilder: (context, index, animation) => SizeTransition(
-              sizeFactor: animation,
-              child: _incompleteTodoDismissible(state, index))),
-    );
+    return AnimatedList(
+        key: _incompleteTodoListKey,
+        padding: const EdgeInsets.all(8),
+        initialItemCount: todos.length,
+        itemBuilder: (context, index, animation) => SizeTransition(
+            sizeFactor: animation,
+            child: _incompleteTodoDismissible(state, index)));
   }
 
   Widget _completeTodoList(TodoState state, BuildContext context) {
