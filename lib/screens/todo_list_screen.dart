@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:keyboard_attachable/keyboard_attachable.dart';
 
 import '../blocs/todo_bloc.dart';
 import '../blocs/todo_list_bloc.dart';
@@ -11,6 +12,7 @@ import '../repository/itodo_repository.dart';
 import '../utils/app_color_palette.dart';
 import '../utils/localization.dart';
 import '../widgets/progress_loader.dart';
+import '../widgets/widgets.dart';
 import 'home_screen.dart';
 
 class TodoListScreen extends StatefulWidget {
@@ -71,98 +73,47 @@ class _TodoListScreenState extends State<TodoListScreen> {
                     icon: const Icon(Icons.more_horiz))
               ],
             ),
-            body: Container(
-                color: Theme.of(context).primaryColor,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        widget.todoList.title,
-                        style: TextStyle(
-                            color: AppColorPalette().secondaryColor,
-                            fontSize: 30),
-                      ),
-                    ),
-                    Expanded(
-                      child: _incompleteTodoList(state, context),
-                    ),
-                    if (state.completeTodos.isNotEmpty)
+            body: FooterLayout(
+              footer: TodoKeyboardAttachable(
+                  todoBloc: todoBloc,
+                  todoList: widget.todoList,
+                  incompleteTodoListKey: _incompleteTodoListKey),
+              child: Container(
+                  color: Theme.of(context).primaryColor,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Padding(
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(16),
                         child: Text(
-                          'Completed  ${state.completeTodos.length}',
-                          textAlign: TextAlign.center,
+                          widget.todoList.title,
                           style: TextStyle(
-                            color: AppColorPalette().secondaryColor,
-                            fontSize: 20,
-                          ),
+                              color: AppColorPalette().secondaryColor,
+                              fontSize: 30),
                         ),
                       ),
-                    Expanded(child: _completeTodoList(state, context))
-                  ],
-                )),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => _createTodoForm(context, todoBloc),
-              child: Icon(
-                Icons.add,
-                color: Theme.of(context).primaryColor,
-              ),
+                      Expanded(
+                        child: _incompleteTodoList(state, context),
+                      ),
+                      if (state.completeTodos.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Text(
+                            'Completed  ${state.completeTodos.length}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: AppColorPalette().secondaryColor,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      Expanded(child: _completeTodoList(state, context)),
+                    ],
+                  )),
             ),
           );
         },
       );
-
-  Future<Widget> _createTodoForm(BuildContext context, TodoBloc bloc) =>
-      showDialog<Widget>(
-          context: context,
-          child: AlertDialog(
-            contentPadding: const EdgeInsets.all(10),
-            content: Column(
-              children: [
-                Text(
-                    '${FlutterTodosAppLocalizations.of(context).translate("fill_form")}'),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                        labelText:
-                            '${FlutterTodosAppLocalizations.of(context).translate("content")}'),
-                    controller: contentInputController,
-                  ),
-                ),
-              ],
-            ),
-            actions: [
-              FlatButton(
-                onPressed: () {
-                  contentInputController.clear();
-
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                    '${FlutterTodosAppLocalizations.of(context).translate("cancel")}',
-                    style: TextStyle(color: Theme.of(context).primaryColor)),
-              ),
-              FlatButton(
-                onPressed: () async {
-                  if (contentInputController.text.isNotEmpty) {
-                    await todoBloc.createTodo(
-                        contentInputController.text, widget.todoList);
-
-                    contentInputController.clear();
-
-                    _incompleteTodoListKey.currentState.insertItem(0);
-
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: Text(
-                    '${FlutterTodosAppLocalizations.of(context).translate("save")}',
-                    style: TextStyle(color: Theme.of(context).primaryColor)),
-              )
-            ],
-          ));
 
   Widget _incompleteTodoList(TodoState state, BuildContext context) {
     final List<Todo> todos = state.incompleteTodos;
