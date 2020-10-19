@@ -6,5 +6,5 @@ class AppColorPalette {
 
   Color secondaryColor = const Color(0xffffffff);
 
-  Color floatingActionButtonBackgroundColor = const Color(0xffe3f2fd);
+  Color containerBackgroundColor = const Color(0xfffafafa);
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_todos_app/screens/todo_details_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:keyboard_attachable/keyboard_attachable.dart';
 
@@ -157,7 +158,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                             height: 0,
                           ));
 
-                  await todoBloc.completeTodo(incompleteTodo);
+                  await onPressed(incompleteTodo);
 
                   _completeTodoListKey.currentState.insertItem(0);
                 },
@@ -170,8 +171,22 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 incompleteTodo.content ?? '',
                 style: const TextStyle(fontSize: 20),
               ),
-              onTap: () {}),
+              onTap: () {
+                Navigator.push<Widget>(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TodoDetailsScreen(
+                              todo: incompleteTodo,
+                              todoList: widget.todoList,
+                              todoBloc: todoBloc,
+                              listKey: _incompleteTodoListKey
+                            )));
+              }),
         ));
+  }
+
+  Future<void> onPressed(Todo todo) async {
+    await todoBloc.completeTodo(todo);
   }
 
   Widget _completeTodoDismissible(TodoState state, int index) {
@@ -295,7 +310,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
   Future<void> _showPopupMenu(BuildContext context) => showMenu(
           context: context,
-          position: const RelativeRect.fromLTRB(15, 15, 0, 0),
+          position: const RelativeRect.fromLTRB(25, 25, 0, 0),
           items: [
             PopupMenuItem(
                 child: ListTile(
