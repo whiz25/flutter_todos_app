@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todos_app/screens/todo_details_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:keyboard_attachable/keyboard_attachable.dart';
 
@@ -15,6 +14,7 @@ import '../utils/localization.dart';
 import '../widgets/progress_loader.dart';
 import '../widgets/widgets.dart';
 import 'home_screen.dart';
+import 'todo_details_screen.dart';
 
 class TodoListScreen extends StatefulWidget {
   final TodoList todoList;
