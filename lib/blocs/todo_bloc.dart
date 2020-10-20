@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../model/todo.dart';
 import '../model/todo_list.dart';
@@ -88,4 +89,36 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
 
     emit(state.copyWith(incompleteTodos: incompleteTodos));
   }
+
+  String dayOfWeek(Todo todo) {
+    final int day = todo.dueDate.weekday;
+    switch (day) {
+      case 1:
+        return 'Mon';
+        break;
+      case 2:
+        return 'Tue';
+        break;
+      case 3:
+        return 'Wed';
+        break;
+      case 4:
+        return 'Thu';
+        break;
+      case 5:
+        return 'Fri';
+        break;
+      case 6:
+        return 'Sat';
+        break;
+      case 7:
+        return 'Sun';
+        break;
+      default:
+        return 'Mon';
+        break;
+    }
+  }
+
+  String monthOfYear(Todo todo) => DateFormat.MMM().format(todo.dueDate);
 }

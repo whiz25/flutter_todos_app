@@ -110,7 +110,8 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
             width: 10,
           ),
           Text(
-            '${widget.todo.dueDate}',
+            'Due ${widget.todoBloc.dayOfWeek(widget.todo)} ${widget.
+            todo.dueDate.month} ${widget.todoBloc.monthOfYear(widget.todo)}',
             style:
                 TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
           ),
