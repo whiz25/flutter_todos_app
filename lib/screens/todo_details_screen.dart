@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import '../blocs/todo_bloc.dart';
 import '../model/todo.dart';
 import '../model/todo_list.dart';
@@ -74,26 +75,55 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
             RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
-                onPressed: () {},
+                onPressed: () {
+                  DatePicker.showDatePicker(
+                    context,
+                    theme: const DatePickerTheme(),
+                    onConfirm: (time) {
+                      widget.todoBloc.setTodoDueDate(time, widget.todo);
+                    },
+                  );
+                },
                 color: AppColorPalette().secondaryColor,
                 child: Container(
                   height: 70,
                   width: 365,
                   alignment: Alignment.center,
                   child: Row(
-                    children: const [
-                      Icon(Icons.calendar_today),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Add due date',
-                        style: TextStyle(fontSize: 18),
-                      )
+                    children: [
+                      if (widget.todo.dueDate == null) _dueDateNotSet(),
+                      if (widget.todo.dueDate != null) _dueDateSet(),
                     ],
                   ),
                 ))
           ],
         ),
       ));
+
+  Widget _dueDateSet() => Row(
+        children: [
+          Icon(
+            Icons.calendar_today,
+            color: Theme.of(context).primaryColor,
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Text(
+            '${widget.todo.dueDate}',
+            style:
+                TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
+          ),
+        ],
+      );
+
+  Widget _dueDateNotSet() => Row(
+        children: const [
+          Icon(Icons.calendar_today),
+          SizedBox(
+            width: 10,
+          ),
+          Text('Add due date', style: TextStyle(fontSize: 18)),
+        ],
+      );
 }

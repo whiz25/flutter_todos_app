@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     IconButton(
-                      icon: const Icon(Icons.group_add_outlined),
+                      icon: const Icon(Icons.group_add),
                       onPressed: () {},
                       color: Theme.of(context).primaryColor,
                       iconSize: 30,

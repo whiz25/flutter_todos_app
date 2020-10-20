@@ -23,7 +23,7 @@ class TodoRepository implements ITodoRepository {
   @override
   Future<Todo> addTodo(Todo todo, TodoList todoList) async {
     await checkIfTodosBoxIsCreatedAndOpen();
-    
+
     await _todoBox.add(todo);
 
     return todo;
@@ -76,8 +76,9 @@ class TodoRepository implements ITodoRepository {
   Future<Todo> updateTodo(Todo todo) async {
     await checkIfTodosBoxIsCreatedAndOpen();
 
-    final Todo updatedTodo = Todo(id: todo.id, content: todo.content);
-    await _todoBox.put(todo.key, updatedTodo);
+    final Todo updatedTodo = Todo(id: todo.id, content: todo.content, 
+    dueDate: todo.dueDate);
+    await _todoBox.put(todo.id, updatedTodo);
 
     return updatedTodo;
   }

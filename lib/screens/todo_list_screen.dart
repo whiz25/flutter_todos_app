@@ -171,16 +171,16 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 incompleteTodo.content ?? '',
                 style: const TextStyle(fontSize: 20),
               ),
+              subtitle: Text('${incompleteTodo.dueDate}'),
               onTap: () {
                 Navigator.push<Widget>(
                     context,
                     MaterialPageRoute(
                         builder: (context) => TodoDetailsScreen(
-                              todo: incompleteTodo,
-                              todoList: widget.todoList,
-                              todoBloc: todoBloc,
-                              listKey: _incompleteTodoListKey
-                            )));
+                            todo: incompleteTodo,
+                            todoList: widget.todoList,
+                            todoBloc: todoBloc,
+                            listKey: _incompleteTodoListKey)));
               }),
         ));
   }

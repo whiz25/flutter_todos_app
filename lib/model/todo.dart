@@ -14,5 +14,12 @@ class Todo extends HiveObject {
   @HiveField(2)
   bool isComplete;
 
-  Todo({@required this.id, @required this.content, this.isComplete = false});
+  @HiveField(3)
+  DateTime dueDate;
+
+  Todo(
+      {@required this.id,
+      @required this.content,
+      this.isComplete = false,
+      this.dueDate});
 }

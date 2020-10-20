@@ -78,4 +78,14 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
 
     return todoStatus;
   }
+
+  Future<void> setTodoDueDate(DateTime dateTime, Todo todo) async {
+    todo.dueDate = dateTime;
+    final Todo updatedTodo = await iTodoRepository.updateTodo(todo);
+
+    final List<Todo> incompleteTodos = List.from(state.incompleteTodos);
+    incompleteTodos.where((t) => t.id == updatedTodo.id);
+
+    emit(state.copyWith(incompleteTodos: incompleteTodos));
+  }
 }
