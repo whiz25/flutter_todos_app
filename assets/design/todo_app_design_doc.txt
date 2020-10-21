@@ -44,3 +44,14 @@ languages currently.
 - Screens: This folder houses all pages in the app 
 - Widgets: Houses re-usable widgets like the progress indicator
 - Utils: Contains helper code. The AppTheme resides in this folder 
+
+
+## Features
+  ### Add due date 
+    - A user should be able to add a due date to a todo item
+    #### Implementation
+    - The dueDate is displayed in two different screens. So it's state needs to be global.
+    - Async_redux will be used to manage it's state.
+    - The app state will take a dateTime field called `dueDate`
+    - An action will be called to set the dueDate via the TimeModel
+    - A connector will render the dueDate in the UI

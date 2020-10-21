@@ -121,4 +121,5 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   }
 
   String monthOfYear(Todo todo) => DateFormat.MMM().format(todo.dueDate);
+  String dayOfMonth(Todo todo) => DateFormat.d().format(todo.dueDate);
 }

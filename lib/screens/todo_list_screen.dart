@@ -171,7 +171,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 incompleteTodo.content ?? '',
                 style: const TextStyle(fontSize: 20),
               ),
-              subtitle: Text('${incompleteTodo.dueDate}'),
+              subtitle: _checkTodoDueDate(incompleteTodo),
               onTap: () {
                 Navigator.push<Widget>(
                     context,
@@ -183,6 +183,16 @@ class _TodoListScreenState extends State<TodoListScreen> {
                             listKey: _incompleteTodoListKey)));
               }),
         ));
+  }
+
+  Widget _checkTodoDueDate(Todo todo) {
+    if (todo.dueDate != null) {
+      return Text(
+          // ignore: lines_longer_than_80_chars
+          '${todoBloc.dayOfWeek(todo)} ${todo.dueDate.day} ${todoBloc.monthOfYear(todo)}');
+    } else {
+      return const Text('');
+    }
   }
 
   Future<void> onPressed(Todo todo) async {
