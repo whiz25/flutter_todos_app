@@ -33,32 +33,35 @@ class _TodoKeyboardAttachableState extends State<TodoKeyboardAttachable> {
         child: Container(
           color: Theme.of(context).primaryColor,
           child: Padding(
-            padding: EdgeInsets.only(bottom: 
-            MediaQuery.of(context).viewInsets.bottom),
-            child: TextField(
-              controller: contentInputController,
-              decoration: InputDecoration(
-                  hintText: 'Add a task',
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: const OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                      icon: Icon(
-                        Icons.add,
-                        size: 35,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      onPressed: () async {
-                        if (contentInputController.text.isNotEmpty) {
-                          await widget.todoBloc.createTodo(
-                              contentInputController.text, widget.todoList);
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: TextField(
+                controller: contentInputController,
+                decoration: InputDecoration(
+                    hintText: 'Add item',
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: const OutlineInputBorder(),
+                    prefixIcon: IconButton(
+                        icon: Icon(
+                          Icons.add,
+                          size: 35,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onPressed: () async {
+                          if (contentInputController.text.isNotEmpty) {
+                            await widget.todoBloc.createTodo(
+                                contentInputController.text, widget.todoList);
 
-                          contentInputController.clear();
+                            contentInputController.clear();
 
-                          widget.incompleteTodoListKey.currentState.
-                          insertItem(0);
-                        }
-                      })),
+                            widget.incompleteTodoListKey.currentState
+                                .insertItem(0);
+                          }
+                        })),
+              ),
             ),
           ),
         ),

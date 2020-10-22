@@ -80,14 +80,31 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
     return todoStatus;
   }
 
-  Future<void> setTodoDueDate(DateTime dateTime, Todo todo) async {
-    todo.dueDate = dateTime;
-    final Todo updatedTodo = await iTodoRepository.updateTodo(todo);
+  Future<void> update(Todo todo) async {
+    final updatedTodo = await iTodoRepository.updateTodo(todo);
 
     final List<Todo> incompleteTodos = List.from(state.incompleteTodos);
-    incompleteTodos.where((t) => t.id == updatedTodo.id);
+    final List<Todo> completeTodos = List.from(state.completeTodos);
 
-    emit(state.copyWith(incompleteTodos: incompleteTodos));
+    if (updatedTodo.isComplete) {
+      for (int i = 0; i < completeTodos.length; i++) {
+        if (completeTodos[i].id == updatedTodo.id) {
+          completeTodos.removeAt(i);
+          completeTodos.insert(i, updatedTodo);
+
+          emit(state.copyWith(completeTodos: completeTodos));
+        }
+      }
+    }
+
+    for (int i = 0; i < incompleteTodos.length; i++) {
+      if (incompleteTodos[i].id == updatedTodo.id) {
+        incompleteTodos.removeAt(i);
+        incompleteTodos.insert(i, updatedTodo);
+
+        emit(state.copyWith(incompleteTodos: incompleteTodos));
+      }
+    }
   }
 
   String dayOfWeek(Todo todo) {
@@ -121,5 +138,6 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   }
 
   String monthOfYear(Todo todo) => DateFormat.MMM().format(todo.dueDate);
+
   String dayOfMonth(Todo todo) => DateFormat.d().format(todo.dueDate);
 }

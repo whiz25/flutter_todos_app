@@ -158,7 +158,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                             height: 0,
                           ));
 
-                  await onPressed(incompleteTodo);
+                  await todoBloc.completeTodo(incompleteTodo);
 
                   _completeTodoListKey.currentState.insertItem(0);
                 },
@@ -179,8 +179,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                         builder: (context) => TodoDetailsScreen(
                             todo: incompleteTodo,
                             todoList: widget.todoList,
-                            todoBloc: todoBloc,
-                            listKey: _incompleteTodoListKey)));
+                            todoBloc: todoBloc)));
               }),
         ));
   }
@@ -191,12 +190,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
           // ignore: lines_longer_than_80_chars
           '${todoBloc.dayOfWeek(todo)} ${todo.dueDate.day} ${todoBloc.monthOfYear(todo)}');
     } else {
-      return const Text('');
+      return const Text('Add due date');
     }
-  }
-
-  Future<void> onPressed(Todo todo) async {
-    await todoBloc.completeTodo(todo);
   }
 
   Widget _completeTodoDismissible(TodoState state, int index) {
@@ -230,7 +225,15 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 style: const TextStyle(
                     fontSize: 20, decoration: TextDecoration.lineThrough),
               ),
-              onTap: () {}),
+              subtitle: _checkTodoDueDate(completeTodo),
+              onTap: () {
+                Navigator.of(context).push<Widget>(MaterialPageRoute(
+                    builder: (context) => TodoDetailsScreen(
+                          todo: completeTodo,
+                          todoBloc: todoBloc,
+                          todoList: widget.todoList,
+                        )));
+              }),
         ));
   }
 

@@ -22,4 +22,12 @@ class Todo extends HiveObject {
       @required this.content,
       this.isComplete = false,
       this.dueDate});
+
+  Todo copyWith(
+          {String id, String content, bool isComplete, DateTime dueDate}) =>
+      Todo(
+          id: id ?? this.id,
+          content: content ?? this.content,
+          isComplete: isComplete ?? this.isComplete,
+          dueDate: dueDate ?? this.dueDate);
 }

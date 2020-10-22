@@ -76,8 +76,8 @@ class TodoRepository implements ITodoRepository {
   Future<Todo> updateTodo(Todo todo) async {
     await checkIfTodosBoxIsCreatedAndOpen();
 
-    final Todo updatedTodo = Todo(id: todo.id, content: todo.content, 
-    dueDate: todo.dueDate);
+    final Todo updatedTodo =
+        Todo(id: todo.id, content: todo.content, dueDate: todo.dueDate);
     await _todoBox.put(todo.id, updatedTodo);
 
     return updatedTodo;

@@ -15,10 +15,8 @@ class TodoDetailsScreen extends StatefulWidget {
   final Todo todo;
   final TodoList todoList;
   final TodoBloc todoBloc;
-  final GlobalKey<AnimatedListState> listKey;
 
-  const TodoDetailsScreen(
-      {Key key, this.todo, this.todoList, this.todoBloc, this.listKey})
+  const TodoDetailsScreen({Key key, this.todo, this.todoList, this.todoBloc})
       : super(key: key);
 
   @override
@@ -39,82 +37,74 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<TodoBloc, TodoState>(
-      cubit: todoBloc,
-      builder: (context, state) {
-        if (state == null) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        return Scaffold(
-            appBar: AppBar(
-              backgroundColor: AppColorPalette().secondaryColor,
-              elevation: 0,
-              iconTheme: IconThemeData(color: AppColorPalette().textOnPrimary),
-              title: Text(
-                widget.todoList.title,
-                style: TextStyle(color: AppColorPalette().textOnPrimary),
-              ),
-            ),
-            body: Container(
-              color: AppColorPalette().containerBackgroundColor,
-              alignment: Alignment.center,
-              child: Column(
+  Widget build(BuildContext context) => Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColorPalette().secondaryColor,
+        elevation: 0,
+        iconTheme: IconThemeData(color: AppColorPalette().textOnPrimary),
+        title: Text(
+          widget.todoList.title,
+          style: TextStyle(color: AppColorPalette().textOnPrimary),
+        ),
+      ),
+      body: Container(
+        color: AppColorPalette().containerBackgroundColor,
+        alignment: Alignment.center,
+        child: Column(
+          children: [
+            RaisedButton(
+              padding: const EdgeInsets.all(16),
+              onPressed: () {},
+              color: AppColorPalette().secondaryColor,
+              child: Row(
                 children: [
-                  RaisedButton(
-                    padding: const EdgeInsets.all(16),
-                    onPressed: () {},
-                    color: AppColorPalette().secondaryColor,
-                    child: Row(
-                      children: [
-                        if (widget.todo.isComplete)
-                          Text(
-                            widget.todo.content,
-                            style: const TextStyle(
-                                decoration: TextDecoration.lineThrough,
-                                fontSize: 20),
-                          ),
-                        if (!widget.todo.isComplete)
-                          Text(
-                            widget.todo.content,
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                      ],
+                  if (widget.todo.isComplete)
+                    Text(
+                      widget.todo.content,
+                      style: const TextStyle(
+                          decoration: TextDecoration.lineThrough, fontSize: 20),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      onPressed: () {
-                        DatePicker.showDatePicker(
-                          context,
-                          theme: const DatePickerTheme(),
-                          onConfirm: (time) {
-                            widget.todoBloc.setTodoDueDate(time, widget.todo);
-                          },
-                        );
-                      },
-                      color: AppColorPalette().secondaryColor,
-                      child: Container(
-                        height: 70,
-                        width: 365,
-                        alignment: Alignment.center,
-                        child: Row(
-                          children: [
-                            if (widget.todo.dueDate == null) _dueDateNotSet(),
-                            if (widget.todo.dueDate != null) _dueDateSet(),
-                          ],
-                        ),
-                      ))
+                  if (!widget.todo.isComplete)
+                    Text(
+                      widget.todo.content,
+                      style: const TextStyle(fontSize: 20),
+                    ),
                 ],
               ),
-            ));
-      });
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                onPressed: () {
+                  DatePicker.showDatePicker(
+                    context,
+                    theme: const DatePickerTheme(),
+                    onConfirm: (time) async {
+                      final Todo updatedTodo =
+                          widget.todo.copyWith(dueDate: time);
+
+                      await widget.todoBloc.update(updatedTodo);
+                    },
+                  );
+                },
+                color: AppColorPalette().secondaryColor,
+                child: Container(
+                  height: 70,
+                  width: 365,
+                  alignment: Alignment.center,
+                  child: Row(
+                    children: [
+                      if (widget.todo.dueDate == null) _dueDateNotSet(),
+                      if (widget.todo.dueDate != null) _dueDateSet(),
+                    ],
+                  ),
+                ))
+          ],
+        ),
+      ));
 
   Widget _dueDateSet() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
