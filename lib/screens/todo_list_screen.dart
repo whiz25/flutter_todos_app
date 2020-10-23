@@ -11,7 +11,6 @@ import '../model/todo_list.dart';
 import '../repository/itodo_repository.dart';
 import '../utils/app_color_palette.dart';
 import '../utils/localization.dart';
-import '../widgets/progress_loader.dart';
 import '../widgets/widgets.dart';
 import 'home_screen.dart';
 import 'todo_details_screen.dart';
@@ -189,8 +188,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
       return Text(
           // ignore: lines_longer_than_80_chars
           '${todoBloc.dayOfWeek(todo)} ${todo.dueDate.day} ${todoBloc.monthOfYear(todo)}');
-    } else {
-      return const Text('Add due date');
     }
   }
 
