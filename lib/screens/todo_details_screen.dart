@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_todos_app/widgets/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../blocs/todo_bloc.dart';
@@ -10,6 +9,7 @@ import '../model/todo.dart';
 import '../model/todo_list.dart';
 import '../repository/itodo_repository.dart';
 import '../utils/app_color_palette.dart';
+import '../widgets/widgets.dart';
 
 class TodoDetailsScreen extends StatefulWidget {
   final Todo todo;
@@ -199,7 +199,7 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                           width: 0,
                           height: 0,
                         ));
-                        
+
                 await widget.todoBloc.completeTodo(widget.todo);
 
                 widget.completeTodoListKey.currentState.insertItem(0);

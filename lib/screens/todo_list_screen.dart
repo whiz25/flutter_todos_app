@@ -168,7 +168,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
               ),
               title: Text(
                 incompleteTodo.content ?? '',
-                style: const TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: 22),
               ),
               subtitle: _checkTodoDueDate(incompleteTodo),
               onTap: () {
@@ -189,9 +189,20 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
   Widget _checkTodoDueDate(Todo todo) {
     if (todo.dueDate != null) {
-      return Text(
-          // ignore: lines_longer_than_80_chars
-          '${todoBloc.dayOfWeek(todo)} ${todo.dueDate.day} ${todoBloc.monthOfYear(todo)}');
+      return Row(
+        children: [
+          Icon(
+            Icons.calendar_today,
+            color: Theme.of(context).primaryColor,
+          ),
+          const SizedBox(
+            width: 4,
+          ),
+          Text(
+              // ignore: lines_longer_than_80_chars
+              '${todoBloc.dayOfWeek(todo)} ${todo.dueDate.day} ${todoBloc.monthOfYear(todo)}'),
+        ],
+      );
     }
     return null;
   }
@@ -225,7 +236,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
               title: Text(
                 completeTodo.content ?? '',
                 style: const TextStyle(
-                    fontSize: 20, decoration: TextDecoration.lineThrough),
+                    fontSize: 22, decoration: TextDecoration.lineThrough),
               ),
               subtitle: _checkTodoDueDate(completeTodo),
               onTap: () {
