@@ -83,10 +83,9 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                     context,
                     theme: const DatePickerTheme(),
                     onConfirm: (time) async {
-                      final Todo updatedTodo =
-                          widget.todo.copyWith(dueDate: time);
+                      widget.todo.dueDate = time;
 
-                      await widget.todoBloc.update(updatedTodo);
+                      await widget.todoBloc.update(widget.todo);
                     },
                   );
                 },
