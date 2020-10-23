@@ -180,7 +180,7 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
           Text(
             widget.todo.content,
             style: const TextStyle(
-                decoration: TextDecoration.lineThrough, fontSize: 20),
+                decoration: TextDecoration.lineThrough, fontSize: 24),
           ),
         ],
       );
@@ -207,7 +207,7 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
           if (!widget.todo.isComplete)
             Text(
               widget.todo.content,
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 24),
             ),
         ],
       );
