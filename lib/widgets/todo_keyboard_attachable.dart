@@ -29,7 +29,6 @@ class _TodoKeyboardAttachableState extends State<TodoKeyboardAttachable> {
 
   @override
   Widget build(BuildContext context) => KeyboardAttachable(
-        backgroundColor: Theme.of(context).primaryColor,
         child: Container(
           color: Theme.of(context).primaryColor,
           child: Padding(

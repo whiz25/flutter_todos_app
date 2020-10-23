@@ -189,6 +189,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
           // ignore: lines_longer_than_80_chars
           '${todoBloc.dayOfWeek(todo)} ${todo.dueDate.day} ${todoBloc.monthOfYear(todo)}');
     }
+    return null;
   }
 
   Widget _completeTodoDismissible(TodoState state, int index) {

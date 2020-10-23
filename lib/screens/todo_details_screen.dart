@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../blocs/todo_bloc.dart';
 import '../blocs/todo_state.dart';
@@ -56,17 +57,8 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
               color: AppColorPalette().secondaryColor,
               child: Row(
                 children: [
-                  if (widget.todo.isComplete)
-                    Text(
-                      widget.todo.content,
-                      style: const TextStyle(
-                          decoration: TextDecoration.lineThrough, fontSize: 20),
-                    ),
-                  if (!widget.todo.isComplete)
-                    Text(
-                      widget.todo.content,
-                      style: const TextStyle(fontSize: 20),
-                    ),
+                  if (widget.todo.isComplete) _completeTodoRow(),
+                  if (!widget.todo.isComplete) _incompleteTodoRow()
                 ],
               ),
             ),
@@ -120,7 +112,12 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                 TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
           ),
           IconButton(
-            icon: const Icon(Icons.cancel),
+            padding: const EdgeInsets.only(left: 180),
+            icon: const Icon(
+              Icons.cancel,
+              color: Colors.black26,
+              size: 25,
+            ),
             onPressed: () {},
           )
         ],
@@ -135,4 +132,37 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
           Text('Add due date', style: TextStyle(fontSize: 18)),
         ],
       );
+
+  Row _completeTodoRow() => Row(
+      children: [
+        IconButton(
+            icon: Icon(
+              FontAwesomeIcons.solidCheckCircle,
+              color: Theme.of(context).primaryColor,
+              size: 30,
+            ),
+            onPressed: () {}),
+        Text(
+          widget.todo.content,
+          style: const TextStyle(
+              decoration: TextDecoration.lineThrough, fontSize: 20),
+        ),
+      ],
+    );
+
+  Row _incompleteTodoRow() => Row(
+      children: [
+        IconButton(
+            icon: const Icon(
+              FontAwesomeIcons.circle,
+              size: 30,
+            ),
+            onPressed: () {}),
+        if (!widget.todo.isComplete)
+          Text(
+            widget.todo.content,
+            style: const TextStyle(fontSize: 20),
+          ),
+      ],
+    );
 }
