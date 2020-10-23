@@ -14,8 +14,18 @@ class TodoDetailsScreen extends StatefulWidget {
   final Todo todo;
   final TodoList todoList;
   final TodoBloc todoBloc;
+  final int index;
+  final GlobalKey<AnimatedListState> incompleteTodoListKey;
+  final GlobalKey<AnimatedListState> completeTodoListKey;
 
-  const TodoDetailsScreen({Key key, this.todo, this.todoList, this.todoBloc})
+  const TodoDetailsScreen(
+      {Key key,
+      this.todo,
+      this.todoList,
+      this.todoBloc,
+      this.index,
+      this.incompleteTodoListKey,
+      this.completeTodoListKey})
       : super(key: key);
 
   @override
@@ -145,7 +155,18 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                 color: Theme.of(context).primaryColor,
                 size: 30,
               ),
-              onPressed: () {}),
+              onPressed: () async {
+                widget.completeTodoListKey.currentState.removeItem(
+                    widget.index,
+                    (context, animation) => const SizedBox(
+                          width: 0,
+                          height: 0,
+                        ));
+
+                await widget.todoBloc.completeTodo(widget.todo);
+
+                widget.incompleteTodoListKey.currentState.insertItem(0);
+              }),
           Text(
             widget.todo.content,
             style: const TextStyle(
@@ -161,7 +182,17 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                 FontAwesomeIcons.circle,
                 size: 30,
               ),
-              onPressed: () {}),
+              onPressed: () async {
+                widget.incompleteTodoListKey.currentState.removeItem(
+                    widget.index,
+                    (context, animation) => const SizedBox(
+                          width: 0,
+                          height: 0,
+                        ));
+                await widget.todoBloc.completeTodo(widget.todo);
+
+                widget.completeTodoListKey.currentState.insertItem(0);
+              }),
           if (!widget.todo.isComplete)
             Text(
               widget.todo.content,

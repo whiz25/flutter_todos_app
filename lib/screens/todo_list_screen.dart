@@ -176,9 +176,13 @@ class _TodoListScreenState extends State<TodoListScreen> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => TodoDetailsScreen(
-                            todo: incompleteTodo,
-                            todoList: widget.todoList,
-                            todoBloc: todoBloc)));
+                              todo: incompleteTodo,
+                              todoList: widget.todoList,
+                              index: index,
+                              todoBloc: todoBloc,
+                              incompleteTodoListKey: _incompleteTodoListKey,
+                              completeTodoListKey: _completeTodoListKey,
+                            )));
               }),
         ));
   }
@@ -230,6 +234,9 @@ class _TodoListScreenState extends State<TodoListScreen> {
                           todo: completeTodo,
                           todoBloc: todoBloc,
                           todoList: widget.todoList,
+                          index: index,
+                          incompleteTodoListKey: _incompleteTodoListKey,
+                          completeTodoListKey: _completeTodoListKey,
                         )));
               }),
         ));
