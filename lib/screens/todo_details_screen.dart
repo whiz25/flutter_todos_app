@@ -7,7 +7,6 @@ import '../blocs/todo_bloc.dart';
 import '../blocs/todo_state.dart';
 import '../model/todo.dart';
 import '../model/todo_list.dart';
-import '../repository/itodo_repository.dart';
 import '../utils/app_color_palette.dart';
 import '../widgets/widgets.dart';
 
@@ -36,18 +35,6 @@ class TodoDetailsScreen extends StatefulWidget {
 }
 
 class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
-  TodoBloc todoBloc;
-  TodoState todoBlocState;
-
-  @override
-  void initState() {
-    super.initState();
-
-    todoBloc = TodoBloc(
-        todoList: widget.todoList,
-        iTodoRepository: RepositoryProvider.of<ITodoRepository>(context));
-  }
-
   @override
   Widget build(BuildContext context) => BlocBuilder<TodoBloc, TodoState>(
       cubit: widget.todoBloc,
