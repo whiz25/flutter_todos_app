@@ -132,7 +132,7 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                 TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
           ),
           IconButton(
-            padding: const EdgeInsets.only(left: 180),
+            padding: const EdgeInsets.only(left: 20),
             icon: const Icon(
               Icons.cancel,
               color: Colors.black26,
@@ -199,6 +199,7 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                           width: 0,
                           height: 0,
                         ));
+                        
                 await widget.todoBloc.completeTodo(widget.todo);
 
                 widget.completeTodoListKey.currentState.insertItem(0);
