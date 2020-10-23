@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_todos_app/widgets/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../blocs/todo_bloc.dart';
@@ -14,6 +15,7 @@ class TodoDetailsScreen extends StatefulWidget {
   final Todo todo;
   final TodoList todoList;
   final TodoBloc todoBloc;
+  final TodoState todoState;
   final int index;
   final GlobalKey<AnimatedListState> incompleteTodoListKey;
   final GlobalKey<AnimatedListState> completeTodoListKey;
@@ -23,6 +25,7 @@ class TodoDetailsScreen extends StatefulWidget {
       this.todo,
       this.todoList,
       this.todoBloc,
+      this.todoState,
       this.index,
       this.incompleteTodoListKey,
       this.completeTodoListKey})
@@ -46,64 +49,71 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColorPalette().secondaryColor,
-        elevation: 0,
-        iconTheme: IconThemeData(color: AppColorPalette().textOnPrimary),
-        title: Text(
-          widget.todoList.title,
-          style: TextStyle(color: AppColorPalette().textOnPrimary),
-        ),
-      ),
-      body: Container(
-        color: AppColorPalette().containerBackgroundColor,
-        alignment: Alignment.center,
-        child: Column(
-          children: [
-            RaisedButton(
-              padding: const EdgeInsets.all(16),
-              onPressed: () {},
-              color: AppColorPalette().secondaryColor,
-              child: Row(
-                children: [
-                  if (widget.todo.isComplete) _completeTodoRow(),
-                  if (!widget.todo.isComplete) _incompleteTodoRow()
-                ],
+  Widget build(BuildContext context) => BlocBuilder<TodoBloc, TodoState>(
+      cubit: widget.todoBloc,
+      builder: (context, state) {
+        if (state == null) {
+          return const ProgressLoader();
+        }
+        return Scaffold(
+            appBar: AppBar(
+              backgroundColor: AppColorPalette().secondaryColor,
+              elevation: 0,
+              iconTheme: IconThemeData(color: AppColorPalette().textOnPrimary),
+              title: Text(
+                widget.todoList.title,
+                style: TextStyle(color: AppColorPalette().textOnPrimary),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                onPressed: () {
-                  DatePicker.showDatePicker(
-                    context,
-                    theme: const DatePickerTheme(),
-                    onConfirm: (time) async {
-                      widget.todo.dueDate = time;
-
-                      await widget.todoBloc.update(widget.todo);
-                    },
-                  );
-                },
-                color: AppColorPalette().secondaryColor,
-                child: Container(
-                  height: 70,
-                  width: 365,
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      if (widget.todo.dueDate == null) _dueDateNotSet(),
-                      if (widget.todo.dueDate != null) _dueDateSet(),
-                    ],
+            body: Container(
+              color: AppColorPalette().containerBackgroundColor,
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  RaisedButton(
+                    padding: const EdgeInsets.all(16),
+                    onPressed: () {},
+                    color: AppColorPalette().secondaryColor,
+                    child: Row(
+                      children: [
+                        if (widget.todo.isComplete) _completeTodoRow(),
+                        if (!widget.todo.isComplete) _incompleteTodoRow()
+                      ],
+                    ),
                   ),
-                ))
-          ],
-        ),
-      ));
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      onPressed: () {
+                        DatePicker.showDatePicker(
+                          context,
+                          theme: const DatePickerTheme(),
+                          onConfirm: (time) async {
+                            widget.todo.dueDate = time;
+
+                            await widget.todoBloc.update(widget.todo);
+                          },
+                        );
+                      },
+                      color: AppColorPalette().secondaryColor,
+                      child: Container(
+                        height: 70,
+                        width: 365,
+                        alignment: Alignment.center,
+                        child: Row(
+                          children: [
+                            if (widget.todo.dueDate == null) _dueDateNotSet(),
+                            if (widget.todo.dueDate != null) _dueDateSet(),
+                          ],
+                        ),
+                      ))
+                ],
+              ),
+            ));
+      });
 
   Widget _dueDateSet() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
