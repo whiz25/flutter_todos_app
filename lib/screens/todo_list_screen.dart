@@ -243,8 +243,10 @@ class _TodoListScreenState extends State<TodoListScreen> {
         context: context,
         builder: (BuildContext context) => AlertDialog(
               title: Text(
+                  // ignore: lines_longer_than_80_chars
                   "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
               content: Text(
+                  // ignore: lines_longer_than_80_chars
                   "${FlutterTodosAppLocalizations.of(context).translate('delete_todo_start')} ${todo.content} ${FlutterTodosAppLocalizations.of(context).translate('delete_todo_end')}"),
               actions: [
                 FlatButton(
@@ -261,6 +263,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                       Navigator.pop(context, true);
                     },
                     child: Text(
+                        // ignore: lines_longer_than_80_chars
                         "${FlutterTodosAppLocalizations.of(context).translate('confirm')}",
                         style: Theme.of(context)
                             .textTheme
@@ -269,6 +272,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 FlatButton(
                     onPressed: () => Navigator.pop(context, false),
                     child: Text(
+                        // ignore: lines_longer_than_80_chars
                         "${FlutterTodosAppLocalizations.of(context).translate('cancel')}",
                         style: Theme.of(context)
                             .textTheme
@@ -285,8 +289,10 @@ class _TodoListScreenState extends State<TodoListScreen> {
         context: context,
         builder: (BuildContext context) => AlertDialog(
               title: Text(
+                  // ignore: lines_longer_than_80_chars
                   "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
               content: Text(
+                  // ignore: lines_longer_than_80_chars
                   "${FlutterTodosAppLocalizations.of(context).translate('delete_todo_start')} ${todo.content} ${FlutterTodosAppLocalizations.of(context).translate('delete_todo_end')}"),
               actions: [
                 FlatButton(
@@ -303,6 +309,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                       Navigator.pop(context, true);
                     },
                     child: Text(
+                        // ignore: lines_longer_than_80_chars
                         "${FlutterTodosAppLocalizations.of(context).translate('confirm')}",
                         style: Theme.of(context)
                             .textTheme
@@ -311,6 +318,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 FlatButton(
                     onPressed: () => Navigator.pop(context, false),
                     child: Text(
+                        // ignore: lines_longer_than_80_chars
                         "${FlutterTodosAppLocalizations.of(context).translate('cancel')}",
                         style: Theme.of(context)
                             .textTheme
@@ -343,8 +351,10 @@ class _TodoListScreenState extends State<TodoListScreen> {
         context: context,
         builder: (context) => AlertDialog(
               title: Text(
+                  // ignore: lines_longer_than_80_chars
                   "${FlutterTodosAppLocalizations.of(context).translate('confirm')}"),
               content: Text(
+                  // ignore: lines_longer_than_80_chars
                   "${FlutterTodosAppLocalizations.of(context).translate('delete_todoList_start')} ${widget.todoList.title} ${FlutterTodosAppLocalizations.of(context).translate('delete_todoList_end')}"),
               actions: [
                 FlatButton(
@@ -359,6 +369,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                               builder: (context) => const HomeScreen()));
                     },
                     child: Text(
+                        // ignore: lines_longer_than_80_chars
                         "${FlutterTodosAppLocalizations.of(context).translate('confirm')}",
                         style: Theme.of(context)
                             .textTheme
@@ -367,6 +378,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 FlatButton(
                     onPressed: () => Navigator.pop(context, false),
                     child: Text(
+                        // ignore: lines_longer_than_80_chars
                         "${FlutterTodosAppLocalizations.of(context).translate('cancel')}",
                         style: Theme.of(context)
                             .textTheme

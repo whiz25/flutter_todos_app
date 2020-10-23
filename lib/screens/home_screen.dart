@@ -131,6 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.pop(context);
                 },
                 child: Text(
+                    // ignore: lines_longer_than_80_chars
                     '${FlutterTodosAppLocalizations.of(context).translate("cancel")}',
                     style: TextStyle(color: Theme.of(context).primaryColor)),
               ),
@@ -148,6 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                 },
                 child: Text(
+                    // ignore: lines_longer_than_80_chars
                     '${FlutterTodosAppLocalizations.of(context).translate("save")}',
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,

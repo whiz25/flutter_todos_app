@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_todos_app/blocs/todo_state.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mdi/mdi.dart';
+
 import '../blocs/todo_bloc.dart';
+import '../blocs/todo_state.dart';
 import '../model/todo.dart';
 import '../model/todo_list.dart';
 import '../repository/itodo_repository.dart';
