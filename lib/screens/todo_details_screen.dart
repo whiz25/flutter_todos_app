@@ -118,7 +118,11 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
               color: Colors.black26,
               size: 25,
             ),
-            onPressed: () {},
+            onPressed: () async {
+              widget.todo.dueDate = null;
+
+              await widget.todoBloc.update(widget.todo);
+            },
           )
         ],
       );
@@ -134,35 +138,35 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
       );
 
   Row _completeTodoRow() => Row(
-      children: [
-        IconButton(
-            icon: Icon(
-              FontAwesomeIcons.solidCheckCircle,
-              color: Theme.of(context).primaryColor,
-              size: 30,
-            ),
-            onPressed: () {}),
-        Text(
-          widget.todo.content,
-          style: const TextStyle(
-              decoration: TextDecoration.lineThrough, fontSize: 20),
-        ),
-      ],
-    );
-
-  Row _incompleteTodoRow() => Row(
-      children: [
-        IconButton(
-            icon: const Icon(
-              FontAwesomeIcons.circle,
-              size: 30,
-            ),
-            onPressed: () {}),
-        if (!widget.todo.isComplete)
+        children: [
+          IconButton(
+              icon: Icon(
+                FontAwesomeIcons.solidCheckCircle,
+                color: Theme.of(context).primaryColor,
+                size: 30,
+              ),
+              onPressed: () {}),
           Text(
             widget.todo.content,
-            style: const TextStyle(fontSize: 20),
+            style: const TextStyle(
+                decoration: TextDecoration.lineThrough, fontSize: 20),
           ),
-      ],
-    );
+        ],
+      );
+
+  Row _incompleteTodoRow() => Row(
+        children: [
+          IconButton(
+              icon: const Icon(
+                FontAwesomeIcons.circle,
+                size: 30,
+              ),
+              onPressed: () {}),
+          if (!widget.todo.isComplete)
+            Text(
+              widget.todo.content,
+              style: const TextStyle(fontSize: 20),
+            ),
+        ],
+      );
 }
