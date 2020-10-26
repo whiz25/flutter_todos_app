@@ -26,14 +26,14 @@ class TodoListScreen extends StatefulWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<TodoList>('todoList', todoList));    
+    properties.add(DiagnosticsProperty<TodoList>('todoList', todoList));
   }
 }
 
 class _TodoListScreenState extends State<TodoListScreen> {
   TodoBloc _todoBloc;
   TodoListBloc _todoListBloc;
-  TextEditingController _contentInputController;
+  TextEditingController contentInputController;
 
   final GlobalKey<AnimatedListState> _incompleteTodoListKey =
       GlobalKey<AnimatedListState>();
@@ -52,7 +52,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
     _todoListBloc = TodoListBloc(
         iTodoRepository: RepositoryProvider.of<ITodoRepository>(context));
 
-    _contentInputController = TextEditingController();
+    contentInputController = TextEditingController();
   }
 
   @override
@@ -84,7 +84,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
               onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
               child: FooterLayout(
                 footer: TodoKeyboardAttachable(
-                    todoBloc: todoBloc,
+                    todoBloc: _todoBloc,
                     todoList: widget.todoList,
                     incompleteTodoListKey: _incompleteTodoListKey),
                 child: Container(
@@ -184,7 +184,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                         builder: (context) => TodoDetailsScreen(
                               todo: incompleteTodo,
                               listTitle: widget.todoList.title,
-                              onUpdated: todoBloc.update,
+                              onUpdated: _todoBloc.update,
                             )));
               }),
         ));
@@ -247,7 +247,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                     builder: (context) => TodoDetailsScreen(
                           todo: completeTodo,
                           listTitle: widget.todoList.title,
-                          onUpdated: todoBloc.update,
+                          onUpdated: _todoBloc.update,
                         )));
               }),
         ));

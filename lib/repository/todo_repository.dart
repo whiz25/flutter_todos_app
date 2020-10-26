@@ -16,6 +16,7 @@ class TodoRepository implements ITodoRepository {
     Hive.registerAdapter(TodoListAdapter());
   }
 
+  @override
   Future<Todo> addTodo(TodoList todoList, Todo todo) async {    
     final todoBox = await getBoxForList(todoList);
     await todoBox.add(todo);    
@@ -25,7 +26,7 @@ class TodoRepository implements ITodoRepository {
       @override
       Future<void> deleteTodo(TodoList todoList, Todo todo) async {        
         final todoBox = await getBoxForList(todoList);
-        await todoBox.delete(todo.key);
+        await todoBox.delete(todo.id);
       }
     
       @override
@@ -46,7 +47,7 @@ class TodoRepository implements ITodoRepository {
       @override
       Future<Todo> updateTodo(TodoList todoList, Todo todo) async {
         final todoBox = await getBoxForList(todoList);            
-        await todoBox.put(todo.key, todo);    
+        await todoBox.put(todo.id, todo);    
         return todo;
       }     
     
