@@ -177,11 +177,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
                     MaterialPageRoute(
                         builder: (context) => TodoDetailsScreen(
                               todo: incompleteTodo,
-                              todoList: widget.todoList,
-                              index: index,
-                              todoBloc: todoBloc,
-                              incompleteTodoListKey: _incompleteTodoListKey,
-                              completeTodoListKey: _completeTodoListKey,
+                              listTitle: widget.todoList.title,
+                              onUpdated: todoBloc.update,
                             )));
               }),
         ));
@@ -200,7 +197,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
           ),
           Text(
               // ignore: lines_longer_than_80_chars
-              '${todoBloc.dayOfWeek(todo)} ${todo.dueDate.day} ${todoBloc.monthOfYear(todo)}'),
+              '${todo.dayOfWeek} ${todo.dueDate.day} ${todo.monthOfYear}'),
         ],
       );
     }
@@ -243,11 +240,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 Navigator.of(context).push<Widget>(MaterialPageRoute(
                     builder: (context) => TodoDetailsScreen(
                           todo: completeTodo,
-                          todoBloc: todoBloc,
-                          todoList: widget.todoList,
-                          index: index,
-                          incompleteTodoListKey: _incompleteTodoListKey,
-                          completeTodoListKey: _completeTodoListKey,
+                          listTitle: widget.todoList.title,
+                          onUpdated: todoBloc.update,
                         )));
               }),
         ));

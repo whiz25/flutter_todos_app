@@ -87,15 +87,10 @@ class TodoRepository implements ITodoRepository {
   ) async {
     await checkIfTodosBoxIsCreatedAndOpen();
 
-    if (todo.isComplete) {
-      todo.isComplete = false;
-      await _todoBox.put(todo.key, todo);
-      return todo.isComplete;
-    }
-
-    todo.isComplete = true;
-    await _todoBox.put(todo.key, todo);
-    return todo.isComplete;
+    final updatedTodo = todo.copyWith(isComplete: !todo.isComplete);
+    await _todoBox.put(todo.key, updatedTodo);
+    
+    return updatedTodo.isComplete;
   }
 
   @override
