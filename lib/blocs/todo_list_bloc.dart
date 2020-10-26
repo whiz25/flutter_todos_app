@@ -30,7 +30,7 @@ class TodoListBloc extends AutoLoadCubit<TodoListState> {
   }
 
   Future<void> deleteTodoList(TodoList todoList) async {
-    await iTodoRepository.deletTodoList(todoList);
+    await iTodoRepository.deleteTodoList(todoList);
 
     final List<TodoList> newTodoList = List<TodoList>.from(state.todoList);
     newTodoList.remove(todoList);

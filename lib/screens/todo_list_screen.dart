@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -21,12 +22,18 @@ class TodoListScreen extends StatefulWidget {
 
   @override
   _TodoListScreenState createState() => _TodoListScreenState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<TodoList>('todoList', todoList));    
+  }
 }
 
 class _TodoListScreenState extends State<TodoListScreen> {
-  TodoBloc todoBloc;
-  TodoListBloc todoListBloc;
-  TextEditingController contentInputController;
+  TodoBloc _todoBloc;
+  TodoListBloc _todoListBloc;
+  TextEditingController _contentInputController;
 
   final GlobalKey<AnimatedListState> _incompleteTodoListKey =
       GlobalKey<AnimatedListState>();
@@ -38,26 +45,26 @@ class _TodoListScreenState extends State<TodoListScreen> {
   void initState() {
     super.initState();
 
-    todoBloc = TodoBloc(
+    _todoBloc = TodoBloc(
         todoList: widget.todoList,
         iTodoRepository: RepositoryProvider.of<ITodoRepository>(context));
 
-    todoListBloc = TodoListBloc(
+    _todoListBloc = TodoListBloc(
         iTodoRepository: RepositoryProvider.of<ITodoRepository>(context));
 
-    contentInputController = TextEditingController();
+    _contentInputController = TextEditingController();
   }
 
   @override
   void dispose() {
     super.dispose();
 
-    todoBloc.close();
+    _todoBloc.close();
   }
 
   @override
   Widget build(BuildContext context) => BlocBuilder<TodoBloc, TodoState>(
-        cubit: todoBloc,
+        cubit: _todoBloc,
         builder: (context, state) {
           if (state == null) {
             return const ProgressLoader();
@@ -117,7 +124,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
           );
         },
       );
-
   Widget _incompleteTodoList(TodoState state, BuildContext context) {
     final List<Todo> todos = state.incompleteTodos;
     return AnimatedList(
@@ -157,7 +163,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                             height: 0,
                           ));
 
-                  await todoBloc.completeTodo(incompleteTodo);
+                  await _todoBloc.completeTodo(incompleteTodo);
 
                   _completeTodoListKey.currentState.insertItem(0);
                 },
@@ -221,7 +227,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                               height: 0,
                             ));
 
-                    await todoBloc.completeTodo(completeTodo);
+                    await _todoBloc.completeTodo(completeTodo);
 
                     _incompleteTodoListKey.currentState.insertItem(0);
                   },
@@ -268,7 +274,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                                 height: 0,
                               ));
 
-                      todoBloc.deleteTodo(todo);
+                      _todoBloc.deleteTodo(todo);
 
                       Navigator.pop(context, true);
                     },
@@ -314,7 +320,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                                 height: 0,
                               ));
 
-                      todoBloc.deleteTodo(todo);
+                      _todoBloc.deleteTodo(todo);
 
                       Navigator.pop(context, true);
                     },
@@ -369,7 +375,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
               actions: [
                 FlatButton(
                     onPressed: () async {
-                      await todoListBloc.deleteTodoList(todoList);
+                      await _todoListBloc.deleteTodoList(todoList);
 
                       Navigator.pop(context, true);
 

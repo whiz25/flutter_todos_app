@@ -18,8 +18,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TodoListBloc todoListBloc;
-  TextEditingController todoListInputController;
+  TodoListBloc _todoListBloc;
+  TextEditingController _todoListInputController;
 
   final GlobalKey<AnimatedListState> _todoListKey =
       GlobalKey<AnimatedListState>();
@@ -28,23 +28,23 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    todoListBloc = TodoListBloc(
+    _todoListBloc = TodoListBloc(
         iTodoRepository: RepositoryProvider.of<ITodoRepository>(context));
 
-    todoListInputController = TextEditingController();
+    _todoListInputController = TextEditingController();
   }
 
   @override
   void dispose() {
     super.dispose();
 
-    todoListBloc.close();
+    _todoListBloc.close();
   }
 
   @override
   Widget build(BuildContext context) =>
       BlocBuilder<TodoListBloc, TodoListState>(
-        cubit: todoListBloc,
+        cubit: _todoListBloc,
         builder: (context, state) {
           if (state == null) {
             return const ProgressLoader();
@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         IconButton(
                           icon: const Icon(Icons.add),
                           onPressed: () =>
-                              _createTodoForm(context, todoListBloc),
+                              _createTodoForm(context, _todoListBloc),
                           color: Theme.of(context).primaryColor,
                           iconSize: 30,
                         ),
@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       hintText: 'Enter list title',
                       icon: Icon(Icons.list),
                     ),
-                    controller: todoListInputController,
+                    controller: _todoListInputController,
                   ),
                 ],
               ),
@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
             actions: [
               FlatButton(
                 onPressed: () {
-                  todoListInputController.clear();
+                  _todoListInputController.clear();
 
                   Navigator.pop(context);
                 },
@@ -137,11 +137,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               FlatButton(
                 onPressed: () async {
-                  if (todoListInputController.text.isNotEmpty) {
+                  if (_todoListInputController.text.isNotEmpty) {
                     await todoListBloc.createTodoList(
-                      todoListInputController.text,
+                      _todoListInputController.text,
                     );
-                    todoListInputController.clear();
+                    _todoListInputController.clear();
 
                     _todoListKey.currentState.insertItem(0);
 

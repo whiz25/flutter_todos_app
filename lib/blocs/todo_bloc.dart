@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../model/todo.dart';
 import '../model/todo_list.dart';
 import '../repository/itodo_repository.dart';
+import '../repository/repository_extensions.dart';
 import 'bloc.dart';
 import 'todo_state.dart';
 
@@ -27,7 +28,7 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   Future<void> createTodo(String content, TodoList todoList) async {
     final Todo newTodo = Todo(id: todoList.id, content: content);
 
-    await iTodoRepository.addTodo(newTodo, todoList);
+    await iTodoRepository.addTodo(todoList, newTodo);
 
     final incompleteTodos = List<Todo>.from(state.incompleteTodos);
     incompleteTodos.add(newTodo);
@@ -36,7 +37,7 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   }
 
   Future<void> deleteTodo(Todo todo) async {
-    await iTodoRepository.deleteTodo(todo);
+    await iTodoRepository.deleteTodo(todoList, todo);
 
     if (todo.isComplete) {
       final List<Todo> completeTodos = List<Todo>.from(state.completeTodos);
@@ -52,7 +53,7 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   }
 
   Future<bool> completeTodo(Todo todo) async {
-    final todoStatus = await iTodoRepository.completeTodo(todo);
+    final todoStatus = await iTodoRepository.toggleTodoComplete(todoList, todo);
 
     if (todoStatus) {
       final incompleteTodos = List<Todo>.from(state.incompleteTodos);
