@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 part 'todo.g.dart';
@@ -13,5 +14,5 @@ class Todo extends HiveObject {
   @HiveField(2)
   bool isComplete;
 
-  Todo({this.content, this.isComplete = false});
+  Todo({@required this.id, @required this.content, this.isComplete = false});
 }

@@ -38,6 +38,7 @@ dependencies:
   uuid: ^2.2.2
   font_awesome_flutter: ^8.8.1
   material_design_icons_flutter: ^4.0.5345
+  flutter_slidable: ^0.5.7
 
 dev_dependencies:
   flutter_test:

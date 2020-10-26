@@ -1,10 +1,14 @@
 import '../model/todo.dart';
+import '../model/todo_list.dart';
 
 abstract class ITodoRepository {
-  Future<List<Todo>> getAllIncompleteTodos();
-  Future<List<Todo>> getAllCompleteTodos();
-  Future<Todo> addTodo(Todo todo);
-  Future<Todo> updateTodo(Todo todo);
-  Future<void> deleteTodo(Todo todo);
-  Future<bool> completeTodo(Todo todo);
+  Future<Todo> addTodo(TodoList todoList, Todo todo);  
+  Future<Todo> updateTodo(TodoList todoList, Todo todo);
+  Future<void> deleteTodo(TodoList todoList, Todo todo);  
+  Future<List<Todo>> getAllTodos(TodoList todoList);
+  Future deleteAllTodos(TodoList todoList);
+  
+  Future<TodoList> addTodoList(TodoList todoList);
+  Future<void> deleteTodoList(TodoList todoList);  
+  Future<List<TodoList>> getAllTodoLists();
 }

@@ -14,13 +14,21 @@ TodoRepository class.
 - updateTodoById: Updates a todo item based on the id of the todo item. The updated content is inserted at the specific index.
 - checkIfBoxIsCreatedAndOpen: Checks if Box is created and open. This method is called before any operation
 concerning the Box is performed.
+- addTodoList: This method takes in a parameter of type TodoList. It creates a new TodoList object.
+- deleteTodoList: Deletes a TodoList.
+- getAllTodoLists: Returns a list of TodoList objects.
+- getAllCompleteTodos: Returns completed todo items.
+- getAllIncompleteTodos: Returns in complete todo items.
 
 ## State Management
 - The state is managed locally using the Bloc pattern and globally using the async_redux package.
 The async_redux package is built on top of the redux library.
 
 ## Data
-- Data is stored locally on the user's device using Hive database.
+- Data is stored locally on the user's device using Hive database. HiveDatabase has two boxes: A box
+for todo items and another for todo lists. A todo list's ID is used as the foreign key 
+in the todo's item box. A todo item's ID is the same as the ID for the todo list it's added 
+to.
 
 ## Localization 
 - A localization folder is added in the assets folder with json files for English and Danish languages. These are the two supported 

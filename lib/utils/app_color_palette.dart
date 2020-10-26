@@ -1,8 +1,10 @@
 import 'package:flutter/rendering.dart';
 
 class AppColorPalette {
-  Color primaryColor = const Color(0xff185abd);
+  Color primaryColor = const Color(0xff536dfe);
   Color textOnPrimary = const Color(0xff000000);
-  
-  Color floatingActionButtonBackgroundColor = const Color(0xfffafbfc);
+
+  Color secondaryColor = const Color(0xffffffff);
+
+  Color floatingActionButtonBackgroundColor = const Color(0xffe3f2fd);
 }

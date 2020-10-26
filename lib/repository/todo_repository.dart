@@ -2,97 +2,88 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../model/todo.dart';
+import '../model/todo_list.dart';
 import 'itodo_repository.dart';
 
 class TodoRepository implements ITodoRepository {
-  Box _todoBox;
-
-  final ITodoRepository innerRepository;
-
-  TodoRepository({this.innerRepository});
+  Box _todoListBox;
+  TodoRepository();
 
   static Future<void> initialize() async {
     await Hive.initFlutter();
 
     Hive.registerAdapter(TodoAdapter());
+    Hive.registerAdapter(TodoListAdapter());
   }
 
   @override
-  Future<Todo> addTodo(Todo todo) async {
-    await checkIfBoxIsCreatedAndOpen();
-
-    await _todoBox.add(todo);
-
+  Future<Todo> addTodo(TodoList todoList, Todo todo) async {    
+    final todoBox = await getBoxForList(todoList);
+    await todoBox.add(todo);    
     return todo;
   }
+    
+      @override
+      Future<void> deleteTodo(TodoList todoList, Todo todo) async {        
+        final todoBox = await getBoxForList(todoList);
+        await todoBox.delete(todo.key);
+      }
+    
+      @override
+      Future<void> deleteTodoList(TodoList todoList) async {        
+        await checkIfTodoListsBoxIsCreatedAndOpen();
+        await _todoListBox.delete(todoList.key);
 
-  @override
-  Future<void> deleteTodo(Todo todo) async {
-    await checkIfBoxIsCreatedAndOpen();
+        final todoBox = await getBoxForList(todoList);
+        await todoBox.deleteFromDisk();        
+      }
+    
+      @override
+      Future<List<Todo>> getAllTodos(TodoList todoList) async {
+        final todoBox = await getBoxForList(todoList);        
+        return todoBox.values.cast<Todo>().toList();    
+      }
+    
+      @override
+      Future<Todo> updateTodo(TodoList todoList, Todo todo) async {
+        final todoBox = await getBoxForList(todoList);            
+        await todoBox.put(todo.key, todo);    
+        return todo;
+      }     
+    
+      @override
+      Future<TodoList> addTodoList(TodoList todoList) async {
+        await checkIfTodoListsBoxIsCreatedAndOpen();
+    
+        await _todoListBox.add(todoList);
+    
+        return todoList;
+      }
+    
+      @override
+      Future<List<TodoList>> getAllTodoLists() async {
+        await checkIfTodoListsBoxIsCreatedAndOpen();
+    
+        final Iterable<TodoList> todoLists = 
+          _todoListBox.values.cast<TodoList>();
+        return todoLists.toList();
+      }
 
-    await _todoBox.delete(todo.key);
-  }
-
-  @override
-  Future<List<Todo>> getAllIncompleteTodos() async {
-    await checkIfBoxIsCreatedAndOpen();
-
-    final Iterable<Todo> todos = _todoBox.values.cast<Todo>();
-    final List<Todo> copyTodos = List<Todo>.from(todos);
-    final List<Todo> incompleteTodos = copyTodos.where((t) => t.
-    isComplete == false).toList();
-
-    return incompleteTodos;
-  }
-
-  @override
-  Future<List<Todo>> getAllCompleteTodos() async {
-    await checkIfBoxIsCreatedAndOpen();
-
-    final Iterable<Todo> todos = _todoBox.values.cast<Todo>();
-    final List<Todo> copyTodos = List<Todo>.from(todos);
-    final List<Todo> completeTodos =
-        copyTodos.where((c) => c.isComplete == true).toList();
-
-    return completeTodos;
-  }
-
-  @override
-  Future<Todo> updateTodo(Todo todo) async {
-    await checkIfBoxIsCreatedAndOpen();
-
-    final Todo updatedTodo = Todo()..content = todo.content;
-    await _todoBox.put(todo.key, updatedTodo);
-
-    return updatedTodo;
-  }
-
-  @override
-  Future<bool> completeTodo(Todo todo) async {
-    await checkIfBoxIsCreatedAndOpen();
-
-    if (todo.isComplete) {
-      todo.isComplete = false;
-      await _todoBox.put(todo.key, todo);
-      return todo.isComplete;
-    }
-
-    todo.isComplete = true;
-    await _todoBox.put(todo.key, todo);
-    return todo.isComplete;
-  }
-
-  Future<void> checkIfBoxIsCreatedAndOpen() async {
-    _todoBox ??= await Hive.openBox<Todo>('all_todos');
-
-    if (!(_todoBox?.isOpen ?? false)) {
-      return;
-    }
-  }
-
-  Future<void> clearTodoBox() async {
-    await checkIfBoxIsCreatedAndOpen();
-
-    await _todoBox.clear();
-  }
+      @override
+      Future deleteAllTodos(TodoList todoList) async {
+        final todoBox = await getBoxForList(todoList);
+        await todoBox.clear();
+      }
+    
+      Future<void> checkIfTodoListsBoxIsCreatedAndOpen() async {
+        _todoListBox ??= await Hive.openBox<TodoList>('allTodoLists');
+    
+        if (!(_todoListBox?.isOpen ?? false)) {
+          return;
+        }
+      }
+            
+      Future<Box> getBoxForList(TodoList todoList) =>
+        Hive.openBox<Todo>(todoList.id);
+      
 }

@@ -1,35 +1,34 @@
 import 'dart:async';
 
-import 'package:uuid/uuid.dart';
+import 'package:flutter/material.dart';
 
 import '../model/todo.dart';
+import '../model/todo_list.dart';
 import '../repository/itodo_repository.dart';
+import '../repository/repository_extensions.dart';
 import 'bloc.dart';
 import 'todo_state.dart';
 
 class TodoBloc extends AutoLoadCubit<TodoState> {
+  final TodoList todoList;
   final ITodoRepository iTodoRepository;
 
-  TodoBloc({this.iTodoRepository});
+  TodoBloc({@required this.todoList, this.iTodoRepository});
 
   @override
   FutureOr<TodoState> loadInitialState() async {
     final List<Todo> incompleteTodos =
-        await iTodoRepository.getAllIncompleteTodos();
+        await iTodoRepository.getAllIncompleteTodos(todoList);
     final List<Todo> completeTodos =
-        await iTodoRepository.getAllCompleteTodos();
+        await iTodoRepository.getAllCompleteTodos(todoList);
     return TodoState(
         incompleteTodos: incompleteTodos, completeTodos: completeTodos);
   }
 
-  Future<void> createTodo(String content) async {
-    final uuid = Uuid();
+  Future<void> createTodo(String content, TodoList todoList) async {
+    final Todo newTodo = Todo(id: todoList.id, content: content);
 
-    final Todo newTodo = Todo()
-      ..id = uuid.v4()
-      ..content = content;
-
-    await iTodoRepository.addTodo(newTodo);
+    await iTodoRepository.addTodo(todoList, newTodo);
 
     final incompleteTodos = List<Todo>.from(state.incompleteTodos);
     incompleteTodos.add(newTodo);
@@ -38,7 +37,7 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   }
 
   Future<void> deleteTodo(Todo todo) async {
-    await iTodoRepository.deleteTodo(todo);
+    await iTodoRepository.deleteTodo(todoList, todo);
 
     if (todo.isComplete) {
       final List<Todo> completeTodos = List<Todo>.from(state.completeTodos);
@@ -54,7 +53,7 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   }
 
   Future<bool> completeTodo(Todo todo) async {
-    final todoStatus = await iTodoRepository.completeTodo(todo);
+    final todoStatus = await iTodoRepository.toggleTodoComplete(todoList, todo);
 
     if (todoStatus) {
       final incompleteTodos = List<Todo>.from(state.incompleteTodos);
