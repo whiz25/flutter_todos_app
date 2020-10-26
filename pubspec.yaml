@@ -39,12 +39,16 @@ dependencies:
   font_awesome_flutter: ^8.8.1
   material_design_icons_flutter: ^4.0.5345
   flutter_slidable: ^0.5.7
+  keyboard_attachable: ^1.0.3
+  flutter_datetime_picker: ^1.4.0
+  intl: ^0.16.0
+  mdi: ^4.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  pedantic:
+  pedantic: any
   
   mockito: any
   test: any

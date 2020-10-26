@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     IconButton(
-                      icon: const Icon(Icons.group_add_outlined),
+                      icon: const Icon(Icons.group_add),
                       onPressed: () {},
                       color: Theme.of(context).primaryColor,
                       iconSize: 30,
@@ -131,7 +131,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.pop(context);
                 },
                 child: Text(
-              '${FlutterTodosAppLocalizations.of(context).translate("cancel")}',
+                    // ignore: lines_longer_than_80_chars
+                    '${FlutterTodosAppLocalizations.of(context).translate("cancel")}',
                     style: TextStyle(color: Theme.of(context).primaryColor)),
               ),
               FlatButton(
@@ -148,7 +149,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                 },
                 child: Text(
-              '${FlutterTodosAppLocalizations.of(context).translate("save")}',
+                    // ignore: lines_longer_than_80_chars
+                    '${FlutterTodosAppLocalizations.of(context).translate("save")}',
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                     )),
