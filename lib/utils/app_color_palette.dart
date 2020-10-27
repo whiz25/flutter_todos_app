@@ -8,4 +8,5 @@ class AppColorPalette {
   Color textFieldBackground = const Color(0xff4c4ce6);
 
   Color containerBackgroundColor = const Color(0xfffafafa);
+  Color expiredDueDateColor = const Color(0xfff44336);
 }

@@ -78,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           iconSize: 30,
                         ),
                         Text(
+                          // ignore: lines_longer_than_80_chars
                           '${FlutterTodosAppLocalizations.of(context).translate("new_list")}',
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
@@ -113,10 +114,12 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   Text(
+                      // ignore: lines_longer_than_80_chars
                       '${FlutterTodosAppLocalizations.of(context).translate("new_list")}'),
                   TextField(
                     decoration: InputDecoration(
                       hintText:
+                          // ignore: lines_longer_than_80_chars
                           '${FlutterTodosAppLocalizations.of(context).translate("enter_list_title")}',
                       icon: const Icon(Icons.list),
                     ),

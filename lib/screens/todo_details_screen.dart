@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../model/todo.dart';
 import '../utils/app_color_palette.dart';
 import '../utils/localization.dart';
+import '../widgets/widgets.dart';
 
 class TodoDetailsScreen extends StatefulWidget {
   final Todo todo;
@@ -86,8 +87,8 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                   alignment: Alignment.center,
                   child: Row(
                     children: [
-                      if (todo.dueDate == null) _dueDateNotSet(),
-                      if (todo.dueDate != null) _dueDateSet(),
+                      if (todo.dueDate == null) _dueDateNotSet,
+                      if (todo.dueDate != null) _dueDateSet,
                     ],
                   ),
                 ))
@@ -95,22 +96,11 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
         ),
       ));
 
-  Widget _dueDateSet() => Row(
+  Widget get _dueDateSet => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(
-            Icons.calendar_today,
-            color: Theme.of(context).primaryColor,
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Text(
-            // ignore: lines_longer_than_80_chars
-            'Due ${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
-            style:
-                TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
-          ),
+          if (todo.isDueDateExpired) _dueDateExpired,
+          if (!todo.isDueDateExpired) _dueDateNotExpired,
           IconButton(
             padding: const EdgeInsets.only(left: 20),
             icon: const Icon(
@@ -131,13 +121,28 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
         ],
       );
 
-  Widget _dueDateNotSet() => Row(
+  Widget get _dueDateExpired => DueDateRow(
+        calendarIcon: Icons.calendar_today,
+        dueDateText:
+            'Due ${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+        dueDateColor: AppColorPalette().expiredDueDateColor,
+      );
+
+  Widget get _dueDateNotExpired => DueDateRow(
+        calendarIcon: Icons.calendar_today,
+        dueDateText:
+            'Due ${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+        dueDateColor: Theme.of(context).primaryColor,
+      );
+
+  Widget get _dueDateNotSet => Row(
         children: [
           const Icon(Icons.calendar_today),
           const SizedBox(
             width: 10,
           ),
           Text(
+              // ignore: lines_longer_than_80_chars
               '${FlutterTodosAppLocalizations.of(context).translate("add_due_date")}',
               style: const TextStyle(fontSize: 18)),
         ],

@@ -41,6 +41,7 @@ class _TodoKeyboardAttachableState extends State<TodoKeyboardAttachable> {
                   TextStyle(color: AppColorPalette().containerBackgroundColor),
               decoration: InputDecoration(
                   hintText:
+                      // ignore: lines_longer_than_80_chars
                       '${FlutterTodosAppLocalizations.of(context).translate("add_item")}',
                   hintStyle: TextStyle(
                       color: AppColorPalette().containerBackgroundColor),

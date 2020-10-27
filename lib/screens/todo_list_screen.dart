@@ -107,6 +107,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8),
                             child: Text(
+                              // ignore: lines_longer_than_80_chars
                               '${FlutterTodosAppLocalizations.of(context).translate("completed")}  ${state.completeTodos.length}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -191,23 +192,27 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
   Widget _checkTodoDueDate(Todo todo) {
     if (todo.dueDate != null) {
-      return Row(
-        children: [
-          Icon(
-            Icons.calendar_today,
-            color: Theme.of(context).primaryColor,
-          ),
-          const SizedBox(
-            width: 4,
-          ),
-          Text(
-              // ignore: lines_longer_than_80_chars
-              '${todo.dayOfWeek} ${todo.dueDate.day} ${todo.monthOfYear}'),
-        ],
-      );
+      if (todo.isDueDateExpired) {
+        return _dueDateExpired(todo);
+      }
+      if (!todo.isDueDateExpired) {
+        return _dueDateNotExpired(todo);
+      }
     }
     return null;
   }
+
+  Widget _dueDateExpired(Todo todo) => DueDateRow(
+        calendarIcon: Icons.calendar_today,
+        dueDateText: '${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+        dueDateColor: AppColorPalette().expiredDueDateColor,
+      );
+
+  Widget _dueDateNotExpired(Todo todo) => DueDateRow(
+        calendarIcon: Icons.calendar_today,
+        dueDateText: '${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+        dueDateColor: Theme.of(context).primaryColor,
+      );
 
   Widget _completeTodoDismissible(TodoState state, int index) {
     final Todo completeTodo = state.completeTodos[index];
@@ -357,6 +362,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 },
               ),
               title: Text(
+                  // ignore: lines_longer_than_80_chars
                   '${FlutterTodosAppLocalizations.of(context).translate("delete")}'),
             ))
           ]);
