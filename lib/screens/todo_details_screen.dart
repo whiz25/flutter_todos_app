@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../model/todo.dart';
 import '../utils/app_color_palette.dart';
+import '../utils/localization.dart';
 
 class TodoDetailsScreen extends StatefulWidget {
   final Todo todo;
@@ -131,12 +132,14 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
       );
 
   Widget _dueDateNotSet() => Row(
-        children: const [
-          Icon(Icons.calendar_today),
-          SizedBox(
+        children: [
+          const Icon(Icons.calendar_today),
+          const SizedBox(
             width: 10,
           ),
-          Text('Add due date', style: TextStyle(fontSize: 18)),
+          Text(
+              '${FlutterTodosAppLocalizations.of(context).translate("add_due_date")}',
+              style: const TextStyle(fontSize: 18)),
         ],
       );
 

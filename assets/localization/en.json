@@ -8,5 +8,11 @@
   "delete_todo_end": "?",
   "fill_form": "Please fill out this form",
   "save": "Save",
-  "content": "Content here *"
+  "content": "Content here *",
+  "delete": "Delete",
+  "completed": "Completed",
+  "add_due_date": "Add due date",
+  "add_item": "Add item",
+  "new_list": "New List",
+  "enter_list_title": "Enter list title"
 }

@@ -7,8 +7,8 @@ import '../model/todo_list.dart';
 import '../repository/itodo_repository.dart';
 import '../utils/app_color_palette.dart';
 import '../utils/localization.dart';
-import '../widgets/progress_loader.dart';
-import 'todo_list_screen.dart';
+import '../widgets/widgets.dart';
+import 'screens.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           iconSize: 30,
                         ),
                         Text(
-                          'New List',
+                          '${FlutterTodosAppLocalizations.of(context).translate("new_list")}',
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
                         ),
@@ -112,11 +112,13 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 100,
               child: Column(
                 children: [
-                  const Text('New list'),
+                  Text(
+                      '${FlutterTodosAppLocalizations.of(context).translate("new_list")}'),
                   TextField(
-                    decoration: const InputDecoration(
-                      hintText: 'Enter list title',
-                      icon: Icon(Icons.list),
+                    decoration: InputDecoration(
+                      hintText:
+                          '${FlutterTodosAppLocalizations.of(context).translate("enter_list_title")}',
+                      icon: const Icon(Icons.list),
                     ),
                     controller: _todoListInputController,
                   ),

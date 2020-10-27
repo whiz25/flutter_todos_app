@@ -3,6 +3,8 @@ import 'package:keyboard_attachable/keyboard_attachable.dart';
 
 import '../blocs/todo_bloc.dart';
 import '../model/todo_list.dart';
+import '../utils/app_color_palette.dart';
+import '../utils/localization.dart';
 
 class TodoKeyboardAttachable extends StatefulWidget {
   final TodoBloc todoBloc;
@@ -32,19 +34,24 @@ class _TodoKeyboardAttachableState extends State<TodoKeyboardAttachable> {
         child: Container(
           color: Theme.of(context).primaryColor,
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(10),
             child: TextField(
               controller: contentInputController,
+              style:
+                  TextStyle(color: AppColorPalette().containerBackgroundColor),
               decoration: InputDecoration(
-                  hintText: 'Add item',
-                  fillColor: Colors.white,
+                  hintText:
+                      '${FlutterTodosAppLocalizations.of(context).translate("add_item")}',
+                  hintStyle: TextStyle(
+                      color: AppColorPalette().containerBackgroundColor),
+                  fillColor: AppColorPalette().textFieldBackground,
                   filled: true,
                   border: const OutlineInputBorder(),
                   prefixIcon: IconButton(
                       icon: Icon(
                         Icons.add,
-                        size: 35,
-                        color: Theme.of(context).primaryColor,
+                        size: 30,
+                        color: AppColorPalette().containerBackgroundColor,
                       ),
                       onPressed: () async {
                         if (contentInputController.text.isNotEmpty) {

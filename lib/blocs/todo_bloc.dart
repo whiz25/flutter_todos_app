@@ -59,11 +59,11 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
       final incompleteTodos = List<Todo>.from(state.incompleteTodos);
       final completeTodos = List<Todo>.from(state.completeTodos);
 
-      incompleteTodos.remove(todo);
-      emit(state.copyWith(incompleteTodos: incompleteTodos));
-
       completeTodos.add(todo);
       emit(state.copyWith(completeTodos: completeTodos));
+
+      incompleteTodos.remove(todo);
+      emit(state.copyWith(incompleteTodos: incompleteTodos));
 
       return todoStatus;
     }
@@ -71,11 +71,11 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
     final completeTodos = List<Todo>.from(state.completeTodos);
     final incompleteTodos = List<Todo>.from(state.incompleteTodos);
 
-    completeTodos.remove(todo);
-    emit(state.copyWith(completeTodos: completeTodos));
-
     incompleteTodos.add(todo);
     emit(state.copyWith(incompleteTodos: incompleteTodos));
+
+    completeTodos.remove(todo);
+    emit(state.copyWith(completeTodos: completeTodos));
 
     return todoStatus;
   }

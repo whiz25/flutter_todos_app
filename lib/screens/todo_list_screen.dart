@@ -13,8 +13,7 @@ import '../repository/itodo_repository.dart';
 import '../utils/app_color_palette.dart';
 import '../utils/localization.dart';
 import '../widgets/widgets.dart';
-import 'home_screen.dart';
-import 'todo_details_screen.dart';
+import 'screens.dart';
 
 class TodoListScreen extends StatefulWidget {
   final TodoList todoList;
@@ -108,7 +107,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8),
                             child: Text(
-                              'Completed  ${state.completeTodos.length}',
+                              '${FlutterTodosAppLocalizations.of(context).translate("completed")}  ${state.completeTodos.length}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: AppColorPalette().secondaryColor,
@@ -156,16 +155,16 @@ class _TodoListScreenState extends State<TodoListScreen> {
           child: ListTile(
               leading: IconButton(
                 onPressed: () async {
+                  await _todoBloc.completeTodo(incompleteTodo);
+
+                  _completeTodoListKey.currentState.insertItem(0);
+
                   _incompleteTodoListKey.currentState.removeItem(
                       index,
                       (context, animation) => const SizedBox(
                             width: 0,
                             height: 0,
                           ));
-
-                  await _todoBloc.completeTodo(incompleteTodo);
-
-                  _completeTodoListKey.currentState.insertItem(0);
                 },
                 icon: const Icon(
                   FontAwesomeIcons.circle,
@@ -220,16 +219,16 @@ class _TodoListScreenState extends State<TodoListScreen> {
           child: ListTile(
               leading: IconButton(
                   onPressed: () async {
+                    await _todoBloc.completeTodo(completeTodo);
+
+                    _incompleteTodoListKey.currentState.insertItem(0);
+
                     _completeTodoListKey.currentState.removeItem(
                         index,
                         (context, animation) => const SizedBox(
                               width: 0,
                               height: 0,
                             ));
-
-                    await _todoBloc.completeTodo(completeTodo);
-
-                    _incompleteTodoListKey.currentState.insertItem(0);
                   },
                   icon: Icon(
                     FontAwesomeIcons.solidCheckCircle,
@@ -357,7 +356,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
                   _confirmTodoListDelete(context, widget.todoList);
                 },
               ),
-              title: const Text('Delete'),
+              title: Text(
+                  '${FlutterTodosAppLocalizations.of(context).translate("delete")}'),
             ))
           ]);
 
