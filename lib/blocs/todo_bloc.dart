@@ -55,21 +55,18 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   Future<bool> completeTodo(Todo todo) async {
     final todoStatus = await iTodoRepository.toggleTodoComplete(todoList, todo);
 
+    final incompleteTodos = List<Todo>.from(state.incompleteTodos);
+    final completeTodos = List<Todo>.from(state.completeTodos);
+
     if (todoStatus) {
-      final incompleteTodos = List<Todo>.from(state.incompleteTodos);
-      final completeTodos = List<Todo>.from(state.completeTodos);
+      incompleteTodos.remove(todo);
+      emit(state.copyWith(incompleteTodos: incompleteTodos));
 
       completeTodos.add(todo);
       emit(state.copyWith(completeTodos: completeTodos));
 
-      incompleteTodos.remove(todo);
-      emit(state.copyWith(incompleteTodos: incompleteTodos));
-
       return todoStatus;
     }
-
-    final completeTodos = List<Todo>.from(state.completeTodos);
-    final incompleteTodos = List<Todo>.from(state.incompleteTodos);
 
     incompleteTodos.add(todo);
     emit(state.copyWith(incompleteTodos: incompleteTodos));

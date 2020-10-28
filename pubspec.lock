@@ -244,13 +244,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.6"
-  flutter_datetime_picker:
-    dependency: "direct main"
-    description:
-      name: flutter_datetime_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.4.0"
   flutter_keyboard_visibility:
     dependency: transitive
     description:
@@ -401,13 +394,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.5755"
-  mdi:
-    dependency: "direct main"
-    description:
-      name: mdi
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.0"
   meta:
     dependency: transitive
     description:

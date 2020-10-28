@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../model/todo.dart';
@@ -65,20 +64,22 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
             RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
-                onPressed: () {
-                  DatePicker.showDatePicker(
-                    context,
-                    theme: const DatePickerTheme(),
-                    onConfirm: (time) async {
-                      final updatedTodo = todo.copyWith(dueDate: time);
+                onPressed: () async {
+                  final DateTime pickedDateTime = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(2050));
 
-                      await widget.onUpdated(updatedTodo);
+                  if (pickedDateTime != null) {
+                    final updatedTodo = todo.copyWith(dueDate: pickedDateTime);
 
-                      setState(() {
-                        todo = updatedTodo;
-                      });
-                    },
-                  );
+                    await widget.onUpdated(updatedTodo);
+
+                    setState(() {
+                      todo = updatedTodo;
+                    });
+                  }
                 },
                 color: AppColorPalette().secondaryColor,
                 child: Container(

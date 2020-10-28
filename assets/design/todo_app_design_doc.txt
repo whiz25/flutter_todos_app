@@ -50,8 +50,9 @@ languages currently.
   ### Add due date 
     - A user should be able to add a due date to a todo item
     #### Implementation
-    - The dueDate is displayed in two different screens. So it's state needs to be global.
-    - Async_redux will be used to manage it's state.
+    - The dueDate is displayed in two different screens. The todo_list_screen and the todo_details_screen.
+    - The bloc will be used to manage it's state.
+    - Initially the due date for any todo will be `null`
     - The app state will take a dateTime field called `dueDate`
-    - An action will be called to set the dueDate via the TimeModel
-    - A connector will render the dueDate in the UI
+    - The update method will be called to set the due date of the todo item. 
+    - The update due date will be rendered in the UI using the bloc and the state
