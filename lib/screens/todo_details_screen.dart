@@ -33,69 +33,79 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColorPalette().secondaryColor,
-        elevation: 0,
-        iconTheme: IconThemeData(color: AppColorPalette().textOnPrimary),
-        title: Text(
-          widget.listTitle,
-          style: TextStyle(color: AppColorPalette().textOnPrimary),
+        appBar: AppBar(
+          backgroundColor: AppColorPalette().secondaryColor,
+          elevation: 0,
+          iconTheme: IconThemeData(color: AppColorPalette().textOnPrimary),
+          title: Text(
+            widget.listTitle,
+            style: TextStyle(color: AppColorPalette().textOnPrimary),
+          ),
         ),
-      ),
-      body: Container(
-        color: AppColorPalette().containerBackgroundColor,
-        alignment: Alignment.center,
-        child: Column(
-          children: [
-            RaisedButton(
-              padding: const EdgeInsets.all(16),
-              onPressed: () {},
-              color: AppColorPalette().secondaryColor,
-              child: Row(
-                children: [
-                  if (todo.isComplete) _completeTodoRow(),
-                  if (!todo.isComplete) _incompleteTodoRow()
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                onPressed: () async {
-                  final DateTime pickedDateTime = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime(2050));
-
-                  if (pickedDateTime != null) {
-                    final updatedTodo = todo.copyWith(dueDate: pickedDateTime);
-
-                    await widget.onUpdated(updatedTodo);
-
-                    setState(() {
-                      todo = updatedTodo;
-                    });
-                  }
-                },
+        body: Container(
+          color: AppColorPalette().containerBackgroundColor,
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              RaisedButton(
+                padding: const EdgeInsets.all(16),
+                onPressed: () {},
                 color: AppColorPalette().secondaryColor,
-                child: Container(
-                  height: 70,
-                  width: 365,
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      if (todo.dueDate == null) _dueDateNotSet,
-                      if (todo.dueDate != null) _dueDateSet,
-                    ],
-                  ),
-                ))
-          ],
+                child: Row(
+                  children: [
+                    if (todo.isComplete) _completeTodoRow(),
+                    if (!todo.isComplete) _incompleteTodoRow()
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              RaisedButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  onPressed: () async {
+                    final DateTime pickedDateTime = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime(2050));
+
+                    if (pickedDateTime != null) {
+                      final updatedTodo =
+                          todo.copyWith(dueDate: pickedDateTime);
+
+                      await widget.onUpdated(updatedTodo);
+
+                      setState(() {
+                        todo = updatedTodo;
+                      });
+                    }
+                  },
+                  color: AppColorPalette().secondaryColor,
+                  child: Container(
+                    height: 70,
+                    width: 365,
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        if (todo.dueDate == null) _dueDateNotSet,
+                        if (todo.dueDate != null) _dueDateSet,
+                      ],
+                    ),
+                  ))
+            ],
+          ),
         ),
-      ));
+        bottomNavigationBar: BottomAppBar(
+          child: SizedBox(
+            height: 50,
+            child: Row(
+              children: [Text('Hello')],
+            ),
+          ),
+        ),
+      );
 
   Widget get _dueDateSet => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

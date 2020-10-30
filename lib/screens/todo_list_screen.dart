@@ -154,7 +154,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
                   await _todoBloc.completeTodo(incompleteTodo);
 
-                  _completeTodoListKey.currentState.insertItem(0);
+                  _completeTodoListKey.currentState.insertItem(0,
+                      duration: const Duration(milliseconds: 500));
                 },
                 icon: const Icon(
                   FontAwesomeIcons.circle,
@@ -209,7 +210,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
                     await _todoBloc.completeTodo(completeTodo);
 
-                    _incompleteTodoListKey.currentState.insertItem(0);
+                    _incompleteTodoListKey.currentState.insertItem(0,
+                        duration: const Duration(milliseconds: 500));
                   },
                   icon: Icon(
                     FontAwesomeIcons.solidCheckCircle,
