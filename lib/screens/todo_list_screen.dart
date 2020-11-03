@@ -152,7 +152,11 @@ class _TodoListScreenState extends State<TodoListScreen> {
                             height: 0,
                           ));
 
-                  await _todoBloc.completeTodo(incompleteTodo);
+                  final updatedTodo =
+                      incompleteTodo.copyWith(completedOn: DateTime.now());
+                  await _todoBloc.update(updatedTodo);
+
+                  await _todoBloc.completeTodo(updatedTodo);
 
                   _completeTodoListKey.currentState.insertItem(0,
                       duration: const Duration(milliseconds: 500));
@@ -212,6 +216,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
                     _incompleteTodoListKey.currentState.insertItem(0,
                         duration: const Duration(milliseconds: 500));
+
+                    completeTodo.resetCompletedDate();
                   },
                   icon: Icon(
                     FontAwesomeIcons.solidCheckCircle,
@@ -403,13 +409,17 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
   Widget _dueDateExpired(Todo todo) => DueDateRow(
         calendarIcon: Icons.calendar_today,
-        dueDateText: '${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+        dueDateText:
+            // ignore: lines_longer_than_80_chars
+            '${todo.dayOfWeek(todo.dueDate)} ${todo.dayOfMonth(todo.dueDate)} ${todo.monthOfYear(todo.dueDate)}',
         dueDateColor: AppColorPalette().expiredDueDateColor,
       );
 
   Widget _dueDateNotExpired(Todo todo) => DueDateRow(
         calendarIcon: Icons.calendar_today,
-        dueDateText: '${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+        dueDateText:
+            // ignore: lines_longer_than_80_chars
+            '${todo.dayOfWeek(todo.dueDate)} ${todo.dayOfMonth(todo.dueDate)} ${todo.monthOfYear(todo.dueDate)}',
         dueDateColor: Theme.of(context).primaryColor,
       );
 }

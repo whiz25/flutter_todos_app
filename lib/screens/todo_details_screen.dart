@@ -101,10 +101,31 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
           child: SizedBox(
             height: 50,
             child: Row(
-              children: [Text('Hello')],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (todo.completedOn == null) _createdOn(),
+                if (todo.completedOn != null) _completedOn(),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(FontAwesomeIcons.trashAlt),
+                )
+              ],
             ),
           ),
         ),
+      );
+  Widget _createdOn() => Padding(
+        padding: const EdgeInsets.all(8),
+        child: Text(
+            // ignore: lines_longer_than_80_chars
+            'Created on ${todo.dayOfWeek(todo.createdOn)} ${todo.dayOfMonth(todo.createdOn)} ${todo.monthOfYear(todo.createdOn)}'),
+      );
+
+  Widget _completedOn() => Padding(
+        padding: const EdgeInsets.all(8),
+        child: Text(
+            // ignore: lines_longer_than_80_chars
+            'Completed on ${todo.dayOfWeek(todo.completedOn)} ${todo.dayOfMonth(todo.completedOn)} ${todo.monthOfYear(todo.completedOn)}'),
       );
 
   Widget get _dueDateSet => Row(
@@ -135,14 +156,16 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
   Widget get _dueDateExpired => DueDateRow(
         calendarIcon: Icons.calendar_today,
         dueDateText:
-            'Due ${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+            // ignore: lines_longer_than_80_chars
+            'Due ${todo.dayOfWeek(todo.dueDate)} ${todo.dayOfMonth(todo.dueDate)} ${todo.monthOfYear(todo.dueDate)}',
         dueDateColor: AppColorPalette().expiredDueDateColor,
       );
 
   Widget get _dueDateNotExpired => DueDateRow(
         calendarIcon: Icons.calendar_today,
         dueDateText:
-            'Due ${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+            // ignore: lines_longer_than_80_chars
+            'Due ${todo.dayOfWeek(todo.dueDate)} ${todo.dayOfMonth(todo.dueDate)} ${todo.monthOfYear(todo.dueDate)}',
         dueDateColor: Theme.of(context).primaryColor,
       );
 
@@ -172,6 +195,8 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
 
                 await widget.onUpdated(updatedTodo);
 
+                todo.resetCompletedDate();
+
                 setState(() {
                   todo = updatedTodo;
                 });
@@ -192,7 +217,8 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                 size: 30,
               ),
               onPressed: () async {
-                final updatedTodo = todo.copyWith(isComplete: true);
+                final updatedTodo = todo.copyWith(
+                    isComplete: true, completedOn: DateTime.now());
 
                 await widget.onUpdated(updatedTodo);
 

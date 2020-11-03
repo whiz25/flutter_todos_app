@@ -19,31 +19,42 @@ class Todo {
   final DateTime dueDate;
 
   @HiveField(4)
-  final DateTime createdAt;
+  final DateTime createdOn;
+
+  @HiveField(5)
+  final DateTime completedOn;
 
   Todo(
       {@required this.id,
       @required this.content,
       this.isComplete = false,
       this.dueDate,
-      this.createdAt});
+      this.createdOn,
+      this.completedOn});
 
   Todo copyWith(
-          {String id, String content, bool isComplete, DateTime dueDate}) =>
+          {String id,
+          String content,
+          bool isComplete,
+          DateTime dueDate,
+          DateTime completedOn}) =>
       Todo(
           id: id ?? this.id,
           content: content ?? this.content,
           isComplete: isComplete ?? this.isComplete,
-          dueDate: dueDate ?? this.dueDate);
+          dueDate: dueDate ?? this.dueDate,
+          completedOn: completedOn ?? this.completedOn);
 
   Todo resetDueDate() => Todo(
-        id: id,
-        content: content,
-        isComplete: isComplete,
-      );
+      id: id,
+      content: content,
+      isComplete: isComplete,
+      completedOn: completedOn);
 
-  String get dayOfWeek {
-    final int day = dueDate.weekday;
+  Todo resetCompletedDate() => Todo(id: id, content: content, dueDate: dueDate);
+
+  String dayOfWeek(DateTime dateTime) {
+    final int day = dateTime.weekday;
     switch (day) {
       case 1:
         return 'Mon';
@@ -72,9 +83,9 @@ class Todo {
     }
   }
 
-  String get monthOfYear => DateFormat.MMM().format(dueDate);
+  String monthOfYear(DateTime dateTime) => DateFormat.MMM().format(dateTime);
 
-  String get dayOfMonth => DateFormat.d().format(dueDate);
+  String dayOfMonth(DateTime dateTime) => DateFormat.d().format(dateTime);
 
   bool get isDueDateExpired {
     final timeNow = DateTime.now();

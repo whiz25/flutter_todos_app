@@ -27,7 +27,7 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
 
   Future<void> createTodo(String content, TodoList todoList) async {
     final Todo newTodo =
-        Todo(id: todoList.id, content: content, createdAt: DateTime.now());
+        Todo(id: todoList.id, content: content, createdOn: DateTime.now());
 
     await iTodoRepository.addTodo(todoList, newTodo);
 
@@ -54,28 +54,24 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   }
 
   Future<bool> completeTodo(Todo todo) async {
-    final todoStatus = await iTodoRepository.toggleTodoComplete(todoList, todo);
+    final updatedTodo =
+        await iTodoRepository.toggleTodoComplete(todoList, todo);
 
     final incompleteTodos = List<Todo>.from(state.incompleteTodos);
     final completeTodos = List<Todo>.from(state.completeTodos);
 
-    if (todoStatus) {
+    if (updatedTodo.isComplete) {
       incompleteTodos.remove(todo);
-      emit(state.copyWith(incompleteTodos: incompleteTodos));
-
-      completeTodos.add(todo);
-      emit(state.copyWith(completeTodos: completeTodos));
-
-      return todoStatus;
+      completeTodos.add(updatedTodo);
+    } else {
+      incompleteTodos.add(updatedTodo);
+      completeTodos.remove(todo);
     }
 
-    incompleteTodos.add(todo);
-    emit(state.copyWith(incompleteTodos: incompleteTodos));
+    emit(state.copyWith(
+        completeTodos: completeTodos, incompleteTodos: incompleteTodos));
 
-    completeTodos.remove(todo);
-    emit(state.copyWith(completeTodos: completeTodos));
-
-    return todoStatus;
+    return updatedTodo.isComplete;
   }
 
   Future<void> update(Todo todo) async {
