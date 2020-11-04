@@ -77,9 +77,10 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   Future<void> update(Todo todo) async {
     final updatedTodo = await iTodoRepository.updateTodo(todoList, todo);
 
-    if (updatedTodo.isComplete) {
-      final List<Todo> completeTodos = List.from(state.completeTodos);
+    final List<Todo> completeTodos = List.from(state.completeTodos);
+    final List<Todo> incompleteTodos = List.from(state.incompleteTodos);
 
+    if (updatedTodo.isComplete) {
       for (int i = 0; i < completeTodos.length; i++) {
         if (completeTodos[i].id == updatedTodo.id) {
           completeTodos[i] = updatedTodo;
@@ -88,8 +89,6 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
         }
       }
     }
-
-    final List<Todo> incompleteTodos = List.from(state.incompleteTodos);
 
     for (int i = 0; i < incompleteTodos.length; i++) {
       if (incompleteTodos[i].id == updatedTodo.id) {

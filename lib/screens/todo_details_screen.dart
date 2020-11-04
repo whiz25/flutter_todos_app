@@ -39,7 +39,8 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
           iconTheme: IconThemeData(color: AppColorPalette().textOnPrimary),
           title: Text(
             widget.listTitle,
-            style: TextStyle(color: AppColorPalette().textOnPrimary),
+            style:
+                TextStyle(color: AppColorPalette().textOnPrimary, fontSize: 24),
           ),
         ),
         body: Container(
@@ -191,11 +192,11 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                 size: 30,
               ),
               onPressed: () async {
-                final updatedTodo = todo.copyWith(isComplete: false);
+                final resetTodo = todo.resetCompletedDate();
+                final updatedTodo = todo.copyWith(
+                    isComplete: false, completedOn: resetTodo.completedOn);
 
                 await widget.onUpdated(updatedTodo);
-
-                todo.resetCompletedDate();
 
                 setState(() {
                   todo = updatedTodo;
