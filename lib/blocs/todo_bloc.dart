@@ -54,36 +54,33 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   }
 
   Future<bool> completeTodo(Todo todo) async {
-    final todoStatus = await iTodoRepository.toggleTodoComplete(todoList, todo);
+    final updatedTodo =
+        await iTodoRepository.toggleTodoComplete(todoList, todo);
 
     final incompleteTodos = List<Todo>.from(state.incompleteTodos);
     final completeTodos = List<Todo>.from(state.completeTodos);
 
-    if (todoStatus) {
+    if (updatedTodo.isComplete) {
       incompleteTodos.remove(todo);
-      emit(state.copyWith(incompleteTodos: incompleteTodos));
-
-      completeTodos.add(todo);
-      emit(state.copyWith(completeTodos: completeTodos));
-
-      return todoStatus;
+      completeTodos.add(updatedTodo);
+    } else {
+      completeTodos.remove(todo);
+      incompleteTodos.add(updatedTodo);
     }
 
-    incompleteTodos.add(todo);
-    emit(state.copyWith(incompleteTodos: incompleteTodos));
+    emit(state.copyWith(
+        completeTodos: completeTodos, incompleteTodos: incompleteTodos));
 
-    completeTodos.remove(todo);
-    emit(state.copyWith(completeTodos: completeTodos));
-
-    return todoStatus;
+    return updatedTodo.isComplete;
   }
 
   Future<void> update(Todo todo) async {
     final updatedTodo = await iTodoRepository.updateTodo(todoList, todo);
 
-    if (updatedTodo.isComplete) {
-      final List<Todo> completeTodos = List.from(state.completeTodos);
+    final List<Todo> completeTodos = List.from(state.completeTodos);
+    final List<Todo> incompleteTodos = List.from(state.incompleteTodos);
 
+    if (updatedTodo.isComplete) {
       for (int i = 0; i < completeTodos.length; i++) {
         if (completeTodos[i].id == updatedTodo.id) {
           completeTodos[i] = updatedTodo;
@@ -92,8 +89,6 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
         }
       }
     }
-
-    final List<Todo> incompleteTodos = List.from(state.incompleteTodos);
 
     for (int i = 0; i < incompleteTodos.length; i++) {
       if (incompleteTodos[i].id == updatedTodo.id) {

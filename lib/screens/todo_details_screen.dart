@@ -97,14 +97,6 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
             ],
           ),
         ),
-        bottomNavigationBar: BottomAppBar(
-          child: SizedBox(
-            height: 50,
-            child: Row(
-              children: [Text('Hello')],
-            ),
-          ),
-        ),
       );
 
   Widget get _dueDateSet => Row(
