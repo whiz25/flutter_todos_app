@@ -21,7 +21,7 @@ class TodoAdapter extends TypeAdapter<Todo> {
       content: fields[1] as String,
       isComplete: fields[2] as bool,
       dueDate: fields[3] as DateTime,
-      createdAt: fields[4] as DateTime,
+      createdOn: fields[4] as DateTime,
     );
   }
 
@@ -38,7 +38,7 @@ class TodoAdapter extends TypeAdapter<Todo> {
       ..writeByte(3)
       ..write(obj.dueDate)
       ..writeByte(4)
-      ..write(obj.createdAt);
+      ..write(obj.createdOn);
   }
 
   @override
