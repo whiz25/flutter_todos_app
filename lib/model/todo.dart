@@ -37,12 +37,14 @@ class Todo {
           String content,
           bool isComplete,
           DateTime dueDate,
+          DateTime createdOn,
           DateTime completedOn}) =>
       Todo(
           id: id ?? this.id,
           content: content ?? this.content,
           isComplete: isComplete ?? this.isComplete,
           dueDate: dueDate ?? this.dueDate,
+          createdOn: createdOn ?? this.createdOn,
           completedOn: completedOn ?? this.completedOn);
 
   Todo resetDueDate() => Todo(
@@ -54,32 +56,36 @@ class Todo {
   Todo resetCompletedDate() => Todo(id: id, content: content, dueDate: dueDate);
 
   String dayOfWeek(DateTime dateTime) {
-    final int day = dateTime.weekday;
-    switch (day) {
-      case 1:
-        return 'Mon';
-        break;
-      case 2:
-        return 'Tue';
-        break;
-      case 3:
-        return 'Wed';
-        break;
-      case 4:
-        return 'Thu';
-        break;
-      case 5:
-        return 'Fri';
-        break;
-      case 6:
-        return 'Sat';
-        break;
-      case 7:
-        return 'Sun';
-        break;
-      default:
-        return 'Mon';
-        break;
+    try {
+      final int day = dateTime.weekday;
+      switch (day) {
+        case 1:
+          return 'Mon';
+          break;
+        case 2:
+          return 'Tue';
+          break;
+        case 3:
+          return 'Wed';
+          break;
+        case 4:
+          return 'Thu';
+          break;
+        case 5:
+          return 'Fri';
+          break;
+        case 6:
+          return 'Sat';
+          break;
+        case 7:
+          return 'Sun';
+          break;
+        default:
+          return 'Mon';
+          break;
+      }
+    } on Exception catch (error) {
+      print(error);
     }
   }
 

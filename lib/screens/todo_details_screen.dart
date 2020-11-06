@@ -73,8 +73,8 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                         lastDate: DateTime(2050));
 
                     if (pickedDateTime != null) {
-                      final updatedTodo =
-                          todo.copyWith(dueDate: pickedDateTime);
+                      final updatedTodo = todo.copyWith(
+                          dueDate: pickedDateTime, createdOn: todo.createdOn);
 
                       await widget.onUpdated(updatedTodo);
 
