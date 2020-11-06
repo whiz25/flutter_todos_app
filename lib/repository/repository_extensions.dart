@@ -15,13 +15,13 @@ extension RepositoryExtensions on ITodoRepository {
   Future<List<Todo>> getAllIncompleteTodos(TodoList todoList) async {
     final todos = await getAllTodos(todoList);
 
-    return todos.where((t) => !(t.isComplete ?? false)).toList();
+    return todos.where((todo) => !(todo.isComplete ?? false)).toList();
   }
 
   Future<List<Todo>> getAllCompleteTodos(TodoList todoList) async {
     final todos = await getAllTodos(todoList);
 
-    return todos.where((t) => t.isComplete ?? false).toList();
+    return todos.where((todo) => todo.isComplete ?? false).toList();
   }
 
   Future<Todo> addTodoFromContent(TodoList todoList, String content) {

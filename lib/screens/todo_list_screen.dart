@@ -84,7 +84,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
               child: FooterLayout(
                 footer: TodoKeyboardAttachable(
                     todoBloc: _todoBloc,
-                    todoList: widget.todoList,
                     incompleteTodoListKey: _incompleteTodoListKey),
                 child: Container(
                     color: Theme.of(context).primaryColor,
@@ -154,8 +153,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
                   await _todoBloc.completeTodo(incompleteTodo);
 
-                  _completeTodoListKey.currentState.insertItem(0,
-                      duration: const Duration(milliseconds: 500));
+                  _completeTodoListKey.currentState.insertItem(0);
                 },
                 icon: const Icon(
                   FontAwesomeIcons.circle,
@@ -210,8 +208,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
                     await _todoBloc.completeTodo(completeTodo);
 
-                    _incompleteTodoListKey.currentState.insertItem(0,
-                        duration: const Duration(milliseconds: 500));
+                    _incompleteTodoListKey.currentState.insertItem(0);
                   },
                   icon: Icon(
                     FontAwesomeIcons.solidCheckCircle,

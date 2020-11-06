@@ -19,7 +19,7 @@ class TodoRepository implements ITodoRepository {
   @override
   Future<Todo> addTodo(TodoList todoList, Todo todo) async {
     final todoBox = await getBoxForList(todoList);
-    await todoBox.put(todo.id, todo);
+    await todoBox.add(todo);
     return todo;
   }
 

@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:keyboard_attachable/keyboard_attachable.dart';
 
 import '../blocs/todo_bloc.dart';
-import '../model/todo_list.dart';
 import '../utils/app_color_palette.dart';
 import '../utils/localization.dart';
 
 class TodoKeyboardAttachable extends StatefulWidget {
   final TodoBloc todoBloc;
-  final TodoList todoList;
   final GlobalKey<AnimatedListState> incompleteTodoListKey;
 
   const TodoKeyboardAttachable(
-      {Key key, this.todoBloc, this.todoList, this.incompleteTodoListKey})
+      {Key key, this.todoBloc, this.incompleteTodoListKey})
       : super(key: key);
 
   @override
@@ -56,8 +54,8 @@ class _TodoKeyboardAttachableState extends State<TodoKeyboardAttachable> {
                       ),
                       onPressed: () async {
                         if (contentInputController.text.isNotEmpty) {
-                          await widget.todoBloc.createTodo(
-                              contentInputController.text, widget.todoList);
+                          await widget.todoBloc
+                              .createTodo(contentInputController.text);
 
                           contentInputController.clear();
 

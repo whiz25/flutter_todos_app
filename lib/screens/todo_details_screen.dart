@@ -65,15 +65,14 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () async {
-                    final DateTime pickedDateTime = await showDatePicker(
+                    final pickedDueDate = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime.now(),
                         lastDate: DateTime(2050));
 
-                    if (pickedDateTime != null) {
-                      final updatedTodo =
-                          todo.copyWith(dueDate: pickedDateTime);
+                    if (pickedDueDate != null) {
+                      final updatedTodo = todo.copyWith(dueDate: pickedDueDate);
 
                       await widget.onUpdated(updatedTodo);
 
