@@ -10,10 +10,12 @@ class TodoDetailsScreen extends StatefulWidget {
   final Todo todo;
   final String listTitle;
   final Future Function(Todo todo) onUpdated;
+  final Future Function(Todo todo) onDeleted;
   const TodoDetailsScreen(
       {@required this.todo,
       @required this.listTitle,
       @required this.onUpdated,
+      @required this.onDeleted,
       Key key})
       : super(key: key);
 
@@ -95,6 +97,27 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                   ))
             ],
           ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: SizedBox(
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text(
+                        'Created on ${todo.dayOfWeek(todo.createdOn)} ${todo.dayOfMonth(todo.createdOn)} ${todo.monthOfYear(todo.createdOn)}'),
+                  ),
+                  IconButton(
+                      icon: const Icon(FontAwesomeIcons.trashAlt),
+                      onPressed: () async {
+                        await widget.onDeleted(todo);
+
+                        Navigator.of(context).pop();
+                      })
+                ],
+              )),
         ),
       );
 

@@ -173,6 +173,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                               todo: incompleteTodo,
                               listTitle: widget.todoList.title,
                               onUpdated: _todoBloc.update,
+                              onDeleted: _todoBloc.deleteTodo,
                             )));
               }),
         ));

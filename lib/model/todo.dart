@@ -57,8 +57,8 @@ class Todo {
   Todo resetDateOfCompletion() =>
       Todo(id: id, content: content, createdOn: createdOn, dueDate: dueDate);
 
-  String get dayOfWeek {
-    final int day = dueDate.weekday;
+  String dayOfWeek(DateTime dateTime) {
+    final int day = dateTime.weekday;
     switch (day) {
       case 1:
         return 'Mon';
@@ -87,9 +87,9 @@ class Todo {
     }
   }
 
-  String get monthOfYear => DateFormat.MMM().format(dueDate);
+  String monthOfYear(DateTime dateTime) => DateFormat.MMM().format(dateTime);
 
-  String get dayOfMonth => DateFormat.d().format(dueDate);
+  String dayOfMonth(DateTime dateTime) => DateFormat.d().format(dateTime);
 
   bool get isDueDateExpired {
     final timeNow = DateTime.now();
