@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import '../model/todo.dart';
 import '../model/todo_list.dart';
@@ -26,8 +27,9 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   }
 
   Future<void> createTodo(String content, TodoList todoList) async {
+    final uuid = Uuid();
     final Todo newTodo =
-        Todo(id: todoList.id, content: content, createdOn: DateTime.now());
+        Todo(id: uuid.v4(), content: content, createdOn: DateTime.now());
 
     await iTodoRepository.addTodo(todoList, newTodo);
 
