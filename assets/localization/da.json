@@ -8,5 +8,11 @@
   "delete_todo_end": "?",
   "fill_form": "Udfyld venligst denne formular",
   "save": "Gemme",
-  "content": "Indhold her *"
+  "content": "Indhold her *",
+  "delete": "Slet",
+  "completed": "Afsluttet",
+  "add_due_date": "Tilføj forfaldsdato",
+  "add_item": "Tilføj vare",
+  "new_list": "Ny liste",
+  "enter_list_title": "Indtast listen"
 }

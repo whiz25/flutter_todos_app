@@ -5,23 +5,23 @@ import '../model/todo_list.dart';
 import 'itodo_repository.dart';
 
 extension RepositoryExtensions on ITodoRepository {
-  Future<bool> toggleTodoComplete(TodoList todoList, Todo todo) async {
+  Future<Todo> toggleTodoComplete(TodoList todoList, Todo todo) async {
     final updatedTodo = todo.copyWith(isComplete: !todo.isComplete);
 
     await updateTodo(todoList, updatedTodo);
-    return updatedTodo.isComplete;
+    return updatedTodo;
   }
 
   Future<List<Todo>> getAllIncompleteTodos(TodoList todoList) async {
     final todos = await getAllTodos(todoList);
 
-    return todos.where((t) => !(t.isComplete ?? false)).toList();
+    return todos.where((todo) => !(todo.isComplete ?? false)).toList();
   }
 
   Future<List<Todo>> getAllCompleteTodos(TodoList todoList) async {
     final todos = await getAllTodos(todoList);
 
-    return todos.where((t) => t.isComplete ?? false).toList();
+    return todos.where((todo) => todo.isComplete ?? false).toList();
   }
 
   Future<Todo> addTodoFromContent(TodoList todoList, String content) {

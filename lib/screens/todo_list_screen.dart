@@ -13,8 +13,7 @@ import '../repository/itodo_repository.dart';
 import '../utils/app_color_palette.dart';
 import '../utils/localization.dart';
 import '../widgets/widgets.dart';
-import 'home_screen.dart';
-import 'todo_details_screen.dart';
+import 'screens.dart';
 
 class TodoListScreen extends StatefulWidget {
   final TodoList todoList;
@@ -85,7 +84,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
               child: FooterLayout(
                 footer: TodoKeyboardAttachable(
                     todoBloc: _todoBloc,
-                    todoList: widget.todoList,
                     incompleteTodoListKey: _incompleteTodoListKey),
                 child: Container(
                     color: Theme.of(context).primaryColor,
@@ -108,7 +106,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8),
                             child: Text(
-                              'Completed  ${state.completeTodos.length}',
+                              // ignore: lines_longer_than_80_chars
+                              '${FlutterTodosAppLocalizations.of(context).translate("completed")}  ${state.completeTodos.length}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: AppColorPalette().secondaryColor,
@@ -125,29 +124,18 @@ class _TodoListScreenState extends State<TodoListScreen> {
         },
       );
   Widget _incompleteTodoList(TodoState state, BuildContext context) {
-    final List<Todo> todos = state.incompleteTodos;
+    final List<Todo> incompleteTodos = state.incompleteTodos;
     return AnimatedList(
         key: _incompleteTodoListKey,
         padding: const EdgeInsets.all(8),
-        initialItemCount: todos.length,
+        initialItemCount: incompleteTodos.length,
         itemBuilder: (context, index, animation) => SizeTransition(
             sizeFactor: animation,
             child: _incompleteTodoDismissible(state, index)));
   }
 
-  Widget _completeTodoList(TodoState state, BuildContext context) {
-    final List<Todo> completeTodos = state.completeTodos;
-    return AnimatedList(
-        key: _completeTodoListKey,
-        padding: const EdgeInsets.all(8),
-        initialItemCount: completeTodos.length,
-        itemBuilder: (context, index, animation) => SizeTransition(
-            sizeFactor: animation,
-            child: _completeTodoDismissible(state, index)));
-  }
-
   Widget _incompleteTodoDismissible(TodoState state, int index) {
-    final Todo incompleteTodo = state.incompleteTodos[index];
+    final incompleteTodo = state.incompleteTodos[index];
     return Dismissible(
         confirmDismiss: (direction) => _confirmTodoDeleteIncompleteTodo(
             context, state, index, incompleteTodo),
@@ -173,7 +161,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 ),
               ),
               title: Text(
-                incompleteTodo.content ?? '',
+                incompleteTodo?.content ?? '',
                 style: const TextStyle(fontSize: 22),
               ),
               subtitle: _checkTodoDueDate(incompleteTodo),
@@ -190,24 +178,15 @@ class _TodoListScreenState extends State<TodoListScreen> {
         ));
   }
 
-  Widget _checkTodoDueDate(Todo todo) {
-    if (todo.dueDate != null) {
-      return Row(
-        children: [
-          Icon(
-            Icons.calendar_today,
-            color: Theme.of(context).primaryColor,
-          ),
-          const SizedBox(
-            width: 4,
-          ),
-          Text(
-              // ignore: lines_longer_than_80_chars
-              '${todo.dayOfWeek} ${todo.dueDate.day} ${todo.monthOfYear}'),
-        ],
-      );
-    }
-    return null;
+  Widget _completeTodoList(TodoState state, BuildContext context) {
+    final List<Todo> completeTodos = state.completeTodos;
+    return AnimatedList(
+        key: _completeTodoListKey,
+        padding: const EdgeInsets.all(8),
+        initialItemCount: completeTodos.length,
+        itemBuilder: (context, index, animation) => SizeTransition(
+            sizeFactor: animation,
+            child: _completeTodoDismissible(state, index)));
   }
 
   Widget _completeTodoDismissible(TodoState state, int index) {
@@ -357,7 +336,9 @@ class _TodoListScreenState extends State<TodoListScreen> {
                   _confirmTodoListDelete(context, widget.todoList);
                 },
               ),
-              title: const Text('Delete'),
+              title: Text(
+                  // ignore: lines_longer_than_80_chars
+                  '${FlutterTodosAppLocalizations.of(context).translate("delete")}'),
             ))
           ]);
 
@@ -404,4 +385,28 @@ class _TodoListScreenState extends State<TodoListScreen> {
             ));
     return true;
   }
+
+  Widget _checkTodoDueDate(Todo todo) {
+    if (todo.dueDate != null) {
+      if (todo.isDueDateExpired) {
+        return _dueDateExpired(todo);
+      }
+      if (!todo.isDueDateExpired) {
+        return _dueDateNotExpired(todo);
+      }
+    }
+    return null;
+  }
+
+  Widget _dueDateExpired(Todo todo) => DueDateRow(
+        calendarIcon: Icons.calendar_today,
+        dueDateText: '${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+        dueDateColor: AppColorPalette().expiredDueDateColor,
+      );
+
+  Widget _dueDateNotExpired(Todo todo) => DueDateRow(
+        calendarIcon: Icons.calendar_today,
+        dueDateText: '${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+        dueDateColor: Theme.of(context).primaryColor,
+      );
 }

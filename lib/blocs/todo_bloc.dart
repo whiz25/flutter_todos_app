@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import '../model/todo.dart';
 import '../model/todo_list.dart';
@@ -25,8 +26,10 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
         incompleteTodos: incompleteTodos, completeTodos: completeTodos);
   }
 
-  Future<void> createTodo(String content, TodoList todoList) async {
-    final Todo newTodo = Todo(id: todoList.id, content: content);
+  Future<void> createTodo(String content) async {
+    final uuid = Uuid();
+    final newTodo =
+        Todo(id: uuid.v4(), content: content);
 
     await iTodoRepository.addTodo(todoList, newTodo);
 
@@ -53,39 +56,33 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   }
 
   Future<bool> completeTodo(Todo todo) async {
-    final todoStatus = await iTodoRepository.toggleTodoComplete(todoList, todo);
+    final updatedTodo =
+        await iTodoRepository.toggleTodoComplete(todoList, todo);
 
-    if (todoStatus) {
-      final incompleteTodos = List<Todo>.from(state.incompleteTodos);
-      final completeTodos = List<Todo>.from(state.completeTodos);
+    final incompleteTodos = List<Todo>.from(state.incompleteTodos);
+    final completeTodos = List<Todo>.from(state.completeTodos);
 
+    if (updatedTodo.isComplete) {
       incompleteTodos.remove(todo);
-      emit(state.copyWith(incompleteTodos: incompleteTodos));
-
-      completeTodos.add(todo);
-      emit(state.copyWith(completeTodos: completeTodos));
-
-      return todoStatus;
+      completeTodos.add(updatedTodo);
+    } else {
+      completeTodos.remove(todo);
+      incompleteTodos.add(updatedTodo);
     }
 
-    final completeTodos = List<Todo>.from(state.completeTodos);
-    final incompleteTodos = List<Todo>.from(state.incompleteTodos);
+    emit(state.copyWith(
+        completeTodos: completeTodos, incompleteTodos: incompleteTodos));
 
-    completeTodos.remove(todo);
-    emit(state.copyWith(completeTodos: completeTodos));
-
-    incompleteTodos.add(todo);
-    emit(state.copyWith(incompleteTodos: incompleteTodos));
-
-    return todoStatus;
+    return updatedTodo.isComplete;
   }
 
   Future<void> update(Todo todo) async {
     final updatedTodo = await iTodoRepository.updateTodo(todoList, todo);
 
-    if (updatedTodo.isComplete) {
-      final List<Todo> completeTodos = List.from(state.completeTodos);
+    final List<Todo> completeTodos = List.from(state.completeTodos);
+    final List<Todo> incompleteTodos = List.from(state.incompleteTodos);
 
+    if (updatedTodo.isComplete) {
       for (int i = 0; i < completeTodos.length; i++) {
         if (completeTodos[i].id == updatedTodo.id) {
           completeTodos[i] = updatedTodo;
@@ -94,8 +91,6 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
         }
       }
     }
-
-    final List<Todo> incompleteTodos = List.from(state.incompleteTodos);
 
     for (int i = 0; i < incompleteTodos.length; i++) {
       if (incompleteTodos[i].id == updatedTodo.id) {

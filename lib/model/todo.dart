@@ -74,11 +74,6 @@ class Todo {
 
   bool get isDueDateExpired {
     final timeNow = DateTime.now();
-    if (timeNow.day > dueDate.day &&
-        timeNow.month > dueDate.month &&
-        timeNow.year > dueDate.year) {
-      return true;
-    }
-    return false;
+    return timeNow.isAfter(dueDate);
   }
 }

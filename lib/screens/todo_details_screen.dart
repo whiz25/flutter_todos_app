@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../model/todo.dart';
 import '../utils/app_color_palette.dart';
+import '../utils/localization.dart';
+import '../widgets/widgets.dart';
 
 class TodoDetailsScreen extends StatefulWidget {
   final Todo todo;
@@ -32,84 +33,76 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColorPalette().secondaryColor,
-        elevation: 0,
-        iconTheme: IconThemeData(color: AppColorPalette().textOnPrimary),
-        title: Text(
-          widget.listTitle,
-          style: TextStyle(color: AppColorPalette().textOnPrimary),
+        appBar: AppBar(
+          backgroundColor: AppColorPalette().secondaryColor,
+          elevation: 0,
+          iconTheme: IconThemeData(color: AppColorPalette().textOnPrimary),
+          title: Text(
+            widget.listTitle,
+            style: TextStyle(color: AppColorPalette().textOnPrimary),
+          ),
         ),
-      ),
-      body: Container(
-        color: AppColorPalette().containerBackgroundColor,
-        alignment: Alignment.center,
-        child: Column(
-          children: [
-            RaisedButton(
-              padding: const EdgeInsets.all(16),
-              onPressed: () {},
-              color: AppColorPalette().secondaryColor,
-              child: Row(
-                children: [
-                  if (todo.isComplete) _completeTodoRow(),
-                  if (!todo.isComplete) _incompleteTodoRow()
-                ],
+        body: Container(
+          color: AppColorPalette().containerBackgroundColor,
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              RaisedButton(
+                padding: const EdgeInsets.all(16),
+                onPressed: () {},
+                color: AppColorPalette().secondaryColor,
+                child: Row(
+                  children: [
+                    if (todo.isComplete) _completeTodoRow(),
+                    if (!todo.isComplete) _incompleteTodoRow()
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                onPressed: () {
-                  DatePicker.showDatePicker(
-                    context,
-                    theme: const DatePickerTheme(),
-                    onConfirm: (time) async {
-                      final updatedTodo = todo.copyWith(dueDate: time);
+              const SizedBox(
+                height: 10,
+              ),
+              RaisedButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  onPressed: () async {
+                    final pickedDueDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime(2050));
+
+                    if (pickedDueDate != null) {
+                      final updatedTodo = todo.copyWith(dueDate: pickedDueDate);
 
                       await widget.onUpdated(updatedTodo);
 
                       setState(() {
                         todo = updatedTodo;
                       });
-                    },
-                  );
-                },
-                color: AppColorPalette().secondaryColor,
-                child: Container(
-                  height: 70,
-                  width: 365,
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      if (todo.dueDate == null) _dueDateNotSet(),
-                      if (todo.dueDate != null) _dueDateSet(),
-                    ],
-                  ),
-                ))
-          ],
+                    }
+                  },
+                  color: AppColorPalette().secondaryColor,
+                  child: Container(
+                    height: 70,
+                    width: 365,
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        if (todo.dueDate == null) _dueDateNotSet,
+                        if (todo.dueDate != null) _dueDateSet,
+                      ],
+                    ),
+                  ))
+            ],
+          ),
         ),
-      ));
+      );
 
-  Widget _dueDateSet() => Row(
+  Widget get _dueDateSet => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(
-            Icons.calendar_today,
-            color: Theme.of(context).primaryColor,
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Text(
-            // ignore: lines_longer_than_80_chars
-            'Due ${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
-            style:
-                TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
-          ),
+          if (todo.isDueDateExpired) _dueDateExpired,
+          if (!todo.isDueDateExpired) _dueDateNotExpired,
           IconButton(
             padding: const EdgeInsets.only(left: 20),
             icon: const Icon(
@@ -130,13 +123,30 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
         ],
       );
 
-  Widget _dueDateNotSet() => Row(
-        children: const [
-          Icon(Icons.calendar_today),
-          SizedBox(
+  Widget get _dueDateExpired => DueDateRow(
+        calendarIcon: Icons.calendar_today,
+        dueDateText:
+            'Due ${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+        dueDateColor: AppColorPalette().expiredDueDateColor,
+      );
+
+  Widget get _dueDateNotExpired => DueDateRow(
+        calendarIcon: Icons.calendar_today,
+        dueDateText:
+            'Due ${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+        dueDateColor: Theme.of(context).primaryColor,
+      );
+
+  Widget get _dueDateNotSet => Row(
+        children: [
+          const Icon(Icons.calendar_today),
+          const SizedBox(
             width: 10,
           ),
-          Text('Add due date', style: TextStyle(fontSize: 18)),
+          Text(
+              // ignore: lines_longer_than_80_chars
+              '${FlutterTodosAppLocalizations.of(context).translate("add_due_date")}',
+              style: const TextStyle(fontSize: 18)),
         ],
       );
 

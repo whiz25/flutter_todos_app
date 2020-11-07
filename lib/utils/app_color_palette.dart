@@ -5,6 +5,8 @@ class AppColorPalette {
   Color textOnPrimary = const Color(0xff000000);
 
   Color secondaryColor = const Color(0xffffffff);
+  Color textFieldBackground = const Color(0xff4c4ce6);
 
   Color containerBackgroundColor = const Color(0xfffafafa);
+  Color expiredDueDateColor = const Color(0xfff44336);
 }
