@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import '../model/todo.dart';
 import '../model/todo_list.dart';
@@ -26,8 +27,9 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   }
 
   Future<void> createTodo(String content) async {
+    final uuid = Uuid();
     final newTodo =
-        Todo(id: todoList.id, content: content, createdOn: DateTime.now());
+        Todo(id: uuid.v4(), content: content, createdOn: DateTime.now());
 
     await iTodoRepository.addTodo(todoList, newTodo);
 
@@ -83,22 +85,18 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
     if (updatedTodo.isComplete) {
       for (int i = 0; i < completeTodos.length; i++) {
         if (completeTodos[i].id == updatedTodo.id) {
-          completeTodos.add(updatedTodo);
-          incompleteTodos.remove(completeTodos[i]);
+          completeTodos[i] = updatedTodo;
 
-          emit(state.copyWith(
-              completeTodos: completeTodos, incompleteTodos: incompleteTodos));
+          emit(state.copyWith(completeTodos: completeTodos));
         }
       }
     }
 
     for (int i = 0; i < incompleteTodos.length; i++) {
       if (incompleteTodos[i].id == updatedTodo.id) {
-        incompleteTodos.add(updatedTodo);
-        completeTodos.remove(incompleteTodos[i]);
+        incompleteTodos[i] = updatedTodo;
 
-        emit(state.copyWith(
-            incompleteTodos: incompleteTodos, completeTodos: completeTodos));
+        emit(state.copyWith(incompleteTodos: incompleteTodos));
       }
     }
   }
