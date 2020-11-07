@@ -5,7 +5,8 @@ todo item. This method takes a String as a parameter.
 - ITodoRepository: This is an abstract class with well defined methods that are implemented in the 
 TodoRepository class.
 - TodoRepository: This class holds the only source of data in the app. It overrides five methods from the ITodoRepository class.
-- Todo: This is the model class of the app. This class has fields annotated as HiveFields. These fields are used by the hive_generator and build_runner to auto generate the TodoAdapter.
+- Todo: This is the model class of the todo object. This class has fields annotated as HiveFields. These fields are used by the hive_generator and build_runner to auto generate the TodoAdapter.
+- TodoList: This is the model class for the todo list. This class also has fields annotated as HiveFields.
 
 ## METHODS
 - addNewTodo: Adds a new todo item to the database. Takes a string as a parameter.
@@ -26,7 +27,7 @@ The async_redux package is built on top of the redux library.
 
 ## DATA
 - Data is stored locally on the user's device using Hive database. HiveDatabase has one box for all todo lists and another box for todo items for each todo list.
-A todo list's ID is used as the foreign key in the todo's item box. A todo item's ID is the same as the ID for the todo list it's added to.
+A todo list's ID is used as the foreign key in the todo's item box. A todo item's ID is auto generated using uuid.
 
 ## LOCALIZATION 
 - A localization folder is added in the assets folder with json files for English and Danish languages. These are the two supported 
@@ -51,8 +52,24 @@ languages currently.
     as a `uuid` value.
     - The list will hold a list of todo items.
     - Every todo list is added to a single hive box.
-    - When adding a todo item to the list, the id of the list is used as 
-    the id for the todo item.
+
+  ## CREATE A TODO ITEM 
+    - A user can add a todo item to a specific todo list.
+    ### IMPLEMENTATION 
+    - Create a todo item from the todo bloc
+    - The todo will receive it's content from the textfield (UI) 
+    - It's uuid is a randomly generated string
+    - The todo item will be added to a list passed from the home screen
+    when a user navigates to the todo list screen
+
+  ## DELETE A TODO ITEM 
+  - A user can delete a todo item they added to a specific list 
+  ### IMPLEMENTATION
+  - Swipe a todo item either left or right to delete a todo 
+  - On swiping, a user is presented with a confirmation dialog
+  - On clicking 'OK', the item is deleted from the specific todo list 
+  - The todo list is passed from the home screen when the use clicks 
+  on the list as they navigate to the todo list screen
 
   ## DELETE TODO LIST 
     - A user can delete a todo list they created

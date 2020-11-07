@@ -29,7 +29,7 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   Future<void> createTodo(String content) async {
     final uuid = Uuid();
     final newTodo =
-        Todo(id: uuid.v4(), content: content, createdOn: DateTime.now());
+        Todo(id: uuid.v4(), content: content);
 
     await iTodoRepository.addTodo(todoList, newTodo);
 

@@ -18,15 +18,11 @@ class Todo {
   @HiveField(3)
   final DateTime dueDate;
 
-  @HiveField(4)
-  final DateTime createdOn;
-
   Todo(
       {@required this.id,
       @required this.content,
       this.isComplete = false,
-      this.dueDate,
-      this.createdOn});
+      this.dueDate});
 
   Todo copyWith(
           {String id, String content, bool isComplete, DateTime dueDate}) =>
