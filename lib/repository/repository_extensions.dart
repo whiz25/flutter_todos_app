@@ -25,7 +25,8 @@ extension RepositoryExtensions on ITodoRepository {
   }
 
   Future<Todo> addTodoFromContent(TodoList todoList, String content) {
-    final todo = Todo(id: Uuid().v4(), content: content);
+    final createdOn = DateTime.now();
+    final todo = Todo(id: Uuid().v4(), content: content, createdOn: createdOn);
     return addTodo(todoList, todo);
   }
 }

@@ -36,13 +36,16 @@ void main() {
 
   test('Test addNewTodo()', () async {
     List<Todo> todos = await todoRepository.getAllTodos(todoList);
+    final createdOn = DateTime.now();
 
     expect(todos.length, 0);
 
-    var newTodo = Todo(id: Uuid().v4(), content: 'Code in Flutter');
+    var newTodo =
+        Todo(id: Uuid().v4(), content: 'Code in Flutter', createdOn: createdOn);
     newTodo = await todoRepository.addTodo(todoList, newTodo);
 
-    var anotherNewTodo = Todo(id: Uuid().v4(), content: 'Code in Dart');
+    var anotherNewTodo =
+        Todo(id: Uuid().v4(), content: 'Code in Dart', createdOn: createdOn);
     anotherNewTodo = await todoRepository.addTodo(todoList, anotherNewTodo);
 
     todos = await todoRepository.getAllTodos(todoList);

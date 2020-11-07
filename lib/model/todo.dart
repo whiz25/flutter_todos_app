@@ -18,25 +18,44 @@ class Todo {
   @HiveField(3)
   final DateTime dueDate;
 
+  @HiveField(4)
+  final DateTime createdOn;
+
+  @HiveField(5)
+  final DateTime completedOn;
+
   Todo(
       {@required this.id,
       @required this.content,
+      @required this.createdOn,
       this.isComplete = false,
-      this.dueDate});
+      this.dueDate,
+      this.completedOn});
 
   Todo copyWith(
-          {String id, String content, bool isComplete, DateTime dueDate}) =>
+          {String id,
+          String content,
+          bool isComplete,
+          DateTime dueDate,
+          DateTime createdOn,
+          DateTime completedOn}) =>
       Todo(
           id: id ?? this.id,
           content: content ?? this.content,
+          createdOn: createdOn ?? this.createdOn,
           isComplete: isComplete ?? this.isComplete,
-          dueDate: dueDate ?? this.dueDate);
+          dueDate: dueDate ?? this.dueDate,
+          completedOn: completedOn ?? this.completedOn);
 
   Todo resetDueDate() => Todo(
-        id: id,
-        content: content,
-        isComplete: isComplete,
-      );
+      id: id,
+      content: content,
+      createdOn: createdOn,
+      isComplete: isComplete,
+      completedOn: completedOn);
+
+  Todo resetDateOfCompletion() =>
+      Todo(id: id, content: content, createdOn: createdOn, dueDate: dueDate);
 
   String get dayOfWeek {
     final int day = dueDate.weekday;
