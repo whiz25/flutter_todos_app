@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 part 'todo.g.dart';
 
 @HiveType(typeId: 0)
-class Todo extends HiveObject {
+class Todo {
   @HiveField(0)
   final String id;
 
