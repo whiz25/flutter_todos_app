@@ -106,8 +106,16 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8),
-                    child: Text(
-                        'Created on ${todo.dayOfWeek(todo.createdOn)} ${todo.dayOfMonth(todo.createdOn)} ${todo.monthOfYear(todo.createdOn)}'),
+                    child: Row(
+                      children: [
+                        if (todo.completedOn == null)
+                          Text(
+                              'Created on ${todo.dayOfWeek(todo.createdOn)} ${todo.dayOfMonth(todo.createdOn)} ${todo.monthOfYear(todo.createdOn)}'),
+                        if (todo.completedOn != null)
+                          Text(
+                              'Completed on ${todo.dayOfWeek(todo.completedOn)} ${todo.dayOfMonth(todo.completedOn)} ${todo.monthOfYear(todo.completedOn)}')
+                      ],
+                    ),
                   ),
                   IconButton(
                       icon: const Icon(FontAwesomeIcons.trashAlt),
@@ -182,7 +190,9 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                 size: 30,
               ),
               onPressed: () async {
-                final updatedTodo = todo.copyWith(isComplete: false);
+                final completeTodo = todo.copyWith(isComplete: false);
+
+                final updatedTodo = completeTodo.resetDateOfCompletion();
 
                 await widget.onUpdated(updatedTodo);
 
@@ -206,7 +216,8 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                 size: 30,
               ),
               onPressed: () async {
-                final updatedTodo = todo.copyWith(isComplete: true);
+                final updatedTodo = todo.copyWith(
+                    isComplete: true, completedOn: DateTime.now());
 
                 await widget.onUpdated(updatedTodo);
 
