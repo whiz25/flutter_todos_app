@@ -124,7 +124,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
         },
       );
   Widget _incompleteTodoList(TodoState state, BuildContext context) {
-    final List<Todo> incompleteTodos = state.incompleteTodos;
+    final List<Todo> incompleteTodos = state.incompleteTodos.toList();
     return AnimatedList(
         key: _incompleteTodoListKey,
         padding: const EdgeInsets.all(8),
@@ -135,7 +135,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
   }
 
   Widget _incompleteTodoDismissible(TodoState state, int index) {
-    final incompleteTodo = state.incompleteTodos[index];
+    final incompleteTodo = state.incompleteTodos.toList()[index];
     return Dismissible(
         confirmDismiss: (direction) => _confirmTodoDeleteIncompleteTodo(
             context, state, index, incompleteTodo),
@@ -180,7 +180,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
   }
 
   Widget _completeTodoList(TodoState state, BuildContext context) {
-    final List<Todo> completeTodos = state.completeTodos;
+    final List<Todo> completeTodos = state.completeTodos.toList();
     return AnimatedList(
         key: _completeTodoListKey,
         padding: const EdgeInsets.all(8),
@@ -191,7 +191,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
   }
 
   Widget _completeTodoDismissible(TodoState state, int index) {
-    final Todo completeTodo = state.completeTodos[index];
+    final Todo completeTodo = state.completeTodos.toList()[index];
     return Dismissible(
         confirmDismiss: (direction) =>
             _confirmTodoDeleteCompleteTodo(context, state, index, completeTodo),
@@ -228,6 +228,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                           todo: completeTodo,
                           listTitle: widget.todoList.title,
                           onUpdated: _todoBloc.update,
+                          onDeleted: _todoBloc.deleteTodo,
                         )));
               }),
         ));
@@ -401,13 +402,15 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
   Widget _dueDateExpired(Todo todo) => DueDateRow(
         calendarIcon: Icons.calendar_today,
-        dueDateText: '${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+        dueDateText:
+            '${todo.dayOfWeek(todo.dueDate)} ${todo.dayOfMonth(todo.dueDate)} ${todo.monthOfYear(todo.dueDate)}',
         dueDateColor: AppColorPalette().expiredDueDateColor,
       );
 
   Widget _dueDateNotExpired(Todo todo) => DueDateRow(
         calendarIcon: Icons.calendar_today,
-        dueDateText: '${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+        dueDateText:
+            '${todo.dayOfWeek(todo.dueDate)} ${todo.dayOfMonth(todo.dueDate)} ${todo.monthOfYear(todo.dueDate)}',
         dueDateColor: Theme.of(context).primaryColor,
       );
 }

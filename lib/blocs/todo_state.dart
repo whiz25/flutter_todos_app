@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import '../model/todo.dart';
 
 class TodoState {
-  List<Todo> incompleteTodos;
-  List<Todo> completeTodos;
+  final List<Todo> todos;
+  Iterable<Todo> get incompleteTodos => todos.where((todo) => !todo.isComplete);
+  Iterable<Todo> get completeTodos => todos.where((todo) => todo.isComplete);
 
-  TodoState({@required this.incompleteTodos, @required this.completeTodos});
+  TodoState({@required this.todos});
 
-  TodoState copyWith({List<Todo> incompleteTodos, List<Todo> completeTodos}) =>
-      TodoState(
-          incompleteTodos: incompleteTodos ?? this.incompleteTodos,
-          completeTodos: completeTodos ?? this.completeTodos);
+  TodoState copyWith({List<Todo> todos}) =>
+      TodoState(todos: todos ?? this.todos);
 }

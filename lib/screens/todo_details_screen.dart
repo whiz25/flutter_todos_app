@@ -164,7 +164,7 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
   Widget get _dueDateNotExpired => DueDateRow(
         calendarIcon: Icons.calendar_today,
         dueDateText:
-            'Due ${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+            'Due ${todo.dayOfWeek(todo.dueDate)} ${todo.dayOfMonth(todo.dueDate)} ${todo.monthOfYear(todo.dueDate)}',
         dueDateColor: Theme.of(context).primaryColor,
       );
 
