@@ -22,6 +22,10 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
     return TodoState(todos: todos);
   }
 
+  void toggleShowComplete() {
+    emit(state.copyWith(showComplete: !state.showComplete));
+  }
+
   Future<void> createTodo(String content) async {
     final uuid = Uuid();
     final createdOn = DateTime.now();

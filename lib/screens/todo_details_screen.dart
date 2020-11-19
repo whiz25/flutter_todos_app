@@ -11,11 +11,15 @@ class TodoDetailsScreen extends StatefulWidget {
   final String listTitle;
   final Future Function(Todo todo) onUpdated;
   final Future Function(Todo todo) onDeleted;
+  // final List<Todo> todoList;
+  // final GlobalKey<AnimatedListState> listKey;
   const TodoDetailsScreen(
       {@required this.todo,
       @required this.listTitle,
       @required this.onUpdated,
       @required this.onDeleted,
+      // @required this.todoList,
+      // @required this.listKey,
       Key key})
       : super(key: key);
 
@@ -45,7 +49,7 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
           ),
         ),
         body: Container(
-          color: AppColorPalette().containerBackgroundColor,
+          color: AppColorPalette().whiteColor,
           alignment: Alignment.center,
           child: Column(
             children: [
@@ -110,9 +114,11 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                       children: [
                         if (todo.completedOn == null)
                           Text(
+                              // ignore: lines_longer_than_80_chars
                               'Created on ${todo.dayOfWeek(todo.createdOn)} ${todo.dayOfMonth(todo.createdOn)} ${todo.monthOfYear(todo.createdOn)}'),
                         if (todo.completedOn != null)
                           Text(
+                              // ignore: lines_longer_than_80_chars
                               'Completed on ${todo.dayOfWeek(todo.completedOn)} ${todo.dayOfMonth(todo.completedOn)} ${todo.monthOfYear(todo.completedOn)}')
                       ],
                     ),
@@ -157,7 +163,8 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
   Widget get _dueDateExpired => DueDateRow(
         calendarIcon: Icons.calendar_today,
         dueDateText:
-            'Due ${todo.dayOfWeek} ${todo.dayOfMonth} ${todo.monthOfYear}',
+            // ignore: lines_longer_than_80_chars
+            'Due ${todo.dayOfWeek(todo.dueDate)} ${todo.dayOfMonth(todo.dueDate)} ${todo.monthOfYear(todo.dueDate)}',
         dueDateColor: AppColorPalette().expiredDueDateColor,
       );
 

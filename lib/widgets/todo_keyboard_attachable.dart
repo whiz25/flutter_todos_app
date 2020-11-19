@@ -7,10 +7,9 @@ import '../utils/localization.dart';
 
 class TodoKeyboardAttachable extends StatefulWidget {
   final TodoBloc todoBloc;
-  final GlobalKey<AnimatedListState> incompleteTodoListKey;
+  final GlobalKey<AnimatedListState> todoListKey;
 
-  const TodoKeyboardAttachable(
-      {Key key, this.todoBloc, this.incompleteTodoListKey})
+  const TodoKeyboardAttachable({Key key, this.todoBloc, this.todoListKey})
       : super(key: key);
 
   @override
@@ -36,13 +35,13 @@ class _TodoKeyboardAttachableState extends State<TodoKeyboardAttachable> {
             child: TextField(
               controller: contentInputController,
               style:
-                  TextStyle(color: AppColorPalette().containerBackgroundColor),
+                  TextStyle(color: AppColorPalette().whiteColor),
               decoration: InputDecoration(
                   hintText:
                       // ignore: lines_longer_than_80_chars
                       '${FlutterTodosAppLocalizations.of(context).translate("add_item")}',
                   hintStyle: TextStyle(
-                      color: AppColorPalette().containerBackgroundColor),
+                      color: AppColorPalette().whiteColor),
                   fillColor: AppColorPalette().textFieldBackground,
                   filled: true,
                   border: const OutlineInputBorder(),
@@ -50,7 +49,7 @@ class _TodoKeyboardAttachableState extends State<TodoKeyboardAttachable> {
                       icon: Icon(
                         Icons.add,
                         size: 30,
-                        color: AppColorPalette().containerBackgroundColor,
+                        color: AppColorPalette().whiteColor,
                       ),
                       onPressed: () async {
                         if (contentInputController.text.isNotEmpty) {
@@ -59,8 +58,9 @@ class _TodoKeyboardAttachableState extends State<TodoKeyboardAttachable> {
 
                           contentInputController.clear();
 
-                          widget.incompleteTodoListKey.currentState
-                              .insertItem(0);
+                          if (widget.todoListKey.currentState != null) {
+                            widget.todoListKey.currentState.insertItem(0);
+                          }
                         }
                       })),
             ),
