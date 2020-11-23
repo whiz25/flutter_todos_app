@@ -11,6 +11,7 @@ class TodoDetailsScreen extends StatefulWidget {
   final String listTitle;
   final Future Function(Todo todo) onUpdated;
   final Future Function(Todo todo) onDeleted;
+  // final int index;
   // final List<Todo> todoList;
   // final GlobalKey<AnimatedListState> listKey;
   const TodoDetailsScreen(
@@ -18,6 +19,7 @@ class TodoDetailsScreen extends StatefulWidget {
       @required this.listTitle,
       @required this.onUpdated,
       @required this.onDeleted,
+      // @required this.index,
       // @required this.todoList,
       // @required this.listKey,
       Key key})
@@ -112,14 +114,12 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                     padding: const EdgeInsets.all(8),
                     child: Row(
                       children: [
-                        if (todo.completedOn == null)
-                          Text(
-                              // ignore: lines_longer_than_80_chars
-                              'Created on ${todo.dayOfWeek(todo.createdOn)} ${todo.dayOfMonth(todo.createdOn)} ${todo.monthOfYear(todo.createdOn)}'),
-                        if (todo.completedOn != null)
-                          Text(
-                              // ignore: lines_longer_than_80_chars
-                              'Completed on ${todo.dayOfWeek(todo.completedOn)} ${todo.dayOfMonth(todo.completedOn)} ${todo.monthOfYear(todo.completedOn)}')
+                        if (todo.completedOn == null) Text(
+                            // ignore: lines_longer_than_80_chars
+                            'Created on ${todo.dayOfWeek(todo.createdOn)} ${todo.dayOfMonth(todo.createdOn)} ${todo.monthOfYear(todo.createdOn)}'),
+                        if (todo.completedOn != null) Text(
+                            // ignore: lines_longer_than_80_chars
+                            'Completed on ${todo.dayOfWeek(todo.completedOn)} ${todo.dayOfMonth(todo.completedOn)} ${todo.monthOfYear(todo.completedOn)}')
                       ],
                     ),
                   ),
@@ -171,6 +171,7 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
   Widget get _dueDateNotExpired => DueDateRow(
         calendarIcon: Icons.calendar_today,
         dueDateText:
+            // ignore: lines_longer_than_80_chars
             'Due ${todo.dayOfWeek(todo.dueDate)} ${todo.dayOfMonth(todo.dueDate)} ${todo.monthOfYear(todo.dueDate)}',
         dueDateColor: Theme.of(context).primaryColor,
       );

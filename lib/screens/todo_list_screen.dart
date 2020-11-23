@@ -109,9 +109,8 @@ class _TodoListScreenState extends State<TodoListScreen>
     final incompleteLength = state.incompleteTodos.length;
     return AnimatedList(
         key: _todoListKey,
-        initialItemCount: state.showComplete
-            ? state.todos.length + 1
-            : state.incompleteTodos.length + 1,
+        padding: const EdgeInsets.only(left: 4, right: 4),
+        initialItemCount: state.todos.length + 1,
         itemBuilder: (context, index, animation) {
           if (index == incompleteLength) {
             return state.completeTodos.isNotEmpty
@@ -142,65 +141,116 @@ class _TodoListScreenState extends State<TodoListScreen>
 
           final offset = index < incompleteLength ? index : index - 1;
 
-          const begin = Offset(0, 0.1);
-          const end = Offset.zero;
-          const curve = Curves.linear;
+          // const begin = Offset(0, 0.1);
+          // const end = Offset.zero;
+          // const curve = Curves.linear;
 
-          final tween = Tween<Offset>(begin: begin, end: end)
-              .chain(CurveTween(curve: curve));
+          // final tween = Tween<Offset>(begin: begin, end: end)
+          //     .chain(CurveTween(curve: curve));
 
-          final offsetAnimation = animation.drive(tween);
+          // final offsetAnimation = animation.drive(tween);
 
-          return SlideTransition(
-            position: offsetAnimation,
+          return SizeTransition(
+            sizeFactor: animation,
             child: Dismissible(
               confirmDismiss: (direction) => _confirmTodoDelete(
                   context, state, index, state.todos[offset]),
               key: ValueKey(state.todos[offset]),
-              child: Card(
-                child: ListTile(
-                  leading: state.todos[offset].isComplete
-                      ? IconButton(
-                          icon: Icon(
-                            FontAwesomeIcons.solidCheckCircle,
-                            size: 33,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          onPressed: () {
-                            _completeTodo(state.todos[offset], index);
-                          },
-                        )
-                      : IconButton(
-                          icon: const Icon(
-                            FontAwesomeIcons.circle,
-                            size: 33,
-                          ),
-                          onPressed: () {
-                            _completeTodo(state.todos[offset], index);
-                          },
-                        ),
-                  title: Text(
-                    state.todos[offset].content,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  onTap: () {
-                    Navigator.push<Widget>(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TodoDetailsScreen(
-                                  todo: state.todos[offset],
-                                  listTitle: widget.todoList.title,
-                                  onUpdated: _todoBloc.update,
-                                  onDeleted: _todoBloc.deleteTodo,
-                                )));
-                  },
-                  subtitle: _checkTodoDueDate(state.todos[offset]),
-                ),
-              ),
+              child: state.todos[offset].isComplete
+                  ? _showOrHideCompletedTodos(state, offset)
+                  : _showIncompleteTodos(state, offset),
             ),
           );
         });
   }
+
+  Widget _showOrHideCompletedTodos(TodoState state, int index) => Visibility(
+        visible: state.showComplete,
+        child: Card(
+          child: ListTile(
+            leading: state.todos[index].isComplete
+                ? IconButton(
+                    icon: Icon(
+                      FontAwesomeIcons.solidCheckCircle,
+                      size: 33,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: () {
+                      _completeTodo(state.todos[index], index);
+                    },
+                  )
+                : IconButton(
+                    icon: const Icon(
+                      FontAwesomeIcons.circle,
+                      size: 33,
+                    ),
+                    onPressed: () {
+                      _completeTodo(state.todos[index], index);
+                    },
+                  ),
+            title: Text(
+              state.todos[index].content,
+              style: state.todos[index].isComplete
+                  ? const TextStyle(
+                      fontSize: 20, decoration: TextDecoration.lineThrough)
+                  : const TextStyle(fontSize: 20),
+            ),
+            onTap: () {
+              Navigator.push<Widget>(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TodoDetailsScreen(
+                            todo: state.todos[index],
+                            listTitle: widget.todoList.title,
+                            onUpdated: _todoBloc.update,
+                            onDeleted: _deleteTodo,
+                          )));
+            },
+            subtitle: _checkTodoDueDate(state.todos[index]),
+          ),
+        ),
+      );
+
+  Widget _showIncompleteTodos(TodoState state, int index) => Dismissible(
+      confirmDismiss: (direction) =>
+          _confirmTodoDelete(context, state, index, state.todos[index]),
+      key: ValueKey(state.todos[index]),
+      child: Card(
+        child: ListTile(
+          leading: IconButton(
+            icon: Icon(
+              FontAwesomeIcons.circle,
+              size: 33,
+              color: Theme.of(context).primaryColor,
+            ),
+            onPressed: () {
+              _completeTodo(state.todos[index], index);
+            },
+          ),
+          title: Text(
+            state.todos[index].content,
+            style: state.todos[index].isComplete
+                ? const TextStyle(
+                    fontSize: 20, decoration: TextDecoration.lineThrough)
+                : const TextStyle(fontSize: 20),
+          ),
+          onTap: () {
+            Navigator.push<Widget>(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TodoDetailsScreen(
+                          todo: state.todos[index],
+                          listTitle: widget.todoList.title,
+                          onUpdated: _todoBloc.update,
+                          onDeleted: _deleteTodo,
+                        )));
+          },
+          subtitle: _checkTodoDueDate(state.todos[index]),
+        ),
+      ),
+    );
+
+  Future<void> _deleteTodo(Todo todo) => _todoBloc.deleteTodo(todo);
 
   void _completeTodo(Todo todo, int index) {
     _todoBloc.completeTodo(todo);
@@ -337,6 +387,7 @@ class _TodoListScreenState extends State<TodoListScreen>
   Widget _dueDateExpired(Todo todo) => DueDateRow(
         calendarIcon: Icons.calendar_today,
         dueDateText:
+            // ignore: lines_longer_than_80_chars
             '${todo.dayOfWeek(todo.dueDate)} ${todo.dayOfMonth(todo.dueDate)} ${todo.monthOfYear(todo.dueDate)}',
         dueDateColor: AppColorPalette().expiredDueDateColor,
       );
@@ -344,6 +395,7 @@ class _TodoListScreenState extends State<TodoListScreen>
   Widget _dueDateNotExpired(Todo todo) => DueDateRow(
         calendarIcon: Icons.calendar_today,
         dueDateText:
+            // ignore: lines_longer_than_80_chars
             '${todo.dayOfWeek(todo.dueDate)} ${todo.dayOfMonth(todo.dueDate)} ${todo.monthOfYear(todo.dueDate)}',
         dueDateColor: Theme.of(context).primaryColor,
       );
