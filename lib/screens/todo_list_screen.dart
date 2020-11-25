@@ -145,7 +145,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
           return SlideTransition(
             position: animation.drive(Tween<Offset>(
-                begin: Offset(0, state.previousPosition[index]),
+                begin: Offset(0, state.previousPosition[offset]),
                 end: const Offset(0, 0))),
             child: Dismissible(
               confirmDismiss: (direction) =>
