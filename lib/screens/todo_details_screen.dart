@@ -11,17 +11,12 @@ class TodoDetailsScreen extends StatefulWidget {
   final String listTitle;
   final Future Function(Todo todo) onUpdated;
   final Future Function(Todo todo) onDeleted;
-  // final int index;
-  // final List<Todo> todoList;
-  // final GlobalKey<AnimatedListState> listKey;
+
   const TodoDetailsScreen(
       {@required this.todo,
       @required this.listTitle,
       @required this.onUpdated,
       @required this.onDeleted,
-      // @required this.index,
-      // @required this.todoList,
-      // @required this.listKey,
       Key key})
       : super(key: key);
 

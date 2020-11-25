@@ -19,7 +19,9 @@ class TodoBloc extends AutoLoadCubit<TodoState> {
   @override
   FutureOr<TodoState> loadInitialState() async {
     final List<Todo> todos = await iTodoRepository.getAllTodos(todoList);
-    return TodoState(todos: todos);
+    final List<double> previousPosition =
+        todos.map((e) => 0.toDouble()).toList();
+    return TodoState(todos: todos, previousPosition: previousPosition);
   }
 
   void toggleShowComplete() {

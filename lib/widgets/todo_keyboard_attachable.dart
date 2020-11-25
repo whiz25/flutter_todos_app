@@ -34,14 +34,12 @@ class _TodoKeyboardAttachableState extends State<TodoKeyboardAttachable> {
             padding: const EdgeInsets.all(10),
             child: TextField(
               controller: contentInputController,
-              style:
-                  TextStyle(color: AppColorPalette().whiteColor),
+              style: TextStyle(color: AppColorPalette().whiteColor),
               decoration: InputDecoration(
                   hintText:
                       // ignore: lines_longer_than_80_chars
                       '${FlutterTodosAppLocalizations.of(context).translate("add_item")}',
-                  hintStyle: TextStyle(
-                      color: AppColorPalette().whiteColor),
+                  hintStyle: TextStyle(color: AppColorPalette().whiteColor),
                   fillColor: AppColorPalette().textFieldBackground,
                   filled: true,
                   border: const OutlineInputBorder(),
